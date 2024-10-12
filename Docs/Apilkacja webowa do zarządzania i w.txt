@@ -1,0 +1,22 @@
+Apilkacja webowa do zarządzania i wymieniania informacji o butach
+
+Funkcjonalności kluczowe:
+1.Rejestracja i logowanie użytkowników
+2.Zarządzanie profilem:
+-Dodawanie posiadanych butów
+-Tworzenie wish listy
+-Dodawanie opinii/oceny/recenzji
+3.Dodawanie znajomych
+4.Wyświetlanie butów na tablicy aktywności znajomych
+
+Funkcjonalności dodatkowe:
+1.Wyszukiwanie butów i przeglądanie opinii innych użytkowników niż znajomych
+2.Możliwośc tworzenia grup dyskusyjnych
+3.Funkcja wymiany lub sprzedaży butów
+4.Wsparcie wielu jezyków
+5.System powiadomień
+
+Technologie:
+-react
+-dotnet asp, entity framework
+-SQL

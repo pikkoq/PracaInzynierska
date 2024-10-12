@@ -1,0 +1,72 @@
+Stronka z butami gdzie
+Uzytkownik sie loguje/rejestruje
+Moze dodac do swojego profilu posiadane buty, swoja wish liste, dodac opinie/recenzje odnoscnie pary, ocenic w roznych kategoriach od 1-10
+Dodawanie siebie do znajomych, tablica na ktorej beda widoczne nowe dodane pary przez znajomych
+Uzytkownik moze wyszukac w bazie jaka kolwiek pare i przeczytac opnie/recenzje odnosnie tej pary, sprawdzic ocene, dodac do wish listy
+
+Rejestracja i logowanie użytkowników: Implementacja mechanizmu rejestracji i logowania użytkowników w celu dostępu do funkcji strony internetowej.
+
+Zarządzanie profilem użytkownika: Umożliwienie użytkownikom dodawania swoich posiadanych butów do profilu, tworzenia listy życzeń oraz dodawania opinii i recenzji dotyczących poszczególnych par butów.
+
+Ocena butów w różnych kategoriach: Stworzenie systemu oceniania butów w różnych kategoriach, umożliwiającego użytkownikom wystawianie ocen od 1 do 10.
+
+Zarządzanie znajomymi: Implementacja funkcji dodawania użytkowników do listy znajomych oraz tworzenia tablicy, na której będą widoczne nowe dodane pary butów przez znajomych.
+
+Wyszukiwanie i przeglądanie butów: Umożliwienie użytkownikom wyszukiwania butów w bazie danych oraz przeglądania opinii, recenzji i ocen dotyczących poszczególnych par butów. Dodatkowo użytkownicy mogą dodawać wybrane buty do swojej listy życzeń.
+
+TYTUL:
+-"Platforma społecznościowa do zarządzania kolekcją obuwia: Projektowanie i implementacja systemu opartego na przeglądach butów"
+-Tworzenie platformy internetowej do zarządzania kolekcją obuwia i wymiany opinii społecznościowych
+-"Społeczność butów online: Tworzenie interaktywnej platformy internetowej dla entuzjastów obuwia"
+
+
+Cele:
+-platforma umozliwiajaca uzytkownikom wygodne zarzadzanie swoimi budami, wymiene opini i recenzji oraz budowanie spolecznoscie
+-bezpieczxenstwo danych i prywatnosc
+-skuteczne zarzadzanie baza danych
+-intuicyjni i prosty intefejs uzytkownika
+-integracja z dostepnymi api
+
+technologie front-end:
+-html,css,js
+-react
+-bootstrap
+
+technologie back-end:
+-dotnet asp
+-baza sql lub mongodb
+-entity framework/dapper
+-json web token
+
+NIKE API:
+https://rapidapi.com/ricardourdaneta67-5EC8Vcz4unw/api/nike-products
+
+LITERATURA:
+"React 17 Design Patterns and Best Practices: Design, build, and deploy production-ready web applications using industry-standard practices" autorstwa Carlos Santana Roldán (2021).
+"ASP.NET Core in Action" autorstwa Andrew Lock (2020).
+"JavaScript: The Definitive Guide" autorstwa David Flanagan (2020).
+"MongoDB 4 Quick Start Guide: Learn the skills you need to work with the world's most popular NoSQL database" autorstwa Doug Bierer (2018).
+"C# 8.0 in a Nutshell: The Definitive Reference" autorstwa Joseph Albahari i Eric Johannsen (2019).
+"Web Security for Developers: Real Threats, Practical Defense" autorstwa Malcolm McDonald i James D. Brown (2020).
+"Python Crash Course" autorstwa Eric Matthes (2019).
+"Clean Code: A Handbook of Agile Software Craftsmanship" autorstwa Robert C. Martin (2008, wydanie wznowione w 2016).
+"RESTful API Design: Best Practices in API Design with REST" autorstwa Matthias Biehl (2018).
+"Microservices Patterns: With examples in Java" autorstwa Chris Richardson (2018).
+
+
+O CO MOZNA ROZBUDOWAC:
+System powiadomień: Dodanie funkcji powiadomień, aby użytkownicy mogli otrzymywać aktualizacje dotyczące nowych recenzji, dodanych butów przez znajomych itp.
+
+Forum lub grupy dyskusyjne: Umożliwienie użytkownikom tworzenia grup dyskusyjnych na temat konkretnych marek, modeli butów czy też ogólnych trendów w modzie obuwniczej.
+
+Funkcje społecznościowe: Rozbudowanie funkcji społecznościowych, takich jak możliwość komentowania recenzji lub ocen innych użytkowników.
+
+Podpowiedzi dotyczące stylizacji: Dodanie funkcji, która sugeruje użytkownikom jakie buty mogłyby pasować do ich aktualnego stroju na podstawie ich posiadanych butów i preferencji.
+
+Integracja z mediów społecznościowych: Umożliwienie użytkownikom udostępniania swoich recenzji i opinii na platformach takich jak Instagram, Twitter czy Facebook.
+
+Analiza preferencji użytkowników: Wykorzystanie danych z ocen, recenzji i list życzeń użytkowników do tworzenia spersonalizowanych rekomendacji butów.
+
+Wsparcie dla wielu języków: Dodanie wielojęzyczności, aby platforma była dostępna dla użytkowników z różnych krajów i regionów.
+
+Funkcja wymiany lub sprzedaży butów: Umożliwienie użytkownikom sprzedaży lub wymiany swoich butów z innymi użytkownikami na platformie.

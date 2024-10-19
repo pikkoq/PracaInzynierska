@@ -1,9 +1,11 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ShoeBoardAPI.DataBase;
+using ShoeBoardAPI.Models;
 using ShoeBoardAPI.Services.UserService;
 using System.Text;
 
@@ -19,6 +21,11 @@ namespace ShoeBoardAPI
             //DB connection
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            //ASP.NET Identity configuration
+            builder.Services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
 
             //Automapper registration
             builder.Services.AddAutoMapper(typeof(Program).Assembly);

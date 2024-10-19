@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ShoeBoardAPI.Models;
 
 namespace ShoeBoardAPI.DataBase
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User>
     {
-        public DbSet<User> Users { get; set; }
         public DbSet<Shoe> Shoes { get; set; }
         public DbSet<Friend> Friends { get; set; }
         public DbSet<ShoeFeed> ShoeFeeds { get; set; }
@@ -18,10 +18,10 @@ namespace ShoeBoardAPI.DataBase
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Friend>()
-            .HasOne(f => f.User)
-            .WithMany(u => u.Friends)
-            .HasForeignKey(f => f.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(f => f.User)
+                .WithMany(u => u.Friends)
+                .HasForeignKey(f => f.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Friend>()
                 .HasOne(f => f.FriendUser)

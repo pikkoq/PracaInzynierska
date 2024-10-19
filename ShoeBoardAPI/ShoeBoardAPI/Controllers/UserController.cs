@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ShoeBoardAPI.Models;
 using ShoeBoardAPI.Models.DTO.UserDtos;
@@ -12,9 +13,11 @@ namespace ShoeBoardAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly UserManager<User> _userManager;
+        public UserController(IUserService userService, UserManager<User> userManager)
         {
             _userService = userService;
+            _userManager = userManager;
         }
 
         [HttpPost("registerUser")]
@@ -41,7 +44,7 @@ namespace ShoeBoardAPI.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("getUser/{id}")]
-        public async Task<IActionResult> GetUser(int id)
+        public async Task<IActionResult> GetUser(string id)
         {
             var response = await _userService.GetUser(id);
             if (!response.Success)
@@ -56,6 +59,7 @@ namespace ShoeBoardAPI.Controllers
         public async Task<IActionResult> EditUserData([FromBody] EditUserDto editUser)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Console.WriteLine(userId);
             if (userId == null)
             {
                 var response = new ServiceResponse<bool>
@@ -66,7 +70,7 @@ namespace ShoeBoardAPI.Controllers
                 return BadRequest(response);
             }
 
-            var result = await _userService.EditUserData(editUser, int.Parse(userId));
+            var result = await _userService.EditUserData(editUser, userId);
             if(result.Success){
                 result.Message = "Profile updated successfully!";
                 return Ok(result);
@@ -91,7 +95,7 @@ namespace ShoeBoardAPI.Controllers
                 return BadRequest(response);
             }
 
-            var result = await _userService.ChangeUserPassword(changePassword, int.Parse(userId));
+            var result = await _userService.ChangeUserPassword(changePassword, userId);
             if (result.Success)
             {
                 result.Message = "Password changed successfully!";

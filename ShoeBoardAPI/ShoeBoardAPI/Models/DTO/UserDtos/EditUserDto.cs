@@ -4,7 +4,7 @@
     {
         public string Username { get; set; }
         public string Email { get; set; }
-        public string ProilePicturePath { get; set; }
+        public string ProfilePicturePath { get; set; }
         public string Bio {  get; set; }
     }
 }

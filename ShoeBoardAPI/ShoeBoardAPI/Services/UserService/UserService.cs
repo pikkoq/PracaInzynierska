@@ -18,19 +18,21 @@ namespace ShoeBoardAPI.Services.UserService
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
-        public UserService(AppDbContext context, IConfiguration configuration, IMapper mapper, UserManager<User> userManager)
+        public UserService(AppDbContext context, IConfiguration configuration, IMapper mapper, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _context = context;
             _configuration = configuration;
             _mapper = mapper;
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
-        public async Task<ServiceResponse<bool>> ChangeUserPassword(ChangePasswordDto userPassword, int id)
+        public async Task<ServiceResponse<bool>> ChangeUserPassword(ChangePasswordDto userPassword, string id)
         {
             var response = new ServiceResponse<bool>();
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _userManager.FindByIdAsync(id);
 
             if (user == null)
             {
@@ -39,37 +41,25 @@ namespace ShoeBoardAPI.Services.UserService
                 return response;
             }
 
-            if( !BCrypt.Net.BCrypt.Verify(userPassword.CurrentPassword, user.PasswordHash))
+            var result = await _userManager.ChangePasswordAsync(user, userPassword.CurrentPassword, userPassword.NewPassword);
+            if( result.Succeeded)
             {
-                response.Success = false;
-                response.Message = "Incorrect password";
+                response.Success = true;
+                response.Message = "Password changed successfully";
                 return response;
             }
 
-            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(userPassword.NewPassword);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-                response.Data = true;
-                response.Success = true;
-                response.Message = "Password changed";
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Message = $"Error while chaning password: {ex.Message}";
-                response.Data = false;
-            }
+            response.Success = false;
+            response.Message = "Failed to change password";
             return response;
 
 
         }
 
-        public async Task<ServiceResponse<bool>> EditUserData(EditUserDto userEdit, int id)
+        public async Task<ServiceResponse<bool>> EditUserData(EditUserDto userEdit, string id)
         {
             var response = new ServiceResponse<bool>();
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _userManager.FindByIdAsync(id);
 
             if (user == null)
             {
@@ -78,24 +68,22 @@ namespace ShoeBoardAPI.Services.UserService
                 return response;
             }
 
-            user.Username = userEdit.Username ?? user.Username;
+            user.UserName = userEdit.Username ?? user.UserName;
             user.Email = userEdit.Email ?? user.Email;
             user.Bio = userEdit.Bio ?? user.Bio;
-            user.ProilePicturePath = userEdit.ProilePicturePath ?? user.ProilePicturePath;
+            user.ProfilePicturePath = userEdit.ProfilePicturePath ?? user.ProfilePicturePath;
 
-            try
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
             {
-                await _context.SaveChangesAsync();
+                response.Success = true;
                 response.Data = true;
                 response.Message = "Updated data";
-                response.Success = true;
+                return response;
             }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Message = $"Error while updating user data: {ex.Message}";
-                response.Data = false;
-            }
+
+            response.Success = false;
+            response.Message = "Error while updating user data";
             return response;
 
         }
@@ -107,9 +95,9 @@ namespace ShoeBoardAPI.Services.UserService
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("id", user.Id.ToString())
+                new Claim("id", user.Id)
             };
 
             var token = new JwtSecurityToken(
@@ -123,10 +111,10 @@ namespace ShoeBoardAPI.Services.UserService
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task<ServiceResponse<GetUserDto>> GetUser(int id)
+        public async Task<ServiceResponse<GetUserDto>> GetUser(string id)
         {
             var response = new ServiceResponse<GetUserDto>();
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _userManager.FindByIdAsync(id);
 
             if (user == null)
             {
@@ -140,51 +128,52 @@ namespace ShoeBoardAPI.Services.UserService
             return response;
         }
 
-        public async Task<ServiceResponse<LoginResponseDto>> LoginUser(LoginUserDto loginUser)
+        public async Task<ServiceResponse<string>> LoginUser(LoginUserDto loginUser)
         {
-            var response = new ServiceResponse<LoginResponseDto>();
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == loginUser.Email);
+            var response = new ServiceResponse<string>();
+            var user = await _userManager.FindByEmailAsync(loginUser.Email);
 
-            if (user == null || !BCrypt.Net.BCrypt.Verify(loginUser.Password, user.PasswordHash))
+            if (user == null )
             {
                 response.Success = false;
-
-                response.Data = new LoginResponseDto { Token = null, Success = false};
-                response.Message = "Failed to login";
+                response.Message = "Invalid username or password";
                 return response;
             }
 
-            var token = GenerateJwtToken(user);
-            response.Data = new LoginResponseDto { Token = token, Username = user.Username, Success = true };
-            response.Message = "Succesfully logged in";
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginUser.Password, false);
+            if (result.Succeeded)
+            {
+                response.Data = GenerateJwtToken(user);
+                response.Success = true;
+                response.Message = "User logged in successfully";
+                return response;
+            }
+            response.Success = false;
+            response.Message = "Invalid username or password";
             return response;
 
         }
 
-        public async Task<ServiceResponse<RegisterResponseDto>> ReigsterUser(RegisterUserDto registerUser)
+        public async Task<ServiceResponse<bool>> ReigsterUser(RegisterUserDto registerUser)
         {
-            var response = new ServiceResponse<RegisterResponseDto>();
-
-            if (await _context.Users.AnyAsync(u => u.Email == registerUser.Email))
-            {
-                response.Success = false;
-                response.Data = new RegisterResponseDto { Message = "Email already in use.", Success = false };
-                response.Message = response.Data.Message;
-                return response;
-            }
+            var response = new ServiceResponse<bool>();
 
             var user = new User
             {
-                Username = registerUser.Username,
+                UserName = registerUser.Username,
                 Email = registerUser.Email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerUser.Password)
             };
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            var result = await _userManager.CreateAsync(user, registerUser.Password);
+            if (result.Succeeded)
+            {
+                response.Success = true;
+                response.Message = "User registered successfully";
+                return response;
+            }
 
-            response.Data = new RegisterResponseDto { Message = "User registered successfully.", DateTimeCreated = DateTime.Now, Success = true };
-            response.Message = response.Data.Message;
+            response.Success = false;
+            response.Message = "User registration failed";
             return response;
         }
     }

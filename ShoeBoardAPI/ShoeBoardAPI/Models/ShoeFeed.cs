@@ -2,9 +2,9 @@
 {
     public class ShoeFeed
     {
-        public int Id { get; set; }
-        public int ShoeId { get; set; }
-        public int FriendId { get; set; }
+        public string Id { get; set; }
+        public string ShoeId { get; set; }
+        public string FriendId { get; set; }
         public DateTime DatePosted { get; set; } = DateTime.UtcNow;
 
         public Shoe Shoe { get; set; }

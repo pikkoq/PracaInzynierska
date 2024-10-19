@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using ShoeBoardAPI.Models;
 using ShoeBoardAPI.Models.DTO.UserDtos;
 using ShoeBoardAPI.Services.UserService;
+using System.Security.Claims;
 
 namespace ShoeBoardAPI.Controllers
 {
@@ -15,7 +18,7 @@ namespace ShoeBoardAPI.Controllers
         }
 
         [HttpPost("registerUser")]
-        public async Task<IActionResult> RegisterUser(RegisterUserDto registerUserDto)
+        public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDto registerUserDto)
         {
             var response = await _userService.ReigsterUser(registerUserDto);
             if (!response.Success)
@@ -26,7 +29,7 @@ namespace ShoeBoardAPI.Controllers
         }
 
         [HttpPost("loginUser")]
-        public async Task<IActionResult> LoginUser(LoginUserDto loginUserDto)
+        public async Task<IActionResult> LoginUser([FromBody] LoginUserDto loginUserDto)
         {
             var response = await _userService.LoginUser(loginUserDto);
             if (!response.Success)
@@ -34,6 +37,69 @@ namespace ShoeBoardAPI.Controllers
                 return Unauthorized(response);
             }
             return Ok(response);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("getUser/{id}")]
+        public async Task<IActionResult> GetUser(int id)
+        {
+            var response = await _userService.GetUser(id);
+            if (!response.Success)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPatch("editUserData")]
+        public async Task<IActionResult> EditUserData([FromBody] EditUserDto editUser)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                var response = new ServiceResponse<bool>
+                {
+                    Success = false,
+                    Message = "User not found. Cannot indetify. Please re-login."
+                };
+                return BadRequest(response);
+            }
+
+            var result = await _userService.EditUserData(editUser, int.Parse(userId));
+            if(result.Success){
+                result.Message = "Profile updated successfully!";
+                return Ok(result);
+            }
+
+            result.Message = "Profile update failed.";
+            return BadRequest(result);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPatch("changeUserPassword")]
+        public async Task<IActionResult> ChangeUserPassword([FromBody] ChangePasswordDto changePassword)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                var response = new ServiceResponse<bool>
+                {
+                    Success = false,
+                    Message = "User not found. Cannot indetify. Please re-login."
+                };
+                return BadRequest(response);
+            }
+
+            var result = await _userService.ChangeUserPassword(changePassword, int.Parse(userId));
+            if (result.Success)
+            {
+                result.Message = "Password changed successfully!";
+                return Ok(result);
+            }
+
+            result.Message = "Password change failed.";
+            return BadRequest(result);
         }
 
     }

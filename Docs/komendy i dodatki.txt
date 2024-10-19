@@ -5,6 +5,7 @@ entityframeworkCore.SqlServer 8.0.10
 AspNetCore.Identity.EntityFrameworkCOre 8.0.10
 AspNetCore.Authentication.JwtBearer 8.0.10
 EntityFreamworkCore.Tools 8.0.10
+AutoMapper 13.0.1
 
 WEB:
 npm start - start serwera

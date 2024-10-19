@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.IdentityModel.Tokens;
 using ShoeBoardAPI.DataBase;
 using ShoeBoardAPI.Models;
@@ -13,11 +16,88 @@ namespace ShoeBoardAPI.Services.UserService
     {
         private readonly AppDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
 
-        public UserService(AppDbContext context, IConfiguration configuration)
+        public UserService(AppDbContext context, IConfiguration configuration, IMapper mapper, UserManager<User> userManager)
         {
             _context = context;
             _configuration = configuration;
+            _mapper = mapper;
+            _userManager = userManager;
+        }
+
+        public async Task<ServiceResponse<bool>> ChangeUserPassword(ChangePasswordDto userPassword, int id)
+        {
+            var response = new ServiceResponse<bool>();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                response.Success = false;
+                response.Message = "User not found";
+                return response;
+            }
+
+            if( !BCrypt.Net.BCrypt.Verify(userPassword.CurrentPassword, user.PasswordHash))
+            {
+                response.Success = false;
+                response.Message = "Incorrect password";
+                return response;
+            }
+
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(userPassword.NewPassword);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                response.Data = true;
+                response.Success = true;
+                response.Message = "Password changed";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Error while chaning password: {ex.Message}";
+                response.Data = false;
+            }
+            return response;
+
+
+        }
+
+        public async Task<ServiceResponse<bool>> EditUserData(EditUserDto userEdit, int id)
+        {
+            var response = new ServiceResponse<bool>();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                response.Success = false;
+                response.Message = "User not found";
+                return response;
+            }
+
+            user.Username = userEdit.Username ?? user.Username;
+            user.Email = userEdit.Email ?? user.Email;
+            user.Bio = userEdit.Bio ?? user.Bio;
+            user.ProilePicturePath = userEdit.ProilePicturePath ?? user.ProilePicturePath;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                response.Data = true;
+                response.Message = "Updated data";
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Error while updating user data: {ex.Message}";
+                response.Data = false;
+            }
+            return response;
+
         }
 
         public string GenerateJwtToken(User user)
@@ -43,6 +123,23 @@ namespace ShoeBoardAPI.Services.UserService
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        public async Task<ServiceResponse<GetUserDto>> GetUser(int id)
+        {
+            var response = new ServiceResponse<GetUserDto>();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                response.Success = false;
+                response.Message = "User not found";
+                return response;
+            }
+
+            response.Data = _mapper.Map<GetUserDto>(user);
+            response.Message = "User has been found";
+            return response;
+        }
+
         public async Task<ServiceResponse<LoginResponseDto>> LoginUser(LoginUserDto loginUser)
         {
             var response = new ServiceResponse<LoginResponseDto>();
@@ -53,11 +150,13 @@ namespace ShoeBoardAPI.Services.UserService
                 response.Success = false;
 
                 response.Data = new LoginResponseDto { Token = null, Success = false};
+                response.Message = "Failed to login";
                 return response;
             }
 
             var token = GenerateJwtToken(user);
             response.Data = new LoginResponseDto { Token = token, Username = user.Username, Success = true };
+            response.Message = "Succesfully logged in";
             return response;
 
         }
@@ -70,6 +169,7 @@ namespace ShoeBoardAPI.Services.UserService
             {
                 response.Success = false;
                 response.Data = new RegisterResponseDto { Message = "Email already in use.", Success = false };
+                response.Message = response.Data.Message;
                 return response;
             }
 
@@ -84,6 +184,7 @@ namespace ShoeBoardAPI.Services.UserService
             await _context.SaveChangesAsync();
 
             response.Data = new RegisterResponseDto { Message = "User registered successfully.", DateTimeCreated = DateTime.Now, Success = true };
+            response.Message = response.Data.Message;
             return response;
         }
     }

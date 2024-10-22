@@ -59,7 +59,6 @@ namespace ShoeBoardAPI.Controllers
         public async Task<IActionResult> EditUserData([FromBody] EditUserDto editUser)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Console.WriteLine(userId);
             if (userId == null)
             {
                 var response = new ServiceResponse<bool>

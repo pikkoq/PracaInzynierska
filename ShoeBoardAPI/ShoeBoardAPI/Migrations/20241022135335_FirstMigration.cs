@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ShoeBoardAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class SecondCreate : Migration
+    public partial class FirstMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -59,11 +59,18 @@ namespace ShoeBoardAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Model_No = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Nickname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Model = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Series = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Url_Link_Handler = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Image_Url = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false),
+                    Release_Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Main_Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Colorway = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -202,18 +209,53 @@ namespace ShoeBoardAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserShoeCatalogs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Model_No = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Nickname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Series = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Image_Url = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false),
+                    Image_Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Release_Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Main_Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Colorway = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserShoeCatalogs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserShoeCatalogs_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Shoes",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ShoeCatalogId = table.Column<int>(type: "int", nullable: false),
+                    ShoeCatalogId = table.Column<int>(type: "int", nullable: true),
+                    UserShoeCatalogId = table.Column<int>(type: "int", nullable: true),
                     Size = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ComfortRating = table.Column<int>(type: "int", nullable: false),
                     StyleRating = table.Column<int>(type: "int", nullable: false),
                     Season = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Review = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ShoeAddType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -228,16 +270,21 @@ namespace ShoeBoardAPI.Migrations
                         name: "FK_Shoes_ShoeCatalogs_ShoeCatalogId",
                         column: x => x.ShoeCatalogId,
                         principalTable: "ShoeCatalogs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Shoes_UserShoeCatalogs_UserShoeCatalogId",
+                        column: x => x.UserShoeCatalogId,
+                        principalTable: "UserShoeCatalogs",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "ShoeFeeds",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ShoeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ShoeId = table.Column<int>(type: "int", nullable: false),
                     FriendId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DatePosted = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -326,6 +373,16 @@ namespace ShoeBoardAPI.Migrations
                 name: "IX_Shoes_UserId",
                 table: "Shoes",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Shoes_UserShoeCatalogId",
+                table: "Shoes",
+                column: "UserShoeCatalogId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserShoeCatalogs_UserId",
+                table: "UserShoeCatalogs",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -359,10 +416,13 @@ namespace ShoeBoardAPI.Migrations
                 name: "Shoes");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "ShoeCatalogs");
 
             migrationBuilder.DropTable(
-                name: "ShoeCatalogs");
+                name: "UserShoeCatalogs");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

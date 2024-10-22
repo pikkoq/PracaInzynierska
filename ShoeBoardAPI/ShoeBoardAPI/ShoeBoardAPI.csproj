@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <Folder Include="Services\FriendService\" />
-    <Folder Include="Services\ShoeService\" />
   </ItemGroup>
 
 </Project>

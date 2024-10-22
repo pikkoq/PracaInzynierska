@@ -179,8 +179,11 @@ namespace ShoeBoardAPI.Migrations
 
             modelBuilder.Entity("ShoeBoardAPI.Models.Shoe", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ComfortRating")
                         .HasColumnType("int");
@@ -196,7 +199,10 @@ namespace ShoeBoardAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ShoeCatalogId")
+                    b.Property<int>("ShoeAddType")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ShoeCatalogId")
                         .HasColumnType("int");
 
                     b.Property<string>("Size")
@@ -210,11 +216,16 @@ namespace ShoeBoardAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int?>("UserShoeCatalogId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ShoeCatalogId");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserShoeCatalogId");
 
                     b.ToTable("Shoes");
                 });
@@ -231,19 +242,46 @@ namespace ShoeBoardAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Category")
+                    b.Property<string>("Colorway")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("Image_Url")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<string>("Main_Color")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Model")
+                    b.Property<string>("Model_No")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nickname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Release_Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Series")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url_Link_Handler")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -254,8 +292,11 @@ namespace ShoeBoardAPI.Migrations
 
             modelBuilder.Entity("ShoeBoardAPI.Models.ShoeFeed", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DatePosted")
                         .HasColumnType("datetime2");
@@ -264,9 +305,8 @@ namespace ShoeBoardAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ShoeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("ShoeId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -351,6 +391,75 @@ namespace ShoeBoardAPI.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("ShoeBoardAPI.Models.UserShoeCatalog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Brand")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Colorway")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image_Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image_Url")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<string>("Main_Color")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Model_No")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nickname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Release_Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Series")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserShoeCatalogs");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -425,9 +534,7 @@ namespace ShoeBoardAPI.Migrations
                 {
                     b.HasOne("ShoeBoardAPI.Models.ShoeCatalog", "ShoeCatalog")
                         .WithMany()
-                        .HasForeignKey("ShoeCatalogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ShoeCatalogId");
 
                     b.HasOne("ShoeBoardAPI.Models.User", "User")
                         .WithMany("Shoes")
@@ -435,9 +542,15 @@ namespace ShoeBoardAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ShoeBoardAPI.Models.UserShoeCatalog", "UserShoeCatalog")
+                        .WithMany()
+                        .HasForeignKey("UserShoeCatalogId");
+
                     b.Navigation("ShoeCatalog");
 
                     b.Navigation("User");
+
+                    b.Navigation("UserShoeCatalog");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.ShoeFeed", b =>
@@ -459,11 +572,24 @@ namespace ShoeBoardAPI.Migrations
                     b.Navigation("Shoe");
                 });
 
+            modelBuilder.Entity("ShoeBoardAPI.Models.UserShoeCatalog", b =>
+                {
+                    b.HasOne("ShoeBoardAPI.Models.User", "User")
+                        .WithMany("UserShoeCatalogs")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ShoeBoardAPI.Models.User", b =>
                 {
                     b.Navigation("Friends");
 
                     b.Navigation("Shoes");
+
+                    b.Navigation("UserShoeCatalogs");
                 });
 #pragma warning restore 612, 618
         }

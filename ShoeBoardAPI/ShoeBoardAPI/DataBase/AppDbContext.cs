@@ -10,6 +10,7 @@ namespace ShoeBoardAPI.DataBase
         public DbSet<Friend> Friends { get; set; }
         public DbSet<ShoeFeed> ShoeFeeds { get; set; }
         public DbSet<ShoeCatalog> ShoeCatalogs { get; set; }
+        public DbSet<UserShoeCatalog> UserShoeCatalogs { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -39,6 +40,11 @@ namespace ShoeBoardAPI.DataBase
                 .WithMany()
                 .HasForeignKey(s => s.ShoeCatalogId);
 
+            modelBuilder.Entity<Shoe>()
+                .HasOne(s => s.UserShoeCatalog)
+                .WithMany()
+                .HasForeignKey(s => s.UserShoeCatalogId);
+
             modelBuilder.Entity<ShoeFeed>()
                 .HasOne(sf => sf.Shoe)
                 .WithMany()
@@ -48,6 +54,12 @@ namespace ShoeBoardAPI.DataBase
                 .HasOne(sf => sf.Friend)
                 .WithMany()
                 .HasForeignKey(sf => sf.FriendId);
+
+            modelBuilder.Entity<UserShoeCatalog>()
+                .HasOne(c => c.User)
+                .WithMany(u => u.UserShoeCatalogs)
+                .HasForeignKey(c => c.UserId);
+
         }
     }
 }

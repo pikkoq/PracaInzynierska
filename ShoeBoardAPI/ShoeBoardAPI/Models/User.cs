@@ -10,5 +10,6 @@ namespace ShoeBoardAPI.Models
 
         public ICollection<Shoe> Shoes { get; set; }
         public ICollection<Friend> Friends { get; set; }
+        public ICollection<UserShoeCatalog> UserShoeCatalogs { get; set; }
     }
 }

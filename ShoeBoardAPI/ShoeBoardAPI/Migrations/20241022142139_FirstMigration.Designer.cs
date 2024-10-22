@@ -12,7 +12,7 @@ using ShoeBoardAPI.DataBase;
 namespace ShoeBoardAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241022135335_FirstMigration")]
+    [Migration("20241022142139_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />

@@ -40,6 +40,24 @@ namespace ShoeBoardAPI.Controllers
             }
 
             return BadRequest(result);
-        } 
+        }
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost("SignShoeToUser")]
+        public async Task<IActionResult> SignShoeToUser([FromBody] SignShoeToUserDto newShoe, int? shoeCatalogId, int? userShoeCataloId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                var response = new ServiceResponse<bool>
+                {
+                    Success = false,
+                    Message = "User not found. Cannot indetify. Please re-login."
+                };
+                return BadRequest(response);
+            }
+
+            var result = await _shoeService.SignShoeToUser(newShoe, shoeCatalogId, userShoeCataloId, userId);
+            return Ok(result);
+        }
     }
 }

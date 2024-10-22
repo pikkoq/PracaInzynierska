@@ -6,7 +6,7 @@ namespace ShoeBoardAPI.Services.ShoeService
     public interface IShoeService
     {
         Task<ServiceResponse<bool>> NewShoeRegistry(NewShoeRegistryDto newShoe, string userId);
-        Task<ServiceResponse<bool>> SignShoeToUser(SignShoeToUserDto newShoe);
+        Task<ServiceResponse<bool>> SignShoeToUser(SignShoeToUserDto newShoe, int? shoeCatalogId, int? userShoeCatalogId, string userId);
         Task<ServiceResponse<List<GetAllUserShoesDto>>> GetAllUserShoes(string userId);
         Task<ServiceResponse<List<GetAllAddedUserShoesDto>>> GetAllAddedUserShoes(string userId);
         Task<ServiceResponse<GetShoeDetailsDto>> GetShoeDetails(string shoeId);

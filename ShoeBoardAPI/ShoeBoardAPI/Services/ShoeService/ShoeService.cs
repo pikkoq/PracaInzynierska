@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration.UserSecrets;
 using ShoeBoardAPI.DataBase;
 using ShoeBoardAPI.Models;
 using ShoeBoardAPI.Models.DTO.ShoeDtos;
+using ShoeBoardAPI.Models.Enums;
 
 namespace ShoeBoardAPI.Services.ShoeService
 {
@@ -83,9 +84,52 @@ namespace ShoeBoardAPI.Services.ShoeService
             throw new NotImplementedException();
         }
 
-        public Task<ServiceResponse<bool>> SignShoeToUser(SignShoeToUserDto newShoe)
+        public async Task<ServiceResponse<bool>> SignShoeToUser(SignShoeToUserDto newShoe, int? shoeCatalogId, int? userShoeCatalogId, string userId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<bool>();
+
+            var shoe = new Shoe
+            {
+                UserId = userId,
+                Size = newShoe.Size,
+                ComfortRating = newShoe.ComfortRating,
+                StyleRating = newShoe.StyleRating,
+                Season = newShoe.Season,
+                Review = newShoe.Review,
+                DateAdded = DateTime.UtcNow,
+            };
+
+            if(shoeCatalogId != null)
+            {
+                shoe.ShoeCatalogId = shoeCatalogId;
+                shoe.ShoeAddType = ShoeAddType.MainCatalog;
+            }
+            else if(userShoeCatalogId != null)
+            {
+                shoe.UserShoeCatalogId = userShoeCatalogId;
+                shoe.ShoeAddType = ShoeAddType.UserCatalog;
+            }
+            else
+            {
+                response.Success = false;
+                response.Data = false;
+                response.Message = "Failed to find shoe.";
+            }
+
+            await _context.AddAsync(shoe);
+            var result = await _context.SaveChangesAsync();
+
+            response.Success = result > 0;
+            if (response.Success)
+            {
+                response.Message = "Shoe successfully added to user's collection.";
+                response.Data = true;
+                return response;
+            }
+            response.Message = "Error adding shoe to user's collection.";
+            response.Data = false;
+            return response;
+
         }
     }
 }

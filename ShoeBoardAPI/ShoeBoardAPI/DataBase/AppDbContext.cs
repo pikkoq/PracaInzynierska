@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ShoeBoardAPI.Models;
+using ShoeBoardAPI.Models.Enums;
 
 namespace ShoeBoardAPI.DataBase
 {
@@ -17,6 +18,13 @@ namespace ShoeBoardAPI.DataBase
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Shoe>()
+                .Property(s => s.ShoeAddType)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (ShoeAddType)Enum.Parse(typeof(ShoeAddType), v)
+                );
 
             modelBuilder.Entity<Friend>()
                 .HasOne(f => f.User)

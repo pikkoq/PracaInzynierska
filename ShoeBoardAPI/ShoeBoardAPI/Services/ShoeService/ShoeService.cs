@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using ShoeBoardAPI.DataBase;
 using ShoeBoardAPI.Models;
@@ -33,19 +34,56 @@ namespace ShoeBoardAPI.Services.ShoeService
             throw new NotImplementedException();
         }
 
-        public Task<ServiceResponse<List<GetAllAddedUserShoesDto>>> GetAllAddedUserShoes(string userId)
+        public async Task<ServiceResponse<List<GetAllAddedUserShoesDto>>> GetAllAddedUserShoes(string userId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<GetAllAddedUserShoesDto>>();
+
+            var addedShoes = await _context.UserShoeCatalogs
+                .Where(x => x.UserId == userId)
+                .ToListAsync();
+
+            response.Data = _mapper.Map<List<GetAllAddedUserShoesDto>>(addedShoes);
+            response.Success = true;
+            response.Message = "Successfully retrived added user shoes";
+            return response;
         }
 
-        public Task<ServiceResponse<List<GetAllUserShoesDto>>> GetAllUserShoes(string userId)
+        public async Task<ServiceResponse<List<GetAllUserShoesDto>>> GetAllUserShoes(string userId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<GetAllUserShoesDto>>();
+
+            var userShoes = await _context.Shoes
+                .Where(s => s.UserId == userId)
+                .ToListAsync();
+
+            response.Data = _mapper.Map<List<GetAllUserShoesDto>>(userShoes);
+            response.Success = true;
+            response.Message = "Successfully retrived user shoes";
+            return response;
         }
 
-        public Task<ServiceResponse<GetShoeDetailsDto>> GetShoeDetails(string shoeId)
+        public async Task<ServiceResponse<GetShoeDetailsDto>> GetShoeDetails(int shoeId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<GetShoeDetailsDto>();
+            var shoe = await _context.Shoes
+                .Include(s => s.ShoeCatalog)
+                .Include(s => s.UserShoeCatalog)
+                .FirstOrDefaultAsync(s => s.Id == shoeId);
+
+            if (shoe == null)
+            {
+                response.Success = false;
+                response.Data = null;
+                response.Message = "Shoe not found";
+                return response;
+            }
+
+            response.Data = shoe.ShoeAddType == ShoeAddType.MainCatalog
+                ? _mapper.Map<GetShoeDetailsDto>(shoe.ShoeCatalog)
+                : _mapper.Map<GetShoeDetailsDto>(shoe.UserShoeCatalog);
+            response.Success = true;
+            response.Message = "Shoe details retrived successfully.";
+            return response;
         }
 
         public async Task<ServiceResponse<bool>> NewShoeRegistry(NewShoeRegistryDto newShoe, string userId)

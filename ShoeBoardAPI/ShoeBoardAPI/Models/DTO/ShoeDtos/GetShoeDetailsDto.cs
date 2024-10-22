@@ -14,6 +14,7 @@ namespace ShoeBoardAPI.Models.DTO.ShoeDtos
         public string Gender { get; set; }
         [MaxLength(2048)]
         public string Image_Url { get; set; }
+        public string Image_Path { get; set; }
         public DateTime Release_Date { get; set; }
         public string Main_Color { get; set; }
         public string Colorway { get; set; }

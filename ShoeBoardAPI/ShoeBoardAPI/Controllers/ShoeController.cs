@@ -59,5 +59,115 @@ namespace ShoeBoardAPI.Controllers
             var result = await _shoeService.SignShoeToUser(newShoe, shoeCatalogId, userShoeCataloId, userId);
             return Ok(result);
         }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("GetAllUserShoes")]
+        public async Task<IActionResult> GetAllUserShoes()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                var response = new ServiceResponse<bool>
+                {
+                    Success = false,
+                    Message = "User not found. Cannot indetify. Please re-login."
+                };
+                return BadRequest(response);
+            }
+
+            var result = await _shoeService.GetAllUserShoes(userId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            result.Message = "Failed to fetch data";
+            result.Success = false;
+            result.Data = null;
+            return BadRequest(result);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("GetAllUserShoesWithId")]
+        public async Task<IActionResult> GetAllUserShoesWithId(string userId)
+        {
+            if (userId == null)
+            {
+                var response = new ServiceResponse<bool>
+                {
+                    Success = false,
+                    Message = "User not found. Cannot indetify."
+                };
+                return BadRequest(response);
+            }
+
+            var result = await _shoeService.GetAllUserShoes(userId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            result.Message = "Failed to fetch data";
+            result.Success = false;
+            result.Data = null;
+            return BadRequest(result);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("GetAllAddedUserShoes")]
+        public async Task<IActionResult> GetAllAddedUserShoes()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                var response = new ServiceResponse<bool>
+                {
+                    Success = false,
+                    Message = "User not found. Cannot indetify. Please re-login."
+                };
+                return BadRequest(response);
+            }
+
+            var result = await _shoeService.GetAllAddedUserShoes(userId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            result.Message = "Failed to fetch data";
+            result.Success = false;
+            result.Data = null;
+            return BadRequest(result);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("GetAllAddedUserShoesWithId")]
+        public async Task<IActionResult> GetAllAddedUserShoesWithId(string userId)
+        {
+            if (userId == null)
+            {
+                var response = new ServiceResponse<bool>
+                {
+                    Success = false,
+                    Message = "User not found. Cannot indetify."
+                };
+                return BadRequest(response);
+            }
+
+            var result = await _shoeService.GetAllAddedUserShoes(userId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            result.Message = "Failed to fetch data";
+            result.Success = false;
+            result.Data = null;
+            return BadRequest(result);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("GetShoeDetails")]
+        public async Task<IActionResult> GetShoeDetails(int shoeId)
+        {
+            var response = await _shoeService.GetShoeDetails(shoeId);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
     }
 }

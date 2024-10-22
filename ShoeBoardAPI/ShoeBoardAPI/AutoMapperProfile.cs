@@ -2,6 +2,7 @@
 using ShoeBoardAPI.Models;
 using ShoeBoardAPI.Models.DTO.ShoeDtos;
 using ShoeBoardAPI.Models.DTO.UserDtos;
+using ShoeBoardAPI.Models.Enums;
 
 namespace ShoeBoardAPI
 {
@@ -26,10 +27,12 @@ namespace ShoeBoardAPI
                 .ForMember(dest => dest.Bio, opt => opt.MapFrom(src => src.Bio))
                 .ForMember(dest => dest.ProfilePicturePath, opt => opt.MapFrom(src => src.ProfilePicturePath));
 
-            CreateMap<Shoe, GetAllUserShoesDto>();
             CreateMap<ShoeCatalog, GetShoeDetailsDto>();
             CreateMap<UserShoeCatalog, GetAllAddedUserShoesDto>();
             CreateMap<NewShoeRegistryDto, UserShoeCatalog>();
+            CreateMap<Shoe, GetShoeDetailsDto>();
+            CreateMap<UserShoeCatalog, GetShoeDetailsDto>();
+            CreateMap<Shoe, GetAllUserShoesDto>();
 
         }
     }

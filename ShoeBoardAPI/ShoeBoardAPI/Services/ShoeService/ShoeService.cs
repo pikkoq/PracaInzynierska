@@ -117,9 +117,27 @@ namespace ShoeBoardAPI.Services.ShoeService
             return response;
         }
 
-        public Task<ServiceResponse<List<GetShoeDetailsDto>>> SearchShoes(string searchTerm)
+        public async Task<ServiceResponse<List<GetShoeDetailsDto>>> SearchShoes(string searchTerm)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<GetShoeDetailsDto>>();
+
+            var shoeCatalog = await _context.ShoeCatalogs
+                .Where(s => s.Title.Contains(searchTerm) || s.Brand.Contains(searchTerm) ||
+                s.Model_No.Contains(searchTerm) || s.Nickname.Contains(searchTerm) || 
+                s.Series.Contains(searchTerm)).ToListAsync();
+
+            var shoeUserCatalog = await _context.UserShoeCatalogs
+                .Where(s => s.Title.Contains(searchTerm) || s.Brand.Contains(searchTerm) ||
+                s.Model_No.Contains(searchTerm) || s.Nickname.Contains(searchTerm) ||
+                s.Series.Contains(searchTerm)).ToListAsync();
+
+            var catalogShoeDto = _mapper.Map<List<GetShoeDetailsDto>>(shoeCatalog);
+            var userCatalogShoeDto = _mapper.Map<List<GetShoeDetailsDto>>(shoeUserCatalog);
+
+            response.Data = catalogShoeDto.Concat(userCatalogShoeDto).ToList();
+            response.Message = "Search results retrieved successfully.";
+            response.Success = true;
+            return response;
         }
 
         public async Task<ServiceResponse<bool>> SignShoeToUser(SignShoeToUserDto newShoe, int? shoeCatalogId, int? userShoeCatalogId, string userId)

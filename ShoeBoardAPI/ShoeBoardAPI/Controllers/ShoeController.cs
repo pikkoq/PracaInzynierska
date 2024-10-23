@@ -62,33 +62,7 @@ namespace ShoeBoardAPI.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("GetAllUserShoes")]
-        public async Task<IActionResult> GetAllUserShoes()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
-            {
-                var response = new ServiceResponse<bool>
-                {
-                    Success = false,
-                    Message = "User not found. Cannot indetify. Please re-login."
-                };
-                return BadRequest(response);
-            }
-
-            var result = await _shoeService.GetAllUserShoes(userId);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            result.Message = "Failed to fetch data";
-            result.Success = false;
-            result.Data = null;
-            return BadRequest(result);
-        }
-
-        [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("GetAllUserShoesWithId")]
-        public async Task<IActionResult> GetAllUserShoesWithId(string userId)
+        public async Task<IActionResult> GetAllUserShoes(string userId)
         {
             if (userId == null)
             {
@@ -113,33 +87,7 @@ namespace ShoeBoardAPI.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("GetAllAddedUserShoes")]
-        public async Task<IActionResult> GetAllAddedUserShoes()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
-            {
-                var response = new ServiceResponse<bool>
-                {
-                    Success = false,
-                    Message = "User not found. Cannot indetify. Please re-login."
-                };
-                return BadRequest(response);
-            }
-
-            var result = await _shoeService.GetAllAddedUserShoes(userId);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            result.Message = "Failed to fetch data";
-            result.Success = false;
-            result.Data = null;
-            return BadRequest(result);
-        }
-
-        [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("GetAllAddedUserShoesWithId")]
-        public async Task<IActionResult> GetAllAddedUserShoesWithId(string userId)
+        public async Task<IActionResult> GetAllAddedUserShoes(string userId)
         {
             if (userId == null)
             {

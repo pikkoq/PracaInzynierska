@@ -10,7 +10,8 @@ namespace ShoeBoardAPI.Services.ShoeService
         Task<ServiceResponse<List<GetAllUserShoesDto>>> GetAllUserShoes(string userId);
         Task<ServiceResponse<List<GetAllAddedUserShoesDto>>> GetAllAddedUserShoes(string userId);
         Task<ServiceResponse<GetShoeDetailsDto>> GetShoeDetails(int shoeId);
-        Task<ServiceResponse<List<GetShoeDetailsDto>>> SearchShoes(string searchTerm);
+        Task<SearchServiseResponse<List<GetShoeSearchDto>>> SearchShoes(string searchTerm, int pageNumber = 1);
+        Task<SearchServiseResponse<List<GetShoeSearchDto>>> SearchUsersShoes(string searchTerm, int pageNumber = 1);
         Task<ServiceResponse<bool>> EditShoeDetails();
         Task<ServiceResponse<bool>> EditAddedUserShoe();
         Task<ServiceResponse<bool>> DeleteUserShoe();

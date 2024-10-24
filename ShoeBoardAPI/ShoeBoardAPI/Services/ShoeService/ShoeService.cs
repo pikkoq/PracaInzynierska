@@ -117,24 +117,95 @@ namespace ShoeBoardAPI.Services.ShoeService
             return response;
         }
 
-        public async Task<ServiceResponse<List<GetShoeDetailsDto>>> SearchShoes(string searchTerm)
+        public async Task<SearchServiseResponse<List<GetShoeSearchDto>>> SearchShoes(string searchTerm, int pageNumber = 1)
         {
-            var response = new ServiceResponse<List<GetShoeDetailsDto>>();
+            var response = new SearchServiseResponse<List<GetShoeSearchDto>>();
+            int pageSize = 40;
+            int offset = (pageNumber - 1) * pageSize;
+
+            string BuildSearchQuery(string baseQuery, string searchTerm)
+            {
+                var searchWords = searchTerm.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                var searchConditions = string.Join(" AND ", searchWords.Select(word => $"CONTAINS((Title, Brand, Model_No, Nickname, Series, Main_Color), '\"{word}\"')"));
+
+                return $"{baseQuery} WHERE {searchConditions}";
+            }
+
+            var shoeCatalogQuery = @"
+                SELECT *
+                FROM ShoeCatalogs
+                ";
+
+            var shoeCatalogQueryCount = @"
+                SELECT Title
+                FROM ShoeCatalogs
+                ";
+
+            var dynamicShoeCatalogQuery = BuildSearchQuery(shoeCatalogQuery, searchTerm) + $" ORDER BY Id OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY;";
 
             var shoeCatalog = await _context.ShoeCatalogs
-                .Where(s => s.Title.Contains(searchTerm) || s.Brand.Contains(searchTerm) ||
-                s.Model_No.Contains(searchTerm) || s.Nickname.Contains(searchTerm) || 
-                s.Series.Contains(searchTerm)).ToListAsync();
+                .FromSqlRaw(dynamicShoeCatalogQuery)
+                .ToListAsync();
 
-            var shoeUserCatalog = await _context.UserShoeCatalogs
-                .Where(s => s.Title.Contains(searchTerm) || s.Brand.Contains(searchTerm) ||
-                s.Model_No.Contains(searchTerm) || s.Nickname.Contains(searchTerm) ||
-                s.Series.Contains(searchTerm)).ToListAsync();
+            var totalCountShoeCatalog = await _context.ShoeCatalogs
+                .FromSqlRaw(BuildSearchQuery(shoeCatalogQueryCount, searchTerm))
+                .CountAsync();
 
-            var catalogShoeDto = _mapper.Map<List<GetShoeDetailsDto>>(shoeCatalog);
-            var userCatalogShoeDto = _mapper.Map<List<GetShoeDetailsDto>>(shoeUserCatalog);
+            int totalPages = (int)Math.Ceiling((double)totalCountShoeCatalog / pageSize);
 
-            response.Data = catalogShoeDto.Concat(userCatalogShoeDto).ToList();
+            var catalogShoeDto = _mapper.Map<List<GetShoeSearchDto>>(shoeCatalog);
+
+            response.Data = catalogShoeDto;
+            response.TotalCount = totalCountShoeCatalog;
+            response.TotalPages = totalPages;
+            response.Message = "Search results retrieved successfully.";
+            response.Success = true;
+            return response;
+        }
+
+        public async Task<SearchServiseResponse<List<GetShoeSearchDto>>> SearchUsersShoes(string searchTerm, int pageNumber = 1)
+        {
+            var response = new SearchServiseResponse<List<GetShoeSearchDto>>();
+            int pageSize = 40;
+            int offset = (pageNumber - 1) * pageSize;
+
+            string BuildSearchQuery(string baseQuery, string searchTerm)
+            {
+                var searchWords = searchTerm.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                var searchConditions = string.Join(" AND ", searchWords.Select(word => $"CONTAINS((Title, Brand, Model_No, Nickname, Series, Main_Color), '\"{word}\"')"));
+
+                return $"{baseQuery} WHERE {searchConditions}";
+            }
+
+            var shoeCatalogQuery = @"
+                SELECT *
+                FROM UserShoeCatalogs
+                ";
+
+            var shoeCatalogQueryCount = @"
+                SELECT Title
+                FROM UserShoeCatalogs
+                ";
+
+            var dynamicShoeCatalogQuery = BuildSearchQuery(shoeCatalogQuery, searchTerm) + $" ORDER BY Id OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY;";
+
+            var shoeCatalog = await _context.UserShoeCatalogs
+                .FromSqlRaw(dynamicShoeCatalogQuery)
+                .ToListAsync();
+
+            var totalCountShoeCatalog = await _context.UserShoeCatalogs
+                .FromSqlRaw(BuildSearchQuery(shoeCatalogQueryCount, searchTerm))
+                .CountAsync();
+
+            int totalPages = (int)Math.Ceiling((double)totalCountShoeCatalog / pageSize);
+
+            var catalogShoeDto = _mapper.Map<List<GetShoeSearchDto>>(shoeCatalog);
+
+            response.Data = catalogShoeDto;
+            response.TotalCount = totalCountShoeCatalog;
+            response.TotalPages = totalPages;
             response.Message = "Search results retrieved successfully.";
             response.Success = true;
             return response;

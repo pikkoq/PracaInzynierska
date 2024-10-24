@@ -117,12 +117,20 @@ namespace ShoeBoardAPI.Controllers
             var response = await _shoeService.GetShoeDetails(shoeId);
             return response.Success ? Ok(response) : BadRequest(response);
         }
-        
+
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("SearchShoe")]
-        public async Task<IActionResult> SearchShoes(string searchTerm)
+        public async Task<IActionResult> SearchShoes(string searchTerm, int pageNumber = 1)
         {
-            var response = await _shoeService.SearchShoes(searchTerm);
+            var response = await _shoeService.SearchShoes(searchTerm, pageNumber);
+            return response.Success ? Ok(response) : BadRequest(response.Success = false);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("SearchUsersShoe")]
+        public async Task<IActionResult> SearchUsersShoes(string searchTerm, int pageNumber = 1)
+        {
+            var response = await _shoeService.SearchUsersShoes(searchTerm, pageNumber);
             return response.Success ? Ok(response) : BadRequest(response.Success = false);
         }
     }

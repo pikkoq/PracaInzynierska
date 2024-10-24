@@ -33,6 +33,8 @@ namespace ShoeBoardAPI
             CreateMap<Shoe, GetShoeDetailsDto>();
             CreateMap<UserShoeCatalog, GetShoeDetailsDto>();
             CreateMap<Shoe, GetAllUserShoesDto>();
+            CreateMap<UserShoeCatalog, GetShoeSearchDto>();
+            CreateMap<ShoeCatalog, GetShoeSearchDto>();
 
         }
     }

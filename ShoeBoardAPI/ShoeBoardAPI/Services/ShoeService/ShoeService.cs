@@ -5,6 +5,7 @@ using ShoeBoardAPI.DataBase;
 using ShoeBoardAPI.Models;
 using ShoeBoardAPI.Models.DTO.ShoeDtos;
 using ShoeBoardAPI.Models.Enums;
+using System.Security.Claims;
 
 namespace ShoeBoardAPI.Services.ShoeService
 {
@@ -29,7 +30,49 @@ namespace ShoeBoardAPI.Services.ShoeService
             throw new NotImplementedException();
         }
 
-        public Task<ServiceResponse<bool>> EditShoeDetails()
+        public async Task<ServiceResponse<bool>> EditUserAddedShoeDetails(int shoeId, EditShoeDetailsDto updatedShoe, string userId)
+        {
+            var response = new ServiceResponse<bool>();
+            var shoeCatalog = await _context.UserShoeCatalogs.FindAsync(shoeId);
+
+            if (shoeCatalog == null)
+            {
+                response.Success = false;
+                response.Data = false;
+                response.Message = "Shoe not found";
+                return response;
+            }
+
+
+            if (shoeCatalog.UserId != userId)
+            {
+                response.Data = false;
+                response.Success = false;
+                response.Message = "You can edit only yours shoes!";
+                return response;
+            }
+
+            shoeCatalog.Model_No = updatedShoe.Model_No ?? shoeCatalog.Model_No;
+            shoeCatalog.Title = updatedShoe.Title ?? shoeCatalog.Title;
+            shoeCatalog.Nickname = updatedShoe.Nickname ?? shoeCatalog.Nickname;
+            shoeCatalog.Brand = updatedShoe.Brand ?? shoeCatalog.Brand;
+            shoeCatalog.Series = updatedShoe.Series ?? shoeCatalog.Series;
+            shoeCatalog.Gender = updatedShoe.Gender ?? shoeCatalog.Gender;
+            shoeCatalog.Image_Url = updatedShoe.Image_Url ?? shoeCatalog.Image_Url;
+            shoeCatalog.Image_Path = updatedShoe.Image_Path ?? shoeCatalog.Image_Path;
+            shoeCatalog.Release_Date = updatedShoe.Release_Date;
+            shoeCatalog.Main_Color = updatedShoe.Main_Color ?? shoeCatalog.Main_Color;
+            shoeCatalog.Colorway = updatedShoe.Colorway ?? shoeCatalog.Colorway;
+            shoeCatalog.Price = updatedShoe.Price != default ? updatedShoe.Price : shoeCatalog.Price;
+
+            var result = await _context.SaveChangesAsync();
+            response.Data = true;
+            response.Success = result > 0;
+            response.Message = response.Success ? "Shoe details updated successfully." : "Error while updating shoe details.";
+            return response;
+        }
+
+        public Task<ServiceResponse<bool>> EditUserShoe()
         {
             throw new NotImplementedException();
         }

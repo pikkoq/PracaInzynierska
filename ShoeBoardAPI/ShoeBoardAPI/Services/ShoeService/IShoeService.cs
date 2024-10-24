@@ -13,7 +13,7 @@ namespace ShoeBoardAPI.Services.ShoeService
         Task<SearchServiseResponse<List<GetShoeSearchDto>>> SearchShoes(string searchTerm, int pageNumber = 1);
         Task<SearchServiseResponse<List<GetShoeSearchDto>>> SearchUsersShoes(string searchTerm, int pageNumber = 1);
         Task<ServiceResponse<bool>> EditUserAddedShoeDetails(int shoeId, EditShoeDetailsDto updatedShoe, string userId);
-        Task<ServiceResponse<bool>> EditUserShoe();
+        Task<ServiceResponse<bool>> EditUserShoe(int shoeId, EditUserShoeDto updatedShoe, string userId);
         Task<ServiceResponse<bool>> DeleteUserShoe();
     }
 }

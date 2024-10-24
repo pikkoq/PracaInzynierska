@@ -39,7 +39,7 @@ namespace ShoeBoardAPI.Services.ShoeService
             {
                 response.Success = false;
                 response.Data = false;
-                response.Message = "Shoe not found";
+                response.Message = "Shoe not found.";
                 return response;
             }
 
@@ -72,9 +72,35 @@ namespace ShoeBoardAPI.Services.ShoeService
             return response;
         }
 
-        public Task<ServiceResponse<bool>> EditUserShoe()
+        public async Task<ServiceResponse<bool>> EditUserShoe(int shoeId, EditUserShoeDto updatedShoe, string userId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<bool>();
+
+            var shoe = await _context.Shoes.FindAsync(shoeId);
+
+            if (shoe == null)
+            {
+                response.Success = false;
+                response.Data = false;
+                response.Message = "Shoe not found.";
+            }
+
+            if (shoe.UserId != userId)
+            {
+                response.Data = false;
+                response.Success = false;
+                response.Message = "You can edit only yours shoes!";
+                return response;
+            }
+            Console.WriteLine(shoe.ComfortRating);
+
+            _mapper.Map(updatedShoe, shoe);
+            var result = await _context.SaveChangesAsync();
+
+            response.Data = true;
+            response.Success = result > 0;
+            response.Message = response.Success ? "Shoe updated." : "Failed to update shoe.";
+            return response;
         }
 
         public async Task<ServiceResponse<List<GetAllAddedUserShoesDto>>> GetAllAddedUserShoes(string userId)

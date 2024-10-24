@@ -143,5 +143,15 @@ namespace ShoeBoardAPI.Controllers
             var response = await _shoeService.EditUserAddedShoeDetails(shoeId, updatedShoe, userId);
             return response.Success ? Ok(response) : BadRequest(response);
         }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPatch("EditUserShoe")]
+        public async Task<IActionResult> EditUserShoe(int shoeId, [FromBody] EditUserShoeDto updatedShoe)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var response = await _shoeService.EditUserShoe(shoeId, updatedShoe, userId);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
     }
 }

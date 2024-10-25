@@ -153,5 +153,15 @@ namespace ShoeBoardAPI.Controllers
             var response = await _shoeService.EditUserShoe(shoeId, updatedShoe, userId);
             return response.Success ? Ok(response) : BadRequest(response);
         }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpDelete("DeleteUserShoe")]
+        public async Task<IActionResult> DeleteUserShoe(int shoeId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var response = await _shoeService.DeleteUserShoe(shoeId, userId);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
     }
 }

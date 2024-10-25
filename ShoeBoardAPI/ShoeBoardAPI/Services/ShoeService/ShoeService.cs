@@ -20,14 +20,33 @@ namespace ShoeBoardAPI.Services.ShoeService
             _context = context;
         }
 
-        public Task<ServiceResponse<bool>> DeleteUserShoe()
+        public async Task<ServiceResponse<bool>> DeleteUserShoe(int shoeId, string userId)
         {
-            throw new NotImplementedException();
-        }
+            var response = new ServiceResponse<bool>();
+            var shoe = await _context.Shoes.FindAsync(shoeId);
 
-        public Task<ServiceResponse<bool>> EditAddedUserShoe()
-        {
-            throw new NotImplementedException();
+            if (shoe == null)
+            {
+                response.Success = false;
+                response.Data = false;
+                response.Message = "User shoe not found.";
+                return response;
+            }
+
+            if (shoe.UserId != userId)
+            {
+                response.Data = false;
+                response.Success = false;
+                response.Message = "You can delete only yours shoes!";
+                return response;
+            }
+
+            _context.Shoes.Remove(shoe);
+            var result = await _context.SaveChangesAsync();
+            response.Success = result > 0;
+            response.Data = response.Success ? true : false;
+            response.Message = response.Success ? "Shoe delted." : "Failed to delete shoe.";
+            return response;
         }
 
         public async Task<ServiceResponse<bool>> EditUserAddedShoeDetails(int shoeId, EditShoeDetailsDto updatedShoe, string userId)
@@ -92,13 +111,12 @@ namespace ShoeBoardAPI.Services.ShoeService
                 response.Message = "You can edit only yours shoes!";
                 return response;
             }
-            Console.WriteLine(shoe.ComfortRating);
 
             _mapper.Map(updatedShoe, shoe);
             var result = await _context.SaveChangesAsync();
 
-            response.Data = true;
             response.Success = result > 0;
+            response.Data = response.Success ? true : false;
             response.Message = response.Success ? "Shoe updated." : "Failed to update shoe.";
             return response;
         }

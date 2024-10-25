@@ -35,7 +35,11 @@ namespace ShoeBoardAPI
             CreateMap<Shoe, GetAllUserShoesDto>();
             CreateMap<UserShoeCatalog, GetShoeSearchDto>();
             CreateMap<ShoeCatalog, GetShoeSearchDto>();
-            CreateMap<EditUserShoeDto, Shoe >();
+            CreateMap<EditUserShoeDto, Shoe >()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) =>
+                srcMember != null &&
+                !srcMember.Equals(default) &&
+                (srcMember is not string || !string.IsNullOrWhiteSpace(srcMember.ToString()))));
 
         }
     }

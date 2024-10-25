@@ -9,9 +9,12 @@ namespace ShoeBoardAPI.DataBase
     {
         public DbSet<Shoe> Shoes { get; set; }
         public DbSet<Friend> Friends { get; set; }
-        public DbSet<ShoeFeed> ShoeFeeds { get; set; }
+        public DbSet<Post> Posts { get; set; }
         public DbSet<ShoeCatalog> ShoeCatalogs { get; set; }
         public DbSet<UserShoeCatalog> UserShoeCatalogs { get; set; }
+        public DbSet<FriendRequest> FriendRequests { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Like> Likes { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -30,18 +33,35 @@ namespace ShoeBoardAPI.DataBase
                 .HasOne(f => f.User)
                 .WithMany(u => u.Friends)
                 .HasForeignKey(f => f.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Friend>()
                 .HasOne(f => f.FriendUser)
                 .WithMany()
                 .HasForeignKey(f => f.FriendId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Shoe>()
-                .HasOne(s => s.User)
-                .WithMany(u => u.Shoes)
-                .HasForeignKey(s => s.UserId);
+            modelBuilder.Entity<Post>()
+                .HasOne(p => p.Shoe)
+                .WithMany()
+                .HasForeignKey(p => p.ShoeId);
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.Post)
+                .WithMany(p => p.Comments)
+                .HasForeignKey(c => c.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Like>()
+                .HasOne(l => l.Post)
+                .WithMany(p => p.Likes)
+                .HasForeignKey(l => l.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserShoeCatalog>()
+                .HasOne(c => c.User)
+                .WithMany(u => u.UserShoeCatalogs)
+                .HasForeignKey(c => c.UserId);
 
             modelBuilder.Entity<Shoe>()
                 .HasOne(s => s.ShoeCatalog)
@@ -53,20 +73,17 @@ namespace ShoeBoardAPI.DataBase
                 .WithMany()
                 .HasForeignKey(s => s.UserShoeCatalogId);
 
-            modelBuilder.Entity<ShoeFeed>()
-                .HasOne(sf => sf.Shoe)
+            modelBuilder.Entity<FriendRequest>()
+                .HasOne(fr => fr.Requester)
                 .WithMany()
-                .HasForeignKey(sf => sf.ShoeId);
+                .HasForeignKey(fr => fr.RequesterId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<ShoeFeed>()
-                .HasOne(sf => sf.Friend)
+            modelBuilder.Entity<FriendRequest>()
+                .HasOne(fr => fr.Receiver)
                 .WithMany()
-                .HasForeignKey(sf => sf.FriendId);
-
-            modelBuilder.Entity<UserShoeCatalog>()
-                .HasOne(c => c.User)
-                .WithMany(u => u.UserShoeCatalogs)
-                .HasForeignKey(c => c.UserId);
+                .HasForeignKey(fr => fr.ReceiverId)
+                .OnDelete(DeleteBehavior.NoAction);
 
         }
     }

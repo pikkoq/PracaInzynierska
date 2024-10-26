@@ -7,8 +7,8 @@
         public string UserId { get; set; }
         public string Content { get; set; }
         public DateTime DatePosted { get; set; } = DateTime.UtcNow;
-        public ICollection<Comment> Comments { get; set; }
-        public ICollection<Like> Likes { get; set; }
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<Like> Likes { get; set; } = new List<Like>();
         public Shoe Shoe { get; set; }
     }
 }

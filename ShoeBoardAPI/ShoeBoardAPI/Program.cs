@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using ShoeBoardAPI.DataBase;
 using ShoeBoardAPI.Models;
 using ShoeBoardAPI.Services.FriendService;
+using ShoeBoardAPI.Services.PostService;
 using ShoeBoardAPI.Services.ShoeService;
 using ShoeBoardAPI.Services.UserService;
 using System.Text;
@@ -36,6 +37,7 @@ namespace ShoeBoardAPI
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IShoeService, ShoeService>();
             builder.Services.AddScoped<IFriendService, FriendService>();
+            builder.Services.AddScoped<IPostService, PostService>();
 
             //JWT Authentication service
             builder.Services.AddAuthentication(options =>

@@ -30,6 +30,10 @@ namespace ShoeBoardAPI.DataBase
                 );
 
             modelBuilder.Entity<Friend>()
+                .Property(s => s.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Friend>()
                 .HasOne(f => f.User)
                 .WithMany(u => u.Friends)
                 .HasForeignKey(f => f.UserId)

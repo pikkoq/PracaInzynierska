@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShoeBoardAPI.DataBase;
 
@@ -11,9 +12,11 @@ using ShoeBoardAPI.DataBase;
 namespace ShoeBoardAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241026152223_FriendIdGenerationOnAdd")]
+    partial class FriendIdGenerationOnAdd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -181,7 +184,7 @@ namespace ShoeBoardAPI.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.Friend", b =>
@@ -207,7 +210,7 @@ namespace ShoeBoardAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Friends", (string)null);
+                    b.ToTable("Friends");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.FriendRequest", b =>
@@ -238,7 +241,7 @@ namespace ShoeBoardAPI.Migrations
 
                     b.HasIndex("RequesterId");
 
-                    b.ToTable("FriendRequests", (string)null);
+                    b.ToTable("FriendRequests");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.Like", b =>
@@ -260,7 +263,7 @@ namespace ShoeBoardAPI.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Likes", (string)null);
+                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.Post", b =>
@@ -289,7 +292,7 @@ namespace ShoeBoardAPI.Migrations
 
                     b.HasIndex("ShoeId");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.Shoe", b =>
@@ -343,7 +346,7 @@ namespace ShoeBoardAPI.Migrations
 
                     b.HasIndex("UserShoeCatalogId");
 
-                    b.ToTable("Shoes", (string)null);
+                    b.ToTable("Shoes");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.ShoeCatalog", b =>
@@ -403,7 +406,7 @@ namespace ShoeBoardAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ShoeCatalogs", (string)null);
+                    b.ToTable("ShoeCatalogs");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.User", b =>
@@ -546,7 +549,7 @@ namespace ShoeBoardAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserShoeCatalogs", (string)null);
+                    b.ToTable("UserShoeCatalogs");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -4,6 +4,7 @@ using ShoeBoardAPI.Models.DTO.ShoeDtos;
 using ShoeBoardAPI.Models;
 using ShoeBoardAPI.Services.FriendService;
 using System.Security.Claims;
+using Azure.Core;
 
 namespace ShoeBoardAPI.Controllers
 {
@@ -38,6 +39,160 @@ namespace ShoeBoardAPI.Controllers
                 return Ok(result);
             }
 
+            return BadRequest(result);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("GetFriendRequests")]
+        public async Task<IActionResult> GetFriendRequests()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                var response = new ServiceResponse<bool>
+                {
+                    Data = false,
+                    Success = false,
+                    Message = "User not found. Cannot indetify."
+                };
+                return BadRequest(response);
+            }
+
+            var result = await _friendService.GetFriendRequests(userId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            result.Message = "Failed to fetch data";
+            result.Success = false;
+            result.Data = null;
+            return BadRequest(result);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("GetSentFriendRequests")]
+        public async Task<IActionResult> GetSentFriendRequests()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                var response = new ServiceResponse<bool>
+                {
+                    Data = false,
+                    Success = false,
+                    Message = "User not found. Cannot indetify."
+                };
+                return BadRequest(response);
+            }
+
+            var result = await _friendService.GetSentFriendRequests(userId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            result.Message = "Failed to fetch data";
+            result.Success = false;
+            result.Data = null;
+            return BadRequest(result);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("GetFreinds")]
+        public async Task<IActionResult> GetFriends()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                var response = new ServiceResponse<bool>
+                {
+                    Data = false,
+                    Success = false,
+                    Message = "User not found. Cannot indetify."
+                };
+                return BadRequest(response);
+            }
+
+            var result = await _friendService.GetFriends(userId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            result.Message = "Failed to fetch data";
+            result.Success = false;
+            result.Data = null;
+            return BadRequest(result);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost("AcceptFriendRequest")]
+        public async Task<IActionResult> AcceptFriendRequest(int requestId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                var response = new ServiceResponse<bool>
+                {
+                    Data = false,
+                    Success = false,
+                    Message = "User not found. Cannot indetify."
+                };
+                return BadRequest(response);
+            }
+
+            var result = await _friendService.AcceptFriendRequest(requestId, userId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            result.Message = "Failed to accept friend.";
+            result.Success = false;
+            result.Data = false;
+            return BadRequest(result);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpDelete("DeleteFriend")]
+        public async Task<IActionResult> DeleteFriend(string friendId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var response = new ServiceResponse<bool>
+            {
+                Data = false,
+                Success = false,
+                Message = "User not found. Cannot indetify."
+            };
+
+            var result = await _friendService.DeleteFriend(userId, friendId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            result.Message = "Failed to delete friend.";
+            result.Success = false;
+            result.Data = false;
+            return BadRequest(result);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpDelete("DeclineFriendRequest")]
+        public async Task<IActionResult> DeclineFriendRequest(int requestId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var response = new ServiceResponse<bool>
+            {
+                Data = false,
+                Success = false,
+                Message = "User not found. Cannot indetify."
+            };
+
+            var result = await _friendService.DeclineFriendRequest(requestId, userId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            result.Message = "Failed to decline friend request.";
+            result.Success = false;
+            result.Data = false;
             return BadRequest(result);
         }
     }

@@ -6,9 +6,10 @@ namespace ShoeBoardAPI.Services.FriendService
     public interface IFriendService
     {
         Task<ServiceResponse<bool>> SendFriendRequest(string requesterId, string receiverId);
-        Task<ServiceResponse<bool>> AcceptFriendRequest(string requestId);
-        Task<ServiceResponse<bool>> DeclineFriendRequest(string requestId);
+        Task<ServiceResponse<bool>> AcceptFriendRequest(int requestId, string userId);
+        Task<ServiceResponse<bool>> DeclineFriendRequest(int requestId, string userId);
         Task<ServiceResponse<List<GetFriendRequestDto>>> GetFriendRequests(string userId);
+        Task<ServiceResponse<List<GetFriendRequestDto>>> GetSentFriendRequests(string userId);
         Task<ServiceResponse<List<GetFriendsDto>>> GetFriends(string userId);
         Task<ServiceResponse<bool>> DeleteFriend(string userId, string friendId);
 

@@ -50,9 +50,9 @@ namespace ShoeBoardAPI.Services.PostService
             
         }
 
-        public async Task<ServiceResponse<PostDto>> AddPost(CreatePostDto newPost, string userId)
+        public async Task<ServiceResponse<bool>> AddPost(CreatePostDto newPost, string userId)
         {
-            var response = new ServiceResponse<PostDto>();
+            var response = new ServiceResponse<bool>();
 
             var shoeExists = await _context.Shoes.AnyAsync(sh => sh.UserId == userId && sh.Id == newPost.ShoeId);
 
@@ -60,7 +60,7 @@ namespace ShoeBoardAPI.Services.PostService
             {
                 response.Success = false;
                 response.Message = "Shoe not found in user's collection";
-                response.Data = null;
+                response.Data = false;
                 return response;
             }
 
@@ -74,16 +74,7 @@ namespace ShoeBoardAPI.Services.PostService
             _context.Posts.Add(post);
             await _context.SaveChangesAsync();
 
-            response.Data = new PostDto
-            {
-                Id = post.Id,
-                Content = post.Content,
-                DatePosted = post.DatePosted,
-                ShoeId = post.ShoeId,
-                UserId = post.UserId,
-                Comments = new List<CommentDto>(),
-                LikeCount = 0
-            };
+            response.Data = true;
             response.Success = true;
             response.Message = "New post created";
             return response;
@@ -176,13 +167,24 @@ namespace ShoeBoardAPI.Services.PostService
 
             var posts = await _context.Posts
                 .Where(p => friendIds.Contains(p.UserId))
+                .Include(p => p.Shoe)
+                    .ThenInclude(s => s.ShoeCatalog)
+                .Include(p => p.Shoe)
+                    .ThenInclude(s => s.UserShoeCatalog)
                 .Select(p => new PostDto
                 {
                     Id = p.Id,
+                    Username = p.User.UserName,
                     Content = p.Content,
                     DatePosted = p.DatePosted,
-                    ShoeId = p.ShoeId,
-                    UserId = p.UserId,
+                    Size = p.Shoe.Size,
+                    ComfortRating = p.Shoe.ComfortRating,
+                    StyleRating = p.Shoe.StyleRating,
+                    Season = p.Shoe.Season,
+                    Review = p.Shoe.Review,
+                    Image_Url = p.Shoe.ShoeCatalogId != null ? p.Shoe.ShoeCatalog.Image_Url : p.Shoe.UserShoeCatalog.Image_Url,
+                    Title = p.Shoe.ShoeCatalogId != null ? p.Shoe.ShoeCatalog.Title : p.Shoe.UserShoeCatalog.Title,
+                    IsLiked = p.Likes.Any(l => l.UserId == userId),
                     Comments = p.Comments.Select(c => new CommentDto
                     {
                         Id = c.Id,
@@ -205,13 +207,23 @@ namespace ShoeBoardAPI.Services.PostService
 
             var posts = await _context.Posts
                 .Where(p => p.UserId == userId)
+                .Include(p => p.Shoe)
+                    .ThenInclude(s => s.ShoeCatalog)
+                .Include(p => p.Shoe)
+                    .ThenInclude(s => s.UserShoeCatalog)
                 .Select(p => new PostDto
                 {
-                    Id = p.Id,
+                    Username = p.User.UserName,
                     Content = p.Content,
                     DatePosted = p.DatePosted,
-                    ShoeId = p.ShoeId,
-                    UserId = p.UserId,
+                    Size = p.Shoe.Size,
+                    ComfortRating = p.Shoe.ComfortRating,
+                    StyleRating = p.Shoe.StyleRating,
+                    Season = p.Shoe.Season,
+                    Review = p.Shoe.Review,
+                    Image_Url = p.Shoe.ShoeCatalogId != null ? p.Shoe.ShoeCatalog.Image_Url : p.Shoe.UserShoeCatalog.Image_Url,
+                    Title = p.Shoe.ShoeCatalogId != null ? p.Shoe.ShoeCatalog.Title : p.Shoe.UserShoeCatalog.Title,
+                    IsLiked = p.Likes.Any(l => l.UserId == userId),
                     Comments = p.Comments.Select(c => new CommentDto
                     {
                         Id = c.Id,

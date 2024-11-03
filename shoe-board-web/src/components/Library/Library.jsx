@@ -1,23 +1,23 @@
 import React from "react";
 import TopNavbar from '../Navigation/TopNavbar';
 import Navigation from "../Navigation/Navigation";
-import ProfileCard from "./ProfileCard";
-import './Profile.css';
+import ShoeLibrary from "./ShoeLibrary";
+import './Library.css';
 
-const Profile = () => {
+const Library = () => {
     return(
-        <div className="profile-container">
+        <div className="library-container">
             <TopNavbar />
             <div className="main-content">
                 <div className="left-nav">
                     <Navigation />
                 </div>
                 <div className="main-content-container">
-                    <ProfileCard />
+                    <ShoeLibrary />
                 </div>
             </div>
         </div>
     );
 };
 
-export default Profile;
+export default Library; 

@@ -141,9 +141,20 @@ namespace ShoeBoardAPI.Services.ShoeService
 
             var userShoes = await _context.Shoes
                 .Where(s => s.UserId == userId)
-                .ToListAsync();
+                .Include(s => s.ShoeCatalog)
+                .Include(s => s.UserShoeCatalog)
+                .Select(s => new GetAllUserShoesDto
+                {
+                    Id = s.Id,
+                    Title = s.ShoeCatalogId != null ? s.ShoeCatalog.Title : s.UserShoeCatalog.Title,
+                    Gender = s.ShoeCatalogId != null ? s.ShoeCatalog.Gender : s.UserShoeCatalog.Gender,
+                    Image_Url = s.ShoeCatalogId != null ? s.ShoeCatalog.Image_Url : s.UserShoeCatalog.Image_Url,
+                    Size = s.Size,
+                    DateAdded = s.DateAdded
+                }
+                ).ToListAsync();
 
-            response.Data = _mapper.Map<List<GetAllUserShoesDto>>(userShoes);
+            response.Data = userShoes;
             response.Success = true;
             response.Message = "Successfully retrived user shoes";
             return response;
@@ -155,7 +166,29 @@ namespace ShoeBoardAPI.Services.ShoeService
             var shoe = await _context.Shoes
                 .Include(s => s.ShoeCatalog)
                 .Include(s => s.UserShoeCatalog)
-                .FirstOrDefaultAsync(s => s.Id == shoeId);
+                .Where(s => s.Id == shoeId)
+                .Select(s => new GetShoeDetailsDto
+                {
+                    Id = s.Id,
+                    Model_No = s.ShoeCatalogId != null ? s.ShoeCatalog.Model_No : s.UserShoeCatalog.Model_No,
+                    Title = s.ShoeCatalogId != null ? s.ShoeCatalog.Title : s.UserShoeCatalog.Title,
+                    Nickname = s.ShoeCatalogId != null ? s.ShoeCatalog.Nickname : s.UserShoeCatalog.Nickname,
+                    Brand = s.ShoeCatalogId != null ? s.ShoeCatalog.Brand : s.UserShoeCatalog.Brand,
+                    Series = s.ShoeCatalogId != null ? s.ShoeCatalog.Series : s.UserShoeCatalog.Series,
+                    Url_Link_Handler = s.ShoeCatalogId != null ? s.ShoeCatalog.Url_Link_Handler : null,
+                    Gender = s.ShoeCatalogId != null ? s.ShoeCatalog.Gender : s.UserShoeCatalog.Gender,
+                    Image_Url = s.ShoeCatalogId != null ? s.ShoeCatalog.Image_Url : s.UserShoeCatalog.Image_Url,
+                    Release_Date = s.ShoeCatalogId != null ? s.ShoeCatalog.Release_Date : s.UserShoeCatalog.Release_Date,
+                    Main_Color = s.ShoeCatalogId != null ? s.ShoeCatalog.Main_Color : s.UserShoeCatalog.Main_Color,
+                    Colorway = s.ShoeCatalogId != null ? s.ShoeCatalog.Colorway : s.UserShoeCatalog.Colorway,
+                    Price = s.ShoeCatalogId != null ? s.ShoeCatalog.Price : s.UserShoeCatalog.Price,
+                    Size = s.Size,
+                    ComfortRating = s.ComfortRating,
+                    StyleRating = s.ComfortRating,
+                    Season = s.Season,
+                    Review = s.Review,
+                    DateAdded = s.DateAdded,
+                }).FirstAsync();
 
             if (shoe == null)
             {
@@ -165,9 +198,7 @@ namespace ShoeBoardAPI.Services.ShoeService
                 return response;
             }
 
-            response.Data = shoe.ShoeAddType == ShoeAddType.MainCatalog
-                ? _mapper.Map<GetShoeDetailsDto>(shoe.ShoeCatalog)
-                : _mapper.Map<GetShoeDetailsDto>(shoe.UserShoeCatalog);
+            response.Data = shoe;
             response.Success = true;
             response.Message = "Shoe details retrived successfully.";
             return response;

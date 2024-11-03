@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
-import { searchShoes } from '../../services/api';
 import './SearchBar.css';
 
 const SearchBar = () => {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
+  const navigate = useNavigate();
 
-  const handleSearch = async (e) => {
+  const handleSearch = (e) => {
     e.preventDefault();
-    try {
-      const data = await searchShoes(query);
-      setResults(data);
-    } catch (error) {
-      console.error('Error searching shoes:', error);
+    if (query.trim()) {
+      navigate(`/search?query=${encodeURIComponent(query.trim())}`);
     }
   };
 
@@ -28,13 +25,6 @@ const SearchBar = () => {
           onChange={(e) => setQuery(e.target.value)}
         />
       </form>
-      {results.length > 0 && (
-        <ul className="search-results">
-          {results.map((shoe) => (
-            <li key={shoe.id}>{shoe.name}</li>
-          ))}
-        </ul>
-      )}
     </div>
   );
 };

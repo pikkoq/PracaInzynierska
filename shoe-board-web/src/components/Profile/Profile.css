@@ -1,0 +1,16 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #1d1d1d;
+    color: #dfe3eb;
+  }
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  .main-content{
+    display: flex;
+  }

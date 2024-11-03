@@ -22,6 +22,7 @@ export const login = async (email, password) => {
     localStorage.setItem('userId', payload.id);
     localStorage.setItem('tokenExpiration', payload.exp * 1000);
   }
+  
   return response.data;
 };
 
@@ -32,13 +33,18 @@ export const register = async (username, email, password) => {
 
 export const getFriendPosts = async () => {
   const response = await api.get('/Post/GetFriendPosts');
-  console.log('API response in getFriendPosts:', response.data);
   return response.data;
 };
 
-export const searchShoes = async (query) => {
-  const response = await api.get(`/Shoe/Search?query=${query}`);
-  return response.data;
+export const searchShoes = async (searchTerm, pageNumber = 1) => {
+  try {
+    const encodedSearchTerm = encodeURIComponent(searchTerm);
+    const response = await api.get(`/Shoe/SearchShoe?searchTerm=${encodedSearchTerm}&pageNumber=${pageNumber}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error searching shoes:', error);
+    throw error;
+  }
 };
 
 export const getPopularShoes = async () => {
@@ -70,6 +76,101 @@ export const unlikePost = async (postId) => {
     return response.data;
   } catch (error) {
     console.error('Error unliking post:', error);
+    throw error;
+  }
+};
+
+export const getUserData = async () => {
+  try {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      throw new Error('User ID not found');
+    }
+    const response = await api.get(`/User/getUser/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    throw error;
+  }
+};
+
+export const updateUserData = async (userData) => {
+  try {
+    const response = await api.patch('/User/editUserData', userData);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating user data:', error);
+    throw error;
+  }
+};
+
+export const getUserShoes = async () => {
+  try {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      throw new Error('User ID not found');
+    }
+    const response = await api.get(`/Shoe/GetAllUserShoes?userId=${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user shoes:', error);
+    throw error;
+  }
+};
+
+export const deleteUserShoe = async (shoeId) => {
+  try {
+    const response = await api.delete(`/Shoe/DeleteUserShoe?shoeId=${shoeId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting user shoe:', error);
+    throw error;
+  }
+};
+
+export const updateUserShoe = async (shoeId, shoeData) => {
+  try {
+    console.log('Sending update request with data:', {
+      shoeId,
+      shoeData
+    });
+    const response = await api.patch(`/Shoe/EditUserShoe?shoeId=${shoeId}`, {
+      size: shoeData.size,
+      comfortRating: parseInt(shoeData.comfortRating),
+      styleRating: parseInt(shoeData.styleRating),
+      season: shoeData.season,
+      review: shoeData.review
+    });
+    console.log('Server response:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating user shoe:', error.response?.data || error);
+    throw error;
+  }
+};
+
+export const getShoeDetails = async (shoeId) => {
+  try {
+    const response = await api.get(`/Shoe/GetShoeDetails?shoeId=${shoeId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching shoe details:', error);
+    throw error;
+  }
+};
+
+export const addShoeToUserCollection = async (shoeCatalogId, shoeData) => {
+  try {
+    const response = await api.post(`/Shoe/SignShoeToUser?shoeCatalogId=${shoeCatalogId}`, {
+      size: shoeData.size,
+      comfortRating: parseInt(shoeData.comfortRating),
+      styleRating: parseInt(shoeData.styleRating),
+      season: shoeData.season,
+      review: shoeData.review
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error adding shoe to collection:', error);
     throw error;
   }
 };

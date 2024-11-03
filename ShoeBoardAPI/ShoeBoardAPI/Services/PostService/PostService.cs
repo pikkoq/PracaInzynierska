@@ -174,6 +174,7 @@ namespace ShoeBoardAPI.Services.PostService
                 .Select(p => new PostDto
                 {
                     Id = p.Id,
+                    ShoeCatalogId = p.Shoe.ShoeCatalogId,
                     Username = p.User.UserName,
                     Content = p.Content,
                     DatePosted = p.DatePosted,

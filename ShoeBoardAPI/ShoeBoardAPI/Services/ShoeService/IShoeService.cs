@@ -15,5 +15,7 @@ namespace ShoeBoardAPI.Services.ShoeService
         Task<ServiceResponse<bool>> EditUserAddedShoeDetails(int shoeId, EditShoeDetailsDto updatedShoe, string userId);
         Task<ServiceResponse<bool>> EditUserShoe(int shoeId, EditUserShoeDto updatedShoe, string userId);
         Task<ServiceResponse<bool>> DeleteUserShoe(int shoeId, string userId);
+        Task<ServiceResponse<List<TopPopularShoesDto>>> GetTopPoulrShoes();
+        Task<ServiceResponse<GetCatalogShoeDetailsDto>> GetCatalogShoeDetails(int catalogShoeId);
     }
 }

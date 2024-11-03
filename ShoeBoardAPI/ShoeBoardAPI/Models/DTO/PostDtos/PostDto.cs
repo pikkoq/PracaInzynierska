@@ -3,6 +3,7 @@
     public class PostDto
     {
         public int Id { get; set; }
+        public int? ShoeCatalogId { get; set; }
         public string Username { get; set; }
         public string Content { get; set; }
         public DateTime DatePosted { get; set; }

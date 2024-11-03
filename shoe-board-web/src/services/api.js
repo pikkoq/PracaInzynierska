@@ -48,7 +48,7 @@ export const searchShoes = async (searchTerm, pageNumber = 1) => {
 };
 
 export const getPopularShoes = async () => {
-  const response = await api.get('/Shoe/Popular');
+  const response = await api.get('/Shoe/GetPopularShoes');
   return response.data;
 };
 
@@ -171,6 +171,16 @@ export const addShoeToUserCollection = async (shoeCatalogId, shoeData) => {
     return response.data;
   } catch (error) {
     console.error('Error adding shoe to collection:', error);
+    throw error;
+  }
+};
+
+export const getCatalogShoeDetails = async (catalogShoeId) => {
+  try {
+    const response = await api.get(`/Shoe/GetCatalogShoeDetails?catalogShoeId=${catalogShoeId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching catalog shoe details:', error);
     throw error;
   }
 };

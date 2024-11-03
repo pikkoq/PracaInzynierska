@@ -163,5 +163,23 @@ namespace ShoeBoardAPI.Controllers
             var response = await _shoeService.DeleteUserShoe(shoeId, userId);
             return response.Success ? Ok(response) : BadRequest(response);
         }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("GetPopularShoes")]
+        public async Task<IActionResult> GetPopularShoes()
+        {
+
+            var response = await _shoeService.GetTopPoulrShoes();
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("GetCatalogShoeDetails")]
+        public async Task<IActionResult> GetCatalogShoeDetails(int catalogShoeId)
+        {
+
+            var response = await _shoeService.GetCatalogShoeDetails(catalogShoeId);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
     }
 }

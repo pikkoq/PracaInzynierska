@@ -160,6 +160,43 @@ namespace ShoeBoardAPI.Services.ShoeService
             return response;
         }
 
+        public async Task<ServiceResponse<GetCatalogShoeDetailsDto>> GetCatalogShoeDetails(int catalogShoeId)
+        {
+            var response = new ServiceResponse<GetCatalogShoeDetailsDto>();
+
+            var shoe = await _context.ShoeCatalogs
+                .Where(s => s.Id == catalogShoeId)
+                .Select(s => new GetCatalogShoeDetailsDto
+                {
+                    Model_No = s.Model_No,
+                    Title = s.Title,
+                    Nickname = s.Nickname,
+                    Brand = s.Brand,
+                    Series = s.Series,
+                    ShopLink = s.Url_Link_Handler,
+                    Gender = s.Gender,
+                    ImageUrl = s.Image_Url,
+                    ReleaseDate = s.Release_Date,
+                    MainColor = s.Main_Color,
+                    Colorway = s.Colorway,
+                    Price = s.Price
+                })
+                .FirstOrDefaultAsync();
+
+            if(shoe == null)
+            {
+                response.Success = false;
+                response.Data = null;
+                response.Message = "Failed to retrive details data";
+                return response;
+            }
+
+            response.Data = shoe;
+            response.Success = true;
+            response.Message = "Successfully retrived user shoes";
+            return response;
+        }
+
         public async Task<ServiceResponse<GetShoeDetailsDto>> GetShoeDetails(int shoeId)
         {
             var response = new ServiceResponse<GetShoeDetailsDto>();
@@ -188,7 +225,7 @@ namespace ShoeBoardAPI.Services.ShoeService
                     Season = s.Season,
                     Review = s.Review,
                     DateAdded = s.DateAdded,
-                }).FirstAsync();
+                }).FirstOrDefaultAsync();
 
             if (shoe == null)
             {
@@ -202,6 +239,38 @@ namespace ShoeBoardAPI.Services.ShoeService
             response.Success = true;
             response.Message = "Shoe details retrived successfully.";
             return response;
+        }
+
+        public async Task<ServiceResponse<List<TopPopularShoesDto>>> GetTopPoulrShoes()
+        {
+            var response = new ServiceResponse<List<TopPopularShoesDto>>();
+
+            var topShoes = await _context.Shoes
+                .Where(s => s.ShoeCatalogId.HasValue)
+                .GroupBy(s => s.ShoeCatalogId)
+                .Select(g => new TopPopularShoesDto
+                {
+                    Id = g.Key.Value,
+                    Title = g.First().ShoeCatalog.Title,
+                    Count = g.Count(),
+                })
+                .OrderByDescending(s => s.Count)
+                .Take(8)
+                .ToListAsync();
+
+            if (topShoes == null)
+            {
+                response.Success = false;
+                response.Data = null;
+                response.Message = "Failed to get popular shoes";
+                return response;
+            }
+
+            response.Data = topShoes;
+            response.Success = true;
+            response.Message = "Successfully retrived popular shoes";
+            return response;
+
         }
 
         public async Task<ServiceResponse<bool>> NewShoeRegistry(NewShoeRegistryDto newShoe, string userId)

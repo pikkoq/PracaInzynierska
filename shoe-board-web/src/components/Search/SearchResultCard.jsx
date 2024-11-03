@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { FaPlus, FaSave, FaTimes } from 'react-icons/fa';
-import { addShoeToUserCollection } from '../../services/api';
+import { addShoeToUserCollection, getCatalogShoeDetails } from '../../services/api';
+import ShoeDetailsModal from '../Navigation/ShoeDetailsModal';
 import './SearchResultCard.css';
 
 const SearchResultCard = ({ shoe }) => {
     const [showAddModal, setShowAddModal] = useState(false);
+    const [showDetails, setShowDetails] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [shoeDetails, setShoeDetails] = useState(null);
     const [shoeData, setShoeData] = useState({
         size: '40',
         comfortRating: '5',
@@ -41,6 +44,25 @@ const SearchResultCard = ({ shoe }) => {
         }
     };
 
+    const handleCardClick = async (e) => {
+        if (e.target.closest('.add-button')) {
+            return;
+        }
+
+        try {
+            setIsLoading(true);
+            const response = await getCatalogShoeDetails(shoe.id);
+            if (response.success) {
+                setShoeDetails(response.data);
+                setShowDetails(true);
+            }
+        } catch (error) {
+            console.error('Error fetching shoe details:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const generateSizeOptions = () => {
         const sizes = [];
         for (let size = 35; size <= 50; size += 0.5) {
@@ -54,7 +76,7 @@ const SearchResultCard = ({ shoe }) => {
 
     return (
         <>
-            <div className="search-result-card">
+            <div className="search-result-card" onClick={handleCardClick}>
                 <img src={shoe.image_Url} alt={shoe.title} className="shoe-image" />
                 <div className="shoe-content">
                     <h3>{shoe.title}</h3>
@@ -65,12 +87,23 @@ const SearchResultCard = ({ shoe }) => {
                     </div>
                     <button 
                         className="add-button"
-                        onClick={() => setShowAddModal(true)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setShowAddModal(true);
+                        }}
                     >
                         <FaPlus /> Add to Collection
                     </button>
                 </div>
             </div>
+
+            {showDetails && (
+                <ShoeDetailsModal 
+                    shoe={shoeDetails}
+                    isLoading={isLoading}
+                    onClose={() => setShowDetails(false)}
+                />
+            )}
 
             {showAddModal && (
                 <div className="add-shoe-modal" onClick={() => setShowAddModal(false)}>

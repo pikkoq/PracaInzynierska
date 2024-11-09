@@ -42,7 +42,6 @@ namespace ShoeBoardAPI.Services.PostService
                 Id = comment.Id,
                 Content = comment.Content,
                 CreatedAt = comment.CreatedAt,
-                UserId = comment.UserId,
             };
             response.Message = "Added new comment.";
             response.Success = true;
@@ -131,12 +130,13 @@ namespace ShoeBoardAPI.Services.PostService
 
             var comments = await _context.Comments
                 .Where(c => c.PostId == postId)
+                .Include(c => c.User)
                 .Select(c => new CommentDto
                 {
                     Id = c.Id,
                     Content = c.Content,
                     CreatedAt = c.CreatedAt,
-                    UserId = c.UserId,
+                    Username = c.User.UserName,
                 }).ToListAsync();
 
             response.Success = true;
@@ -171,11 +171,13 @@ namespace ShoeBoardAPI.Services.PostService
                     .ThenInclude(s => s.ShoeCatalog)
                 .Include(p => p.Shoe)
                     .ThenInclude(s => s.UserShoeCatalog)
+                .OrderByDescending(p => p.DatePosted)
                 .Select(p => new PostDto
                 {
                     Id = p.Id,
                     ShoeCatalogId = p.Shoe.ShoeCatalogId,
                     Username = p.User.UserName,
+                    ProfilePictureUrl = p.User.ProfilePicturePath,
                     Content = p.Content,
                     DatePosted = p.DatePosted,
                     Size = p.Shoe.Size,
@@ -186,14 +188,8 @@ namespace ShoeBoardAPI.Services.PostService
                     Image_Url = p.Shoe.ShoeCatalogId != null ? p.Shoe.ShoeCatalog.Image_Url : p.Shoe.UserShoeCatalog.Image_Url,
                     Title = p.Shoe.ShoeCatalogId != null ? p.Shoe.ShoeCatalog.Title : p.Shoe.UserShoeCatalog.Title,
                     IsLiked = p.Likes.Any(l => l.UserId == userId),
-                    Comments = p.Comments.Select(c => new CommentDto
-                    {
-                        Id = c.Id,
-                        Content = c.Content,
-                        CreatedAt = c.CreatedAt,
-                        UserId = c.UserId,
-                    }).ToList(),
                     LikeCount = p.Likes.Count,
+                    CommentsCount = p.Comments.Count,
                 }).ToListAsync();
 
             response.Data = posts;
@@ -214,6 +210,7 @@ namespace ShoeBoardAPI.Services.PostService
                     .ThenInclude(s => s.UserShoeCatalog)
                 .Select(p => new PostDto
                 {
+                    Id = p.Id,
                     Username = p.User.UserName,
                     Content = p.Content,
                     DatePosted = p.DatePosted,
@@ -225,13 +222,7 @@ namespace ShoeBoardAPI.Services.PostService
                     Image_Url = p.Shoe.ShoeCatalogId != null ? p.Shoe.ShoeCatalog.Image_Url : p.Shoe.UserShoeCatalog.Image_Url,
                     Title = p.Shoe.ShoeCatalogId != null ? p.Shoe.ShoeCatalog.Title : p.Shoe.UserShoeCatalog.Title,
                     IsLiked = p.Likes.Any(l => l.UserId == userId),
-                    Comments = p.Comments.Select(c => new CommentDto
-                    {
-                        Id = c.Id,
-                        Content = c.Content,
-                        CreatedAt = c.CreatedAt,
-                        UserId = c.UserId,
-                    }).ToList(),
+                    CommentsCount = p.Comments.Count,
                     LikeCount = p.Likes.Count,
                 }).ToListAsync();
 

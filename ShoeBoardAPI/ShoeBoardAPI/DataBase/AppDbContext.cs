@@ -48,13 +48,22 @@ namespace ShoeBoardAPI.DataBase
             modelBuilder.Entity<Post>()
                 .HasOne(p => p.Shoe)
                 .WithMany()
-                .HasForeignKey(p => p.ShoeId);
+                .HasForeignKey(p => p.ShoeId)
+                .OnDelete(DeleteBehavior.NoAction);
+
 
             modelBuilder.Entity<Comment>()
                 .HasOne(c => c.Post)
                 .WithMany(p => p.Comments)
                 .HasForeignKey(c => c.PostId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+                modelBuilder.Entity<Comment>()
+               .HasOne(c => c.User)
+               .WithMany(u => u.Comments)
+               .HasForeignKey(c => c.UserId)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Like>()
                 .HasOne(l => l.Post)

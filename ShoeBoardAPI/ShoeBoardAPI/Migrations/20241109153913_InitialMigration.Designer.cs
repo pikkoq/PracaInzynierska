@@ -12,8 +12,8 @@ using ShoeBoardAPI.DataBase;
 namespace ShoeBoardAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241025013237_FixesOnRelationsAndDeleteBehavior")]
-    partial class FixesOnRelationsAndDeleteBehavior
+    [Migration("20241109153913_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -178,19 +178,24 @@ namespace ShoeBoardAPI.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.Friend", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
@@ -285,11 +290,13 @@ namespace ShoeBoardAPI.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ShoeId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Posts");
                 });
@@ -610,7 +617,15 @@ namespace ShoeBoardAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ShoeBoardAPI.Models.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("Post");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.Friend", b =>
@@ -667,10 +682,18 @@ namespace ShoeBoardAPI.Migrations
                     b.HasOne("ShoeBoardAPI.Models.Shoe", "Shoe")
                         .WithMany()
                         .HasForeignKey("ShoeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("ShoeBoardAPI.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Shoe");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.Shoe", b =>
@@ -716,6 +739,8 @@ namespace ShoeBoardAPI.Migrations
 
             modelBuilder.Entity("ShoeBoardAPI.Models.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Friends");
 
                     b.Navigation("Shoes");

@@ -175,20 +175,24 @@ namespace ShoeBoardAPI.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.Friend", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
@@ -207,7 +211,7 @@ namespace ShoeBoardAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Friends", (string)null);
+                    b.ToTable("Friends");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.FriendRequest", b =>
@@ -238,7 +242,7 @@ namespace ShoeBoardAPI.Migrations
 
                     b.HasIndex("RequesterId");
 
-                    b.ToTable("FriendRequests", (string)null);
+                    b.ToTable("FriendRequests");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.Like", b =>
@@ -260,7 +264,7 @@ namespace ShoeBoardAPI.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Likes", (string)null);
+                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.Post", b =>
@@ -283,13 +287,15 @@ namespace ShoeBoardAPI.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ShoeId");
 
-                    b.ToTable("Posts", (string)null);
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.Shoe", b =>
@@ -343,7 +349,7 @@ namespace ShoeBoardAPI.Migrations
 
                     b.HasIndex("UserShoeCatalogId");
 
-                    b.ToTable("Shoes", (string)null);
+                    b.ToTable("Shoes");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.ShoeCatalog", b =>
@@ -403,7 +409,7 @@ namespace ShoeBoardAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ShoeCatalogs", (string)null);
+                    b.ToTable("ShoeCatalogs");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.User", b =>
@@ -546,7 +552,7 @@ namespace ShoeBoardAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserShoeCatalogs", (string)null);
+                    b.ToTable("UserShoeCatalogs");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -608,7 +614,15 @@ namespace ShoeBoardAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ShoeBoardAPI.Models.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("Post");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.Friend", b =>
@@ -665,10 +679,18 @@ namespace ShoeBoardAPI.Migrations
                     b.HasOne("ShoeBoardAPI.Models.Shoe", "Shoe")
                         .WithMany()
                         .HasForeignKey("ShoeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("ShoeBoardAPI.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Shoe");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ShoeBoardAPI.Models.Shoe", b =>
@@ -714,6 +736,8 @@ namespace ShoeBoardAPI.Migrations
 
             modelBuilder.Entity("ShoeBoardAPI.Models.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Friends");
 
                     b.Navigation("Shoes");

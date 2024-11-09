@@ -16,4 +16,25 @@ body {
 
 button, input, select, textarea {
     font-family: 'DM Sans', sans-serif;
-} 
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: $scrollbar-thumb;
+    border-radius: 4px;
+
+    &:hover {
+        background-color: $scrollbar-thumb-hover;
+    }
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+}

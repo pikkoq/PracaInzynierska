@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import logo from '../../assets/LogoJasnoSzare.png';
 import { logout } from '../../services/api';
-import './TopNavbar.css';
+import './TopNavbar.scss';
 
 const TopNavbar = () => {
     const navigate = useNavigate();

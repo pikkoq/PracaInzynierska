@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Post from './Post';
-import './PostFeed.css';
+import './PostFeed.scss';
 
 const PostFeed = ({ initialPosts, loading }) => {
   const [posts, setPosts] = useState(initialPosts);

@@ -3,8 +3,9 @@ import TopNavbar from '../Navigation/TopNavbar';
 import Navigation from '../Navigation/Navigation';
 import PopularShoes from './PopularShoes';
 import PostFeed from './PostFeed';
+import AddPost from './AddPost';
 import { getFriendPosts } from '../../services/api';
-import './Home.css';
+import './Home.scss';
 
 const Home = () => {
     const [posts, setPosts] = useState([]);
@@ -33,6 +34,7 @@ const Home = () => {
                     <Navigation />
                 </div>
                 <div className="scrollable-content">
+                    <AddPost />
                     <PostFeed initialPosts={posts} loading={loading} />
                 </div>
                 <div className="right-sidebar">

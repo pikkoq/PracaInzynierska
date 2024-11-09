@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaPlus, FaSave, FaTimes } from 'react-icons/fa';
 import { addShoeToUserCollection, getCatalogShoeDetails } from '../../services/api';
 import ShoeDetailsModal from '../Navigation/ShoeDetailsModal';
-import './SearchResultCard.css';
+import './SearchResultCard.scss';
 
 const SearchResultCard = ({ shoe }) => {
     const [showAddModal, setShowAddModal] = useState(false);

@@ -2,7 +2,7 @@ import React from "react";
 import TopNavbar from '../Navigation/TopNavbar';
 import Navigation from "../Navigation/Navigation";
 import ShoeLibrary from "./ShoeLibrary";
-import './Library.css';
+import './Library.scss';
 
 const Library = () => {
     return(

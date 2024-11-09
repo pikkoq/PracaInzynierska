@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getPopularShoes, getCatalogShoeDetails } from '../../services/api';
-import axios from 'axios';
-import './PopularShoes.css';
+import './PopularShoes.scss';
 import ShoeDetailsModal from '../Navigation/ShoeDetailsModal';
 
 const PopularShoes = () => {

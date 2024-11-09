@@ -1,0 +1,72 @@
+@import '../../styles/variables';
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: $background-dark;
+    color: $text-primary;
+  }
+  
+  .home-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .top-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: $background-medium;
+  }
+  
+  .logo-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    height: 60px;
+    width: 200px;
+  }
+  
+  .search-bar-container {
+    flex: 1;
+    max-width: 50%;
+    margin: 0 1rem 0 -5rem;
+  }
+  
+  .main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+  
+  .scrollable-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  .logout-button {
+    background-color: $primary-color;
+    color: $background-dark;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 0.25rem;
+  }
+  
+  .logout-button:hover {
+    background-color: $primary-color-hover;
+  }
+  

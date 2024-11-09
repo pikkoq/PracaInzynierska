@@ -1,0 +1,14 @@
+@import '../../styles/variables';
+
+.post-feed {
+    max-width: 800px;
+    width: 100%;
+  }
+  
+.loading, .no-posts {
+  text-align: center;
+  padding: 20px;
+  color: $text-secondary;
+}
+  
+  

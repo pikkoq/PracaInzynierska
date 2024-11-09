@@ -1,0 +1,137 @@
+.user-posts-container {
+    padding: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.user-posts-container h2 {
+    color: #25d162;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.post-card {
+    background-color: #2b2b2b;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.post-card:hover {
+    transform: translateY(-2px);
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #1d1d1d;
+}
+
+.post-date {
+    color: #a0a0a0;
+    font-size: 0.9em;
+    margin: 0;
+}
+
+.delete-button {
+    background: none;
+    border: none;
+    color: #ff4136;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.2s;
+}
+
+.delete-button:hover {
+    color: #ff725c;
+}
+
+.post-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.post-content {
+    padding: 15px;
+}
+
+.post-content h3 {
+    color: #25d162;
+    margin: 0 0 10px 0;
+}
+
+.post-details {
+    background-color: #1d1d1d;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.post-details p {
+    margin: 5px 0;
+    color: #dfe3eb;
+}
+
+.post-stats {
+    display: flex;
+    gap: 15px;
+    color: #a0a0a0;
+}
+
+.loading {
+    text-align: center;
+    color: #dfe3eb;
+    padding: 20px;
+}
+
+.no-posts {
+    text-align: center;
+    color: #a0a0a0;
+    padding: 20px;
+}
+
+.error-message {
+    background-color: #ff4136;
+    color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.success-message {
+    background-color: #25d162;
+    color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+} 

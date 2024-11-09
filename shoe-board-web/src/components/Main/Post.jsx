@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { likePost, unlikePost, getCatalogShoeDetails } from '../../services/api';
-import './Post.css';
+import './Post.scss';
 import ShoeDetailsModal from '../Navigation/ShoeDetailsModal';
+import CommentsModal from './CommentsModal';
 
 const Post = ({ post, onPostUpdate }) => {
   const [isLiked, setIsLiked] = useState(post.isLiked);
@@ -9,6 +10,8 @@ const Post = ({ post, onPostUpdate }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [shoeDetails, setShoeDetails] = useState(null);
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+  const [commentsCount, setCommentsCount] = useState(post.commentsCount || 0);
 
   const handleLikeClick = async () => {
     try {
@@ -49,13 +52,25 @@ const Post = ({ post, onPostUpdate }) => {
     }
   };
 
+  const handleCommentAdded = () => {
+    setCommentsCount(prev => prev + 1);
+    onPostUpdate(post.id, { commentsCount: commentsCount + 1 });
+  };
+
   return (
     <>
       <div className="post">
         <div className="post-content">
           <div className="post-header">
-            <h3>{post.username}</h3>
-            <p>Posted on: {new Date(post.datePosted).toLocaleString()}</p>
+            <div className="user-info">
+              <div className="avatar">
+                <img src={post.profilePictureUrl || 'https://via.placeholder.com/40'} alt="User avatar" />
+              </div>
+              <div className="user-details">
+                <h3>{post.username}</h3>
+                <p>Posted on: {new Date(post.datePosted).toLocaleString()}</p>
+              </div>
+            </div>
           </div>
           <h2 className="post-title">{post.title}</h2>
           <p className="post-text">{post.content}</p>
@@ -73,13 +88,26 @@ const Post = ({ post, onPostUpdate }) => {
               </button>
               <span>{likeCount}</span>
             </div>
-            <span>Comments: {post.comments.length}</span>
+            <button 
+              className="comment-button"
+              onClick={() => setShowComments(true)}
+            >
+              💬 {commentsCount}
+            </button>
           </div>
         </div>
         <div className="post-image" onClick={handleImageClick} style={{ cursor: 'pointer' }}>
           <img src={post.image_Url} alt={post.title} />
         </div>
       </div>
+
+      {showComments && (
+        <CommentsModal 
+          postId={post.id}
+          onClose={() => setShowComments(false)}
+          onCommentAdded={handleCommentAdded}
+        />
+      )}
 
       {showDetails && (
         <ShoeDetailsModal 

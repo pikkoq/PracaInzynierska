@@ -1,0 +1,44 @@
+// Main colors
+$primary-color: #25d162;
+$primary-color-hover: #1ea951;
+
+$background-dark: #1d1d1d;
+$background-medium: #2b2b2b;
+
+// Text colors
+$text-primary: #dfe3eb;
+$text-secondary: #a0a0a0;
+$text-highlight: #ffffff;
+
+// Action colors
+$error-color: #ff4136;
+$error-color-hover: #ff725c;
+
+// Border colors
+$border-primary: $primary-color;
+$border-dark: $background-dark;
+
+// Overlay colors
+$modal-overlay: rgba(0, 0, 0, 0.7);
+
+// Status colors
+$success-color: $primary-color;
+$warning-color: #ffd700;
+$info-color: #0074d9;
+
+// Interactive element colors
+$button-primary: $primary-color;
+$button-primary-hover: $primary-color-hover;
+$button-danger: $error-color;
+$button-danger-hover: $error-color-hover;
+
+// Form element colors
+$input-background: $background-dark;
+$input-border: $border-primary;
+$input-text: $text-primary;
+$input-placeholder: $text-secondary;
+
+// Specific component colors
+$like-button-active: $primary-color;
+$comment-button-hover: $primary-color;
+$nav-link-active: $primary-color; 

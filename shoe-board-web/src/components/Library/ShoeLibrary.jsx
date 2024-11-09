@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getUserShoes, deleteUserShoe, updateUserShoe } from '../../services/api';
 import ShoeCard from './ShoeCard';
-import './ShoeLibrary.css';
+import './ShoeLibrary.scss';
 
 const ShoeLibrary = () => {
     const [shoes, setShoes] = useState([]);

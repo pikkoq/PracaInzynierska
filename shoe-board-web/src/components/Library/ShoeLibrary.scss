@@ -1,0 +1,32 @@
+@import '../../styles/variables';
+
+.shoe-library {
+    padding: 1rem;
+}
+
+.shoe-library h1 {
+    color: $primary-color;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.shoe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.loading {
+    text-align: center;
+    color: $text-primary;
+    padding: 2rem;
+}
+
+.error-message {
+    background-color: $error-color;
+    color: $text-highlight;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    text-align: center;
+} 

@@ -5,7 +5,7 @@ import { searchShoes } from '../../services/api';
 import SearchResultCard from './SearchResultCard';
 import Navigation from '../Navigation/Navigation';
 import TopNavbar from '../Navigation/TopNavbar';
-import './SearchResults.css';
+import './SearchResults.scss';
 
 const SearchResults = () => {
     const [results, setResults] = useState([]);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaPen } from 'react-icons/fa';
 import { getUserData, updateUserData } from '../../services/api';
-import './ProfileCard.css';
+import './ProfileCard.scss';
 
 const ProfileCard = () => {
     const [isEditing, setIsEditing] = useState(false);

@@ -1,5 +1,5 @@
 import React from 'react';
-import './ShoeDetailsModal.css';
+import './ShoeDetailsModal.scss';
 
 const ShoeDetailsModal = ({ shoe, isLoading, onClose }) => {
     if (!shoe && !isLoading) return null;

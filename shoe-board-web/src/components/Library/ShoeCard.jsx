@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaTrash, FaSave, FaTimes } from 'react-icons/fa';
 import { getShoeDetails } from '../../services/api';
-import './ShoeCard.css';
+import './ShoeCard.scss';
 
 const ShoeCard = ({ shoe, onDelete, onUpdate }) => {
     const [showDetails, setShowDetails] = useState(false);

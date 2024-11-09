@@ -1,0 +1,31 @@
+@import '../../styles/variables';
+
+.navigation {
+    width: 250px;
+    height: 100%;
+    background-color: $background-medium;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .nav-links {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .nav-links li {
+    margin-bottom: 20px;
+  }
+  
+  .nav-links a {
+    color: $text-primary;
+    text-decoration: none;
+    transition: color 0.3s;
+    font-size: 30px;
+    font-weight: bold;
+  }
+  
+  .nav-links a:hover {
+    color: $primary-color;
+  }
+  

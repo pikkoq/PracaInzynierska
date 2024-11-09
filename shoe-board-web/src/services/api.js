@@ -185,4 +185,57 @@ export const getCatalogShoeDetails = async (catalogShoeId) => {
   }
 };
 
+export const addPost = async (postData) => {
+  try {
+    const response = await api.post('/Post/AddPost', postData);
+    return response.data;
+  } catch (error) {
+    console.error('Error adding post:', error);
+    throw error;
+  }
+};
+
+export const getYourPosts = async () => {
+  try {
+    const response = await api.get('/Post/GetYoursPosts');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching your posts:', error);
+    throw error;
+  }
+};
+
+export const deletePost = async (postId) => {
+  try {
+    const response = await api.delete(`/Post/DeletePost?postId=${postId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    throw error;
+  }
+};
+
+export const getComments = async (postId) => {
+  try {
+    const response = await api.get(`/Post/GetComments?postId=${postId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    throw error;
+  }
+};
+
+export const addComment = async (postId, content) => {
+  try {
+    const response = await api.post(`/Post/AddComment`, {
+      postId: postId,
+      content: content
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error adding comment:', error);
+    throw error;
+  }
+};
+
 export default api;

@@ -71,7 +71,11 @@ namespace ShoeBoardAPI.Services.UserService
             user.UserName = userEdit.Username ?? user.UserName;
             user.Email = userEdit.Email ?? user.Email;
             user.Bio = userEdit.Bio ?? user.Bio;
-            user.ProfilePicturePath = userEdit.ProfilePicturePath ?? user.ProfilePicturePath;
+            user.ProfilePicturePath = userEdit.ProfilePicturePath == null
+                ? user.ProfilePicturePath 
+                : (string.IsNullOrWhiteSpace(userEdit.ProfilePicturePath)
+                ? "https://icons.veryicon.com/png/o/miscellaneous/common-icons-31/default-avatar-2.png" 
+                : userEdit.ProfilePicturePath);
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)

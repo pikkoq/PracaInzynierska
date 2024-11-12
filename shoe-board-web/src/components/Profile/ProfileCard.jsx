@@ -93,7 +93,7 @@ const ProfileCard = () => {
                     <div className="avatar-container">
                         <div className="avatar-wrapper">
                             <img 
-                                src={userData.profilePicturePath || 'default-avatar.png'} 
+                                src={userData.profilePicturePath || '../../assets/DefaultUser.png'} 
                                 alt={userData.username}
                                 className={`avatar-image ${isEditing ? 'editable' : ''}`}
                                 onClick={handleAvatarClick}

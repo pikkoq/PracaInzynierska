@@ -64,7 +64,7 @@ const Post = ({ post, onPostUpdate }) => {
           <div className="post-header">
             <div className="user-info">
               <div className="avatar">
-                <img src={post.profilePictureUrl || 'https://via.placeholder.com/40'} alt="User avatar" />
+                <img src={post.profilePictureUrl || 'https://icons.veryicon.com/png/o/miscellaneous/common-icons-31/default-avatar-2.png'} alt="User avatar" />
               </div>
               <div className="user-details">
                 <h3>{post.username}</h3>

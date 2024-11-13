@@ -12,8 +12,8 @@ using ShoeBoardAPI.DataBase;
 namespace ShoeBoardAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241109153913_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20241112183110_FirstMigration")]
+    partial class FirstMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -464,6 +464,7 @@ namespace ShoeBoardAPI.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ProfilePicturePath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")

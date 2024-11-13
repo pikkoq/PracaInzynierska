@@ -67,6 +67,28 @@ namespace ShoeBoardAPI.Services.FriendService
             return response;
         }
 
+        public async Task<ServiceResponse<bool>> CancelSentFriendRequest(int requestId, string userId)
+        {
+            var response = new ServiceResponse<bool>();
+
+            var friendRequest = await _context.FriendRequests.FindAsync(requestId);
+            if (friendRequest == null || friendRequest.RequesterId != userId)
+            {
+                response.Data = false;
+                response.Success = false;
+                response.Message = "Failed to cancel friend request.";
+                return response;
+            }
+
+            _context.FriendRequests.Remove(friendRequest);
+            await _context.SaveChangesAsync();
+
+            response.Data = true;
+            response.Success = true;
+            response.Message = "Friend request declined.";
+            return response;
+        }
+
         public async Task<ServiceResponse<bool>> DeleteFriend(string userId, string friendId)
         {
             var response = new ServiceResponse<bool>();
@@ -102,7 +124,9 @@ namespace ShoeBoardAPI.Services.FriendService
                 .Include(f => f.Requester)
                 .Select(f => new GetFriendRequestDto
                 {
+                    Id = f.Id,
                     Username = f.Requester.UserName,
+                    UserAvatar = f.Requester.ProfilePicturePath,
                     RequestDate = f.RequestDate,
                     IsAccepted = f.IsAccepted,
                 })
@@ -122,7 +146,9 @@ namespace ShoeBoardAPI.Services.FriendService
                 .Include(f => f.Receiver)
                 .Select(f => new GetFriendRequestDto
                 {
+                    Id = f.Id,
                     Username = f.Receiver.UserName,
+                    UserAvatar = f.Receiver.ProfilePicturePath,
                     RequestDate = f.RequestDate,
                     IsAccepted = f.IsAccepted,
                 })
@@ -144,7 +170,9 @@ namespace ShoeBoardAPI.Services.FriendService
                 .Include(f => f.User)
                 .Select(f => new GetFriendsDto
                 {
+                    Id = userId == f.UserId ? f.FriendUser.Id : f.User.Id,
                     Username = userId == f.UserId ? f.FriendUser.UserName : f.User.UserName,
+                    UserAvatar = userId == f.UserId ? f.FriendUser.ProfilePicturePath : f.User.ProfilePicturePath,
                     DateAdded = f.DateAdded,
                 })
                 .ToListAsync();
@@ -217,6 +245,33 @@ namespace ShoeBoardAPI.Services.FriendService
             response.Success = true;
             response.Data = true;
             response.Message = "Friend request sent.";
+            return response;
+        }
+
+        public async Task<ServiceResponse<List<SearchFriendDto>>> SearchFriends(string searchTerm, string userId)
+        {
+            var response = new ServiceResponse<List< SearchFriendDto>>();
+
+            var userMatch = await _context.Users
+                .Where(u => u.UserName.Contains(searchTerm) && u.Id != userId)
+                .Where(u => !_context.Friends.Any(f =>
+                            (f.UserId == userId && f.FriendId == u.Id) ||
+                            (f.UserId == u.Id && f.FriendId == userId)))
+                .Where(u => !_context.FriendRequests.Any(fr =>
+                            (fr.RequesterId == userId && fr.ReceiverId == u.Id) ||
+                            (fr.RequesterId == u.Id && fr.ReceiverId == userId)))
+                .Select(u => new SearchFriendDto
+                {
+                    Id = u.Id,
+                    Username = u.UserName,
+                    UserAvatar = u.ProfilePicturePath,
+                    DateJoined = u.DateCreated
+                })
+                .ToListAsync();
+
+            response.Success = true;
+            response.Message = userMatch.Any() ? "Users found metching query." : "No user found match";
+            response.Data = userMatch;
             return response;
         }
     }

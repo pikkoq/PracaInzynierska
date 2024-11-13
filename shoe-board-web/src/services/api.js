@@ -238,4 +238,94 @@ export const addComment = async (postId, content) => {
   }
 };
 
+export const getFriends = async () => {
+    try {
+        const response = await api.get('/Friend/GetFreinds');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching friends:', error);
+        return { success: false, error: error.response?.data || 'Failed to fetch friends' };
+    }
+};
+
+export const getFriendRequests = async () => {
+    try {
+        const response = await api.get('/Friend/GetFriendRequests');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching friend requests:', error);
+        return { success: false, error: error.response?.data || 'Failed to fetch friend requests' };
+    }
+};
+
+export const getSentFriendRequests = async () => {
+    try {
+        const response = await api.get('/Friend/GetSentFriendRequests');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching sent friend requests:', error);
+        return { success: false, error: error.response?.data || 'Failed to fetch sent friend requests' };
+    }
+};
+
+export const acceptFriendRequest = async (requestId) => {
+    try {
+        const response = await api.post(`/Friend/AcceptFriendRequest?requestId=${requestId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error accepting friend request:', error);
+        return { success: false, error: error.response?.data || 'Failed to accept friend request' };
+    }
+};
+
+export const searchFriends = async (searchTerm) => {
+    try {
+        const response = await api.get(`/Friend/SearchFriends?searchTerm=${encodeURIComponent(searchTerm)}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error searching friends:', error);
+        return { success: false, error: error.response?.data || 'Failed to search friends' };
+    }
+};
+
+export const sendFriendRequest = async (receiverId) => {
+    try {
+        const response = await api.post(`/Friend/SendFriendRequest?receiverId=${receiverId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error sending friend request:', error);
+        return { success: false, error: error.response?.data || 'Failed to send friend request' };
+    }
+};
+
+export const declineFriendRequest = async (requestId) => {
+    try {
+        const response = await api.delete(`/Friend/CancelFriendRequest?requestId=${requestId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error declining friend request:', error);
+        return { success: false, error: error.response?.data || 'Failed to decline friend request' };
+    }
+};
+
+export const deleteFriend = async (friendId) => {
+    try {
+        const response = await api.delete(`/Friend/DeleteFriend?friendId=${friendId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting friend:', error);
+        return { success: false, error: error.response?.data || 'Failed to delete friend' };
+    }
+};
+
+export const rejectFriendRequest = async (requestId) => {
+    try {
+        const response = await api.delete(`/Friend/DeclineFriendRequest?requestId=${requestId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error rejecting friend request:', error);
+        return { success: false, error: error.response?.data || 'Failed to reject friend request' };
+    }
+};
+
 export default api;

@@ -33,6 +33,10 @@ namespace ShoeBoardAPI.DataBase
                 .Property(s => s.Id)
                 .ValueGeneratedOnAdd();
 
+            modelBuilder.Entity<FriendRequest>()
+                .Property(s => s.Id)
+                .ValueGeneratedOnAdd();
+
             modelBuilder.Entity<Friend>()
                 .HasOne(f => f.User)
                 .WithMany(u => u.Friends)

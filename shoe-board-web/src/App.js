@@ -6,6 +6,7 @@ import Home from './components/Main/Home';
 import Profile from './components/Profile/Profile';
 import Library from './components/Library/Library';
 import SearchResults from './components/Search/SearchResults';
+import Friends from './components/Friends/Friends';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/library" element={<Library />} />
           <Route path="/search" element={<SearchResults />} />
+          <Route path="/friends" element={<Friends />} />
           <Route path="/" element={<Home />} />
         </Routes>
       </div>

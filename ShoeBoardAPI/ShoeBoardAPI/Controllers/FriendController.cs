@@ -124,6 +124,33 @@ namespace ShoeBoardAPI.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("SearchFriends")]
+        public async Task<IActionResult> SearchFriends(string searchTerm)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                var response = new ServiceResponse<bool>
+                {
+                    Data = false,
+                    Success = false,
+                    Message = "User not found. Cannot indetify."
+                };
+                return BadRequest(response);
+            }
+
+            var result = await _friendService.SearchFriends(searchTerm, userId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            result.Message = "Failed to fetch data";
+            result.Success = false;
+            result.Data = null;
+            return BadRequest(result);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("AcceptFriendRequest")]
         public async Task<IActionResult> AcceptFriendRequest(int requestId)
         {
@@ -144,9 +171,6 @@ namespace ShoeBoardAPI.Controllers
             {
                 return Ok(result);
             }
-            result.Message = "Failed to accept friend.";
-            result.Success = false;
-            result.Data = false;
             return BadRequest(result);
         }
 
@@ -186,6 +210,29 @@ namespace ShoeBoardAPI.Controllers
             };
 
             var result = await _friendService.DeclineFriendRequest(requestId, userId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            result.Message = "Failed to decline friend request.";
+            result.Success = false;
+            result.Data = false;
+            return BadRequest(result);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpDelete("CancelFriendRequest")]
+        public async Task<IActionResult> CancelFriendRequest(int requestId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var response = new ServiceResponse<bool>
+            {
+                Data = false,
+                Success = false,
+                Message = "User not found. Cannot indetify."
+            };
+
+            var result = await _friendService.CancelSentFriendRequest(requestId, userId);
             if (result.Success)
             {
                 return Ok(result);

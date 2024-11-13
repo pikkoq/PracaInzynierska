@@ -25,6 +25,24 @@
     margin: 0 1rem 0 -5rem;
 }
 
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .username {
+        color: $text-primary;
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    .welcome-message {
+        color: $primary-color;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+}
+
 .logout-button {
     background-color: $primary-color;
     color: $background-dark;
@@ -33,8 +51,8 @@
     cursor: pointer;
     transition: background-color 0.3s;
     border-radius: 0.25rem;
-}
 
-.logout-button:hover {
-    background-color: $primary-color-hover;
+    &:hover {
+        background-color: $primary-color-hover;
+    }
 } 

@@ -101,7 +101,8 @@ namespace ShoeBoardAPI.Services.UserService
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("id", user.Id)
+                new Claim("id", user.Id),
+                new Claim("username", user.UserName)
             };
 
             var token = new JwtSecurityToken(

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import logo from '../../assets/LogoJasnoSzare.png';
@@ -7,6 +7,19 @@ import './TopNavbar.scss';
 
 const TopNavbar = () => {
     const navigate = useNavigate();
+    const [username, setUsername] = useState('');
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                setUsername(payload.username);
+            } catch (error) {
+                console.error('Error decoding token:', error);
+            }
+        }
+    }, []);
 
     const handleLogout = () => {
         logout();
@@ -25,7 +38,11 @@ const TopNavbar = () => {
             <div className="search-bar-container">
                 <SearchBar />
             </div>
-            <button onClick={handleLogout} className="logout-button">Logout</button>
+            <div className="user-section">
+                <span className="welcome-message">Hello,</span>
+                <span className="username">{username}</span>
+                <button onClick={handleLogout} className="logout-button">Logout</button>
+            </div>
         </nav>
     );
 };

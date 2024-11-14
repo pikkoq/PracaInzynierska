@@ -68,6 +68,30 @@ namespace ShoeBoardAPI.Services.UserService
                 return response;
             }
 
+            if (!string.IsNullOrWhiteSpace(userEdit.Username) && userEdit.Username != user.UserName)
+            {
+                var userWithSameUsername = await _userManager.FindByNameAsync(userEdit.Username);
+                if(userWithSameUsername != null && userWithSameUsername.Id != user.Id)
+                {
+                    response.Success = false;
+                    response.Data = false;
+                    response.Message = "Username is already taken.";
+                    return response;
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(userEdit.Email) && userEdit.Email != user.Email)
+            {
+                var userWithSameEmail = await _userManager.FindByEmailAsync(userEdit.Email);
+                if (userWithSameEmail != null && userWithSameEmail.Id != user.Id)
+                {
+                    response.Success = false;
+                    response.Data = false;
+                    response.Message = "Email is already in use.";
+                    return response;
+                }
+            }
+
             user.UserName = userEdit.Username ?? user.UserName;
             user.Email = userEdit.Email ?? user.Email;
             user.Bio = userEdit.Bio ?? user.Bio;
@@ -162,6 +186,22 @@ namespace ShoeBoardAPI.Services.UserService
         public async Task<ServiceResponse<bool>> ReigsterUser(RegisterUserDto registerUser)
         {
             var response = new ServiceResponse<bool>();
+
+            if (await _userManager.FindByNameAsync(registerUser.Username) != null)
+            {
+                response.Success = false;
+                response.Data = false;
+                response.Message = "Username is already taken.";
+                return response;
+            }
+
+            if (await _userManager.FindByEmailAsync(registerUser.Email) != null)
+            {
+                response.Success = false;
+                response.Data = false;
+                response.Message = "Email is already in use";
+                return response;
+            }
 
             var user = new User
             {

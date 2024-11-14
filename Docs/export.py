@@ -16,5 +16,5 @@ def export_table_to_json(table_name, file_name):
     df.to_json(file_name, orient="records")
     print(f"Table {table_name} exported to {file_name}")
 
-export_table_to_json("ShoeCatalogs", "ShoeCatalog.json")
+export_table_to_json("AspNetUsers", "AspNetUsers.json")
 conn.close()

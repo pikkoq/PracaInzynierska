@@ -10,6 +10,17 @@ const PopularShoes = () => {
   const [selectedShoe, setSelectedShoe] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isNavOpen, setIsNavOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchPopularShoes = async () => {
@@ -47,9 +58,13 @@ const PopularShoes = () => {
     }
   };
 
+  const toggleNavVisibility = () => {
+    setIsNavOpen(!isNavOpen);
+  };
+
   if (isLoading) {
     return (
-      <aside className="popular-shoes">
+      <aside className={`popular-shoes ${isNavOpen ? 'open' : ''} ${isMobile ? 'mobile' : ''}`}>
         <h2>Top Shoes</h2>
         <div className="loading">Loading...</div>
       </aside>
@@ -58,7 +73,7 @@ const PopularShoes = () => {
 
   if (error) {
     return (
-      <aside className="popular-shoes">
+      <aside className={`popular-shoes ${isNavOpen ? 'open' : ''} ${isMobile ? 'mobile' : ''}`}>
         <h2>Top Shoes</h2>
         <div className="error-message">{error}</div>
       </aside>
@@ -67,7 +82,13 @@ const PopularShoes = () => {
 
   return (
     <>
-      <aside className="popular-shoes">
+      {isMobile && (
+        <button className="toggle-nav-button" onClick={toggleNavVisibility}>
+          {isNavOpen ? '▲' : '▼'}
+        </button>
+      )}
+
+      <aside className={`popular-shoes ${isNavOpen ? 'open' : ''} ${isMobile ? 'mobile' : ''}`}>
         <h2>Top Shoes</h2>
         <ul className="popular-shoes-list">
           {popularShoes.map((shoe) => (

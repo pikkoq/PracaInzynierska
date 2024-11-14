@@ -7,40 +7,126 @@
     padding: 0.5rem 1rem;
     background-color: $background-medium;
     height: 80px;
+    transition: all 0.3s ease;
+
+    &.mobile {
+        height: 60px;
+        padding: 0.5rem;
+    }
 }
 
 .logo-container {
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
 .logo {
     height: 60px;
     width: 200px;
+    transition: all 0.3s ease;
+
+    @media (max-width: 1200px) {
+        width: 150px;
+        height: 45px;
+    }
+
+    @media (max-width: 768px) {
+        width: 120px;
+        height: 36px;
+    }
 }
 
 .search-bar-container {
     flex: 1;
     max-width: 50%;
-    margin: 0 1rem 0 -5rem;
+    margin: 0 1rem;
+    transition: all 0.3s ease;
+
+    @media (max-width: 1200px) {
+        max-width: 40%;
+    }
+}
+
+.mobile-search-button {
+    background: none;
+    border: none;
+    color: $primary-color;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-search-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: $background-medium;
+    padding: 1rem;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.close-search-button {
+    background: none;
+    border: none;
+    color: $primary-color;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-left: 0.5rem;
 }
 
 .user-section {
     display: flex;
     align-items: center;
     gap: 1rem;
+    transition: all 0.3s ease;
 
-    .username {
-        color: $text-primary;
-        font-size: 1.2rem;
-        font-weight: bold;
-        text-transform: uppercase;
+    &.mobile {
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.2rem;
+        }
+
+        .welcome-message {
+            font-size: 0.8rem;
+        }
+
+        .username {
+            font-size: 0.9rem;
+        }
     }
-    .welcome-message {
-        color: $primary-color;
-        font-size: 1.2rem;
-        font-weight: bold;
-    }
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.welcome-message {
+    color: $primary-color;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.username {
+    color: $text-primary;
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
 .logout-button {
@@ -49,10 +135,22 @@
     border: none;
     padding: 0.5rem 1rem;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
     border-radius: 0.25rem;
+    white-space: nowrap;
 
     &:hover {
         background-color: $primary-color-hover;
+    }
+
+    @media (max-width: 768px) {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .search-bar-container {
+        display: none;
     }
 } 

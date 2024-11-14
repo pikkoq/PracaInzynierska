@@ -46,8 +46,8 @@ const CommentsModal = ({ postId, onClose, onCommentAdded }) => {
     };
 
     return (
-        <div className="comments-modal">
-            <div className="comments-content">
+        <div className="comments-modal" onClick={onClose}>
+            <div className="comments-content" onClick={e => e.stopPropagation()}>
                 <div className="comments-header">
                     <h3>Comments</h3>
                     <button className="close-button" onClick={onClose}>&times;</button>

@@ -208,6 +208,7 @@ namespace ShoeBoardAPI.Services.PostService
                     .ThenInclude(s => s.ShoeCatalog)
                 .Include(p => p.Shoe)
                     .ThenInclude(s => s.UserShoeCatalog)
+                .OrderByDescending(o => o.DatePosted)
                 .Select(p => new PostDto
                 {
                     Id = p.Id,

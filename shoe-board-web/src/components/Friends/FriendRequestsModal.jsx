@@ -25,7 +25,7 @@ const FriendRequestsModal = ({ onClose, onFriendsUpdate }) => {
                 }
             }
         } catch (error) {
-            setError('Wystąpił błąd podczas pobierania zaproszeń');
+            setError('An error occurred while downloading invitations');
         } finally {
             setLoading(false);
         }
@@ -43,10 +43,10 @@ const FriendRequestsModal = ({ onClose, onFriendsUpdate }) => {
                 await fetchRequests();
                 onFriendsUpdate();
             } else {
-                setError('Nie udało się zaakceptować zaproszenia');
+                setError('Failed to accept invitation');
             }
         } catch (error) {
-            setError('Wystąpił błąd podczas akceptowania zaproszenia');
+            setError('An error occurred while accepting the invitation');
         } finally {
             setProcessingRequest(null);
         }
@@ -59,10 +59,10 @@ const FriendRequestsModal = ({ onClose, onFriendsUpdate }) => {
             if (response.success) {
                 await fetchRequests();
             } else {
-                setError('Nie udało się anulować zaproszenia');
+                setError('Failed to cancel invitation');
             }
         } catch (error) {
-            setError('Wystąpił błąd podczas anulowania zaproszenia');
+            setError('An error occurred while cancelling the invitation');
         } finally {
             setProcessingRequest(null);
         }
@@ -75,20 +75,21 @@ const FriendRequestsModal = ({ onClose, onFriendsUpdate }) => {
             if (response.success) {
                 await fetchRequests();
             } else {
-                setError('Nie udało się odrzucić zaproszenia');
+                setError('Failed to decline the invitation');
             }
         } catch (error) {
-            setError('Wystąpił błąd podczas odrzucania zaproszenia');
+            setError('An error occurred while declining an invitation');
         } finally {
             setProcessingRequest(null);
         }
     };
 
+
     return (
-        <div className="modal-overlay">
-            <div className="friend-requests-modal">
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="friend-requests-modal" onClick={e => e.stopPropagation()}>
                 <div className="modal-header">
-                    <h2>Zaproszenia do znajomych</h2>
+                    <h2>Friend invites</h2>
                     <button className="close-button" onClick={onClose}>&times;</button>
                 </div>
                 
@@ -97,26 +98,26 @@ const FriendRequestsModal = ({ onClose, onFriendsUpdate }) => {
                         className={`tab-button ${activeTab === 'received' ? 'active' : ''}`}
                         onClick={() => setActiveTab('received')}
                     >
-                        Otrzymane
+                        Received
                     </button>
                     <button 
                         className={`tab-button ${activeTab === 'sent' ? 'active' : ''}`}
                         onClick={() => setActiveTab('sent')}
                     >
-                        Wysłane
+                        Sent
                     </button>
                 </div>
 
                 <div className="requests-content">
                     {loading ? (
-                        <div className="loading">Ładowanie zaproszeń...</div>
+                        <div className="loading">Loading invitations...</div>
                     ) : error ? (
                         <div className="error-message">{error}</div>
                     ) : (
                         <div className="requests-list">
                             {activeTab === 'received' ? (
                                 receivedRequests.length === 0 ? (
-                                    <p className="no-requests">Brak otrzymanych zaproszeń</p>
+                                    <p className="no-requests">No invitations received</p>
                                 ) : (
                                     receivedRequests.map((request) => (
                                         <div key={request.id} className="request-card">
@@ -136,14 +137,14 @@ const FriendRequestsModal = ({ onClose, onFriendsUpdate }) => {
                                                     onClick={() => handleAcceptRequest(request.id)}
                                                     disabled={processingRequest === request.id}
                                                 >
-                                                    {processingRequest === request.id ? 'Akceptowanie...' : 'Akceptuj'}
+                                                    {processingRequest === request.id ? 'Accepting...' : 'Accept'}
                                                 </button>
                                                 <button 
                                                     className="reject-button"
                                                     onClick={() => handleRejectRequest(request.id)}
                                                     disabled={processingRequest === request.id}
                                                 >
-                                                    {processingRequest === request.id ? 'Odrzucanie...' : 'Odrzuć'}
+                                                    {processingRequest === request.id ? 'Declining...' : 'Decline'}
                                                 </button>
                                             </div>
                                         </div>
@@ -151,7 +152,7 @@ const FriendRequestsModal = ({ onClose, onFriendsUpdate }) => {
                                 )
                             ) : (
                                 sentRequests.length === 0 ? (
-                                    <p className="no-requests">Brak wysłanych zaproszeń</p>
+                                    <p className="no-requests">No invitations sent</p>
                                 ) : (
                                     sentRequests.map((request) => (
                                         <div key={request.id} className="request-card">
@@ -163,7 +164,7 @@ const FriendRequestsModal = ({ onClose, onFriendsUpdate }) => {
                                             </div>
                                             <div className="request-info">
                                                 <h3>{request.username}</h3>
-                                                <p>Data wysłania: {new Date(request.requestDate).toLocaleDateString()}</p>
+                                                <p>Sent date: {new Date(request.requestDate).toLocaleDateString()}</p>
                                             </div>
                                             <div className="request-actions">
                                                 <button 
@@ -171,7 +172,7 @@ const FriendRequestsModal = ({ onClose, onFriendsUpdate }) => {
                                                     onClick={() => handleCancelRequest(request.id)}
                                                     disabled={processingRequest === request.id}
                                                 >
-                                                    {processingRequest === request.id ? 'Anulowanie...' : 'Anuluj zaproszenie'}
+                                                    {processingRequest === request.id ? 'Canceling...' : 'Cancel invite'}
                                                 </button>
                                             </div>
                                         </div>

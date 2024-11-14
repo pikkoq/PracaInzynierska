@@ -17,7 +17,7 @@ const UserPosts = () => {
             }
         } catch (error) {
             console.error('Error fetching your posts:', error);
-            setError('Nie udało się pobrać twoich postów');
+            setError('Error fetching your posts');
         } finally {
             setLoading(false);
         }
@@ -28,19 +28,19 @@ const UserPosts = () => {
     }, []);
 
     const handleDeletePost = async (postId) => {
-        if (window.confirm('Czy na pewno chcesz usunąć ten post?')) {
+        if (window.confirm('Are you sure you want to delete this post?')) {
             try {
                 const response = await deletePost(postId);
                 if (response.success) {
                     setPosts(posts.filter(post => post.id !== postId));
-                    setSuccessMessage('Post został usunięty pomyślnie!');
+                    setSuccessMessage('The post was removed successfully!');
                     setTimeout(() => {
                         setSuccessMessage('');
                     }, 3000);
                 }
             } catch (error) {
                 console.error('Error deleting post:', error);
-                setError('Nie udało się usunąć posta');
+                setError('Error deleting post.');
                 setTimeout(() => {
                     setError('');
                 }, 3000);
@@ -49,7 +49,7 @@ const UserPosts = () => {
     };
 
     if (loading) {
-        return <div className="loading">Ładowanie postów...</div>;
+        return <div className="loading">Loading...</div>;
     }
 
     return (

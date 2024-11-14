@@ -24,19 +24,19 @@ const Friends = () => {
                 </div>
                 <div className="main-content-container">
                     <div className="friends-header">
-                        <h1>Znajomi</h1>
+                        <h1>Friends</h1>
                         <div className="friends-actions">
                             <button 
                                 className="friend-action-button invites-button"
                                 onClick={() => setShowInvites(true)}
                             >
-                                Zaproszenia
+                                Invites
                             </button>
                             <button 
                                 className="friend-action-button add-friend-button"
                                 onClick={() => setShowAddFriend(true)}
                             >
-                                Dodaj znajomego
+                                Add friend
                             </button>
                         </div>
                     </div>

@@ -20,7 +20,7 @@ const ProfilePosts = () => {
             }
         } catch (error) {
             console.error('Error fetching your posts:', error);
-            setError('Nie udało się pobrać twoich postów');
+            setError('Error fetching your posts.');
         } finally {
             setLoading(false);
         }
@@ -31,19 +31,19 @@ const ProfilePosts = () => {
     }, []);
 
     const handleDeletePost = async (postId) => {
-        if (window.confirm('Czy na pewno chcesz usunąć ten post?')) {
+        if (window.confirm('Are you sure you want to delete this post?')) {
             try {
                 const response = await deletePost(postId);
                 if (response.success) {
                     setPosts(posts.filter(post => post.id !== postId));
-                    setSuccessMessage('Post został usunięty pomyślnie!');
+                    setSuccessMessage('Post deleted successfully!');
                     setTimeout(() => {
                         setSuccessMessage('');
                     }, 3000);
                 }
             } catch (error) {
                 console.error('Error deleting post:', error);
-                setError('Nie udało się usunąć posta');
+                setError('Error deleting post.');
                 setTimeout(() => {
                     setError('');
                 }, 3000);
@@ -61,17 +61,17 @@ const ProfilePosts = () => {
     };
 
     if (loading) {
-        return <div className="loading">Ładowanie postów...</div>;
+        return <div className="loading">Loading...</div>;
     }
 
     return (
         <>
             <div className="profile-posts-container">
-                <h2>Twoje posty</h2>
+                <h2>Your posts</h2>
                 {error && <div className="error-message">{error}</div>}
                 {successMessage && <div className="success-message">{successMessage}</div>}
                 {posts.length === 0 ? (
-                    <div className="no-posts">Nie masz jeszcze żadnych postów</div>
+                    <div className="no-posts">You don't have any posts yet.</div>
                 ) : (
                     <div className="profile-posts">
                         {posts.map((post) => (
@@ -87,8 +87,8 @@ const ProfilePosts = () => {
                                     <div className="shoe-details">
                                         <div className="details-box">
                                             <p>Size: {post.size}</p>
-                                            <p>Comfort: {post.comfortRating}/5</p>
-                                            <p>Style: {post.styleRating}/5</p>
+                                            <p>Comfort: {post.comfortRating} ⭐</p>
+                                            <p>Style: {post.styleRating} ⭐</p>
                                             <p>Season: {post.season}</p>
                                             <p>Review: {post.review}</p>
                                         </div>
@@ -115,9 +115,9 @@ const ProfilePosts = () => {
                                     <button
                                         onClick={() => handleDeletePost(post.id)}
                                         className="delete-button"
-                                        title="Usuń post"
+                                        title="Delete post"
                                     >
-                                        <FaTrash /> Usuń post
+                                        <FaTrash /> Delete
                                     </button>
                                 </div>
                             </div>

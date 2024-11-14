@@ -14,10 +14,10 @@ const FriendsList = ({ refreshTrigger }) => {
             if (response.success) {
                 setFriends(response.data);
             } else {
-                setError('Nie udało się pobrać listy znajomych');
+                setError('Failed to download friends list');
             }
         } catch (error) {
-            setError('Wystąpił błąd podczas pobierania znajomych');
+            setError('An error occurred while downloading friends');
         } finally {
             setLoading(false);
         }
@@ -34,17 +34,17 @@ const FriendsList = ({ refreshTrigger }) => {
             if (response.success) {
                 await fetchFriends();
             } else {
-                setError('Nie udało się usunąć znajomego');
+                setError('Failed to remove friend');
             }
         } catch (error) {
-            setError('Wystąpił błąd podczas usuwania znajomego');
+            setError('An error occurred while deleting a friend');
         } finally {
             setProcessingDelete(null);
         }
     };
 
     if (loading) {
-        return <div className="loading">Ładowanie znajomych...</div>;
+        return <div className="loading">Loading friends...</div>;
     }
 
     if (error) {
@@ -52,7 +52,7 @@ const FriendsList = ({ refreshTrigger }) => {
     }
 
     if (friends.length === 0) {
-        return <div className="no-friends">Nie masz jeszcze żadnych znajomych</div>;
+        return <div className="no-friends">You don't have any friends yet</div>;
     }
 
     return (
@@ -68,19 +68,19 @@ const FriendsList = ({ refreshTrigger }) => {
                     <div className="friend-info">
                         <h3 className="friend-username">{friend.username}</h3>
                         <p className="friend-date">
-                            Znajomi od: {new Date(friend.dateAdded).toLocaleDateString()}
+                            Friends since: {new Date(friend.dateAdded).toLocaleDateString()}
                         </p>
                     </div>
                     <div className="friend-actions">
                         <button className="view-profile-button">
-                            Zobacz profil
+                            See profile
                         </button>
                         <button 
                             className="remove-friend-button"
                             onClick={() => handleDeleteFriend(friend.id)}
                             disabled={processingDelete === friend.id}
                         >
-                            {processingDelete === friend.id ? 'Usuwanie...' : 'Usuń znajomego'}
+                            {processingDelete === friend.id ? 'Removing...' : 'Remove friend'}
                         </button>
                     </div>
                 </div>

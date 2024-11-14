@@ -29,7 +29,7 @@ const ProfileCard = () => {
                 setNewAvatarUrl(response.data.profilePicturePath || '');
             }
         } catch (error) {
-            setError('Nie udało się pobrać danych użytkownika');
+            setError('Failed to download user data.');
             console.error('Error fetching user data:', error);
         } finally {
             setIsLoading(false);
@@ -73,16 +73,16 @@ const ProfileCard = () => {
                 setIsEditing(false);
                 await fetchUserData();
             } else {
-                setError('Nie udało się zaktualizować danych');
+                setError('Failed to update data.');
             }
         } catch (error) {
-            setError('Wystąpił błąd podczas zapisywania zmian');
+            setError('Error while saving update.');
             console.error('Error updating user data:', error);
         }
     };
 
     if (isLoading) {
-        return <div className="profile-container">Ładowanie...</div>;
+        return <div className="profile-container">Loading...</div>;
     }
 
     return (
@@ -97,7 +97,7 @@ const ProfileCard = () => {
                                 alt={userData.username}
                                 className={`avatar-image ${isEditing ? 'editable' : ''}`}
                                 onClick={handleAvatarClick}
-                                title={isEditing ? "Kliknij, aby edytować avatar" : ""}
+                                title={isEditing ? "Click, to edit profile picture" : ""}
                             />
                             {isEditing && (
                                 <div className="avatar-edit-icon">
@@ -106,25 +106,25 @@ const ProfileCard = () => {
                             )}
                         </div>
                     </div>
-                    <h2 className="profile-title">Profil Użytkownika</h2>
+                    <h2 className="profile-title">User profile</h2>
                 </div>
                 
                 {showAvatarEdit && (
                     <div className="avatar-edit-modal">
                         <div className="avatar-edit-content">
-                            <h3>Edytuj Avatar</h3>
+                            <h3>Edit Avatar</h3>
                             <input
                                 type="text"
                                 value={newAvatarUrl}
                                 onChange={(e) => setNewAvatarUrl(e.target.value)}
-                                placeholder="Wprowadź URL avatara"
+                                placeholder="Enter avatar URL"
                             />
                             <div className="avatar-edit-buttons">
                                 <button 
                                     className="save-button"
                                     onClick={handleAvatarSubmit}
                                 >
-                                    Zapisz
+                                    Save
                                 </button>
                                 <button 
                                     className="cancel-button"
@@ -133,7 +133,7 @@ const ProfileCard = () => {
                                         setNewAvatarUrl(userData.profilePicturePath || '');
                                     }}
                                 >
-                                    Anuluj
+                                    Cancel
                                 </button>
                             </div>
                         </div>
@@ -144,7 +144,7 @@ const ProfileCard = () => {
                     <form onSubmit={handleSubmit}>
                         <div className="form-fields">
                             <div className="form-group">
-                                <label htmlFor="username">Nazwa użytkownika</label>
+                                <label htmlFor="username">Username</label>
                                 <input
                                     id="username"
                                     name="username"
@@ -167,7 +167,7 @@ const ProfileCard = () => {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="bio">O mnie</label>
+                                <label htmlFor="bio">Bio</label>
                                 <textarea
                                     id="bio"
                                     name="bio"
@@ -182,7 +182,7 @@ const ProfileCard = () => {
                             {isEditing ? (
                                 <>
                                     <button type="submit" className="save-button">
-                                        Zapisz zmiany
+                                        Save
                                     </button>
                                     <button 
                                         type="button" 
@@ -192,7 +192,7 @@ const ProfileCard = () => {
                                             fetchUserData();
                                         }}
                                     >
-                                        Anuluj
+                                        Cancel
                                     </button>
                                 </>
                             ) : (
@@ -204,7 +204,7 @@ const ProfileCard = () => {
                                         setIsEditing(true);
                                     }}
                                 >
-                                    Edytuj profil
+                                    Edit
                                 </button>
                             )}
                         </div>

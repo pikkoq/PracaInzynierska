@@ -25,10 +25,10 @@ const AddFriendModal = ({ onClose }) => {
             if (response.success) {
                 setSearchResults(response.data);
             } else {
-                setError('Nie udało się wyszukać użytkowników');
+                setError('Failed to find that user.');
             }
         } catch (error) {
-            setError('Wystąpił błąd podczas wyszukiwania');
+            setError('Error while searching user.');
         } finally {
             setLoading(false);
         }
@@ -42,26 +42,25 @@ const AddFriendModal = ({ onClose }) => {
         try {
             const response = await sendFriendRequest(userId);
             if (response.success) {
-                setSuccessMessage(`Zaproszenie zostało wysłane!`);
-                // Usuń użytkownika z wyników wyszukiwania
+                setSuccessMessage(`The invitation has been sent!`);
                 setSearchResults(prevResults => 
                     prevResults.filter(user => user.id !== userId)
                 );
             } else {
-                setError('Nie udało się wysłać zaproszenia');
+                setError('Failed to send invitation');
             }
         } catch (error) {
-            setError('Wystąpił błąd podczas wysyłania zaproszenia');
+            setError('An error occurred while sending the invitation');
         } finally {
             setProcessingRequest(null);
         }
     };
 
     return (
-        <div className="modal-overlay">
-            <div className="add-friend-modal">
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="add-friend-modal" onClick={e => e.stopPropagation()}>
                 <div className="modal-header">
-                    <h2>Dodaj znajomego</h2>
+                    <h2>Add friend</h2>
                     <button className="close-button" onClick={onClose}>&times;</button>
                 </div>
 
@@ -69,13 +68,13 @@ const AddFriendModal = ({ onClose }) => {
                     <form onSubmit={handleSearch}>
                         <input
                             type="text"
-                            placeholder="Wpisz nazwę użytkownika..."
+                            placeholder="Type username..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="search-input"
                         />
                         <button type="submit" className="search-button">
-                            Szukaj
+                            Find
                         </button>
                     </form>
                 </div>
@@ -86,12 +85,12 @@ const AddFriendModal = ({ onClose }) => {
 
                 <div className="search-results">
                     {loading ? (
-                        <div className="loading">Wyszukiwanie...</div>
+                        <div className="loading">Searching...</div>
                     ) : error ? (
                         <div className="error-message">{error}</div>
                     ) : searchPerformed ? (
                         searchResults.length === 0 ? (
-                            <div className="no-results">Nie znaleziono użytkowników</div>
+                            <div className="no-results">No users found</div>
                         ) : (
                             <div className="results-list">
                                 {searchResults.map((user) => (
@@ -111,7 +110,7 @@ const AddFriendModal = ({ onClose }) => {
                                             onClick={() => handleSendRequest(user.id)}
                                             disabled={processingRequest === user.id}
                                         >
-                                            {processingRequest === user.id ? 'Wysyłanie...' : 'Dodaj do znajomych'}
+                                            {processingRequest === user.id ? 'Sending...' : 'Add to friends'}
                                         </button>
                                     </div>
                                 ))}

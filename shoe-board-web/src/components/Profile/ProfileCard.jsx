@@ -3,18 +3,18 @@ import { FaPen } from 'react-icons/fa';
 import { getUserData, updateUserData } from '../../services/api';
 import './ProfileCard.scss';
 
-const ProfileCard = () => {
+const ProfileCard = ({ onClose }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [showAvatarEdit, setShowAvatarEdit] = useState(false);
     const [userData, setUserData] = useState({
         username: '',
         email: '',
         bio: '',
         profilePicturePath: ''
     });
-    const [newAvatarUrl, setNewAvatarUrl] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const MAX_BIO_LENGTH = 500;
+    const MAX_LINES = 5;
 
     useEffect(() => {
         fetchUserData();
@@ -26,7 +26,6 @@ const ProfileCard = () => {
             const response = await getUserData();
             if (response.success) {
                 setUserData(response.data);
-                setNewAvatarUrl(response.data.profilePicturePath || '');
             }
         } catch (error) {
             setError('Failed to download user data.');
@@ -44,18 +43,18 @@ const ProfileCard = () => {
         }));
     };
 
-    const handleAvatarClick = () => {
-        if (isEditing) {
-            setShowAvatarEdit(true);
+    const handleBioChange = (e) => {
+        const content = e.target.value;
+        const lines = content.split('\n');
+        
+        if (lines.length <= MAX_LINES) {
+            if (content.length <= MAX_BIO_LENGTH) {
+                setUserData(prev => ({
+                    ...prev,
+                    bio: content
+                }));
+            }
         }
-    };
-
-    const handleAvatarSubmit = () => {
-        setUserData(prev => ({
-            ...prev,
-            profilePicturePath: newAvatarUrl
-        }));
-        setShowAvatarEdit(false);
     };
 
     const handleSubmit = async (e) => {
@@ -73,76 +72,49 @@ const ProfileCard = () => {
                 setIsEditing(false);
                 await fetchUserData();
             } else {
-                setError('Failed to update data.');
+                setError(response.message || 'Failed to update data.');
             }
         } catch (error) {
-            setError('Error while saving update.');
+            setError(error.response?.data?.message || 'Error while saving update.');
             console.error('Error updating user data:', error);
         }
     };
 
     if (isLoading) {
-        return <div className="profile-container">Loading...</div>;
+        return <div className="profile-card">Loading...</div>;
     }
 
     return (
-        <div className="profile-container">
-            <div className="profile-card">
-                {error && <div className="error-message">{error}</div>}
-                <div className="profile-header">
-                    <div className="avatar-container">
-                        <div className="avatar-wrapper">
-                            <img 
-                                src={userData.profilePicturePath || '../../assets/DefaultUser.png'} 
-                                alt={userData.username}
-                                className={`avatar-image ${isEditing ? 'editable' : ''}`}
-                                onClick={handleAvatarClick}
-                                title={isEditing ? "Click, to edit profile picture" : ""}
-                            />
-                            {isEditing && (
-                                <div className="avatar-edit-icon">
-                                    <FaPen />
-                                </div>
-                            )}
-                        </div>
+        <div className="profile-card">
+            <div className="profile-main-content">
+                <div className="profile-left-section">
+                    <img 
+                        src={userData.profilePicturePath || require('../../assets/DefaultUser.png')} 
+                        alt={userData.username}
+                        className="profile-avatar"
+                    />
+                    <div className="profile-info">
+                        <h2 className="username">{userData.username}</h2>
+                        <pre className="bio">{userData.bio}</pre>
                     </div>
-                    <h2 className="profile-title">User profile</h2>
                 </div>
-                
-                {showAvatarEdit && (
-                    <div className="avatar-edit-modal">
-                        <div className="avatar-edit-content">
-                            <h3>Edit Avatar</h3>
-                            <input
-                                type="text"
-                                value={newAvatarUrl}
-                                onChange={(e) => setNewAvatarUrl(e.target.value)}
-                                placeholder="Enter avatar URL"
-                            />
-                            <div className="avatar-edit-buttons">
-                                <button 
-                                    className="save-button"
-                                    onClick={handleAvatarSubmit}
-                                >
-                                    Save
-                                </button>
-                                <button 
-                                    className="cancel-button"
-                                    onClick={() => {
-                                        setShowAvatarEdit(false);
-                                        setNewAvatarUrl(userData.profilePicturePath || '');
-                                    }}
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-                
-                <div className="profile-content">
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-fields">
+                <button 
+                    className="edit-profile-button"
+                    onClick={() => {
+                        setError('');
+                        setIsEditing(true);
+                    }}
+                >
+                    Edit Profile
+                </button>
+            </div>
+
+            {isEditing && (
+                <div className="edit-modal-overlay">
+                    <div className="edit-modal">
+                        <h3>Edit Profile</h3>
+                        {error && <div className="modal-error-message">{error}</div>}
+                        <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label htmlFor="username">Username</label>
                                 <input
@@ -150,7 +122,6 @@ const ProfileCard = () => {
                                     name="username"
                                     value={userData.username || ''}
                                     onChange={handleInputChange}
-                                    disabled={!isEditing}
                                 />
                             </div>
 
@@ -162,55 +133,57 @@ const ProfileCard = () => {
                                     type="email"
                                     value={userData.email || ''}
                                     onChange={handleInputChange}
-                                    disabled={!isEditing}
                                 />
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="bio">Bio</label>
+                                <label htmlFor="bio">
+                                    Bio 
+                                    <span className="bio-limit">
+                                        ({userData.bio?.length || 0}/{MAX_BIO_LENGTH})
+                                    </span>
+                                </label>
                                 <textarea
                                     id="bio"
                                     name="bio"
                                     value={userData.bio || ''}
-                                    onChange={handleInputChange}
-                                    disabled={!isEditing}
+                                    onChange={handleBioChange}
+                                    maxLength={MAX_BIO_LENGTH}
+                                    rows={5}
+                                    className="bio-textarea"
+                                    placeholder="Write something about yourself..."
                                 />
                             </div>
-                        </div>
 
-                        <div className="button-group">
-                            {isEditing ? (
-                                <>
-                                    <button type="submit" className="save-button">
-                                        Save
-                                    </button>
-                                    <button 
-                                        type="button" 
-                                        className="cancel-button"
-                                        onClick={() => {
-                                            setIsEditing(false);
-                                            fetchUserData();
-                                        }}
-                                    >
-                                        Cancel
-                                    </button>
-                                </>
-                            ) : (
+                            <div className="form-group">
+                                <label htmlFor="profilePicturePath">Avatar URL</label>
+                                <input
+                                    id="profilePicturePath"
+                                    name="profilePicturePath"
+                                    value={userData.profilePicturePath || ''}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+
+                            <div className="modal-buttons">
+                                <button type="submit" className="save-button">
+                                    Save Changes
+                                </button>
                                 <button 
                                     type="button" 
-                                    className="edit-button"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setIsEditing(true);
+                                    className="cancel-button"
+                                    onClick={() => {
+                                        setIsEditing(false);
+                                        fetchUserData();
                                     }}
                                 >
-                                    Edit
+                                    Cancel
                                 </button>
-                            )}
-                        </div>
-                    </form>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };

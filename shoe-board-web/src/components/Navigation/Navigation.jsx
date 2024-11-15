@@ -47,7 +47,7 @@ const Navigation = () => {
         </button>
       )}
       <ul className={`nav-links ${isMenuOpen ? 'show' : ''}`}>
-        <li><Link to="/home" onClick={() => setIsMenuOpen(false)}>Home</Link></li>
+        <li><Link className="home-button" to="/home" onClick={() => setIsMenuOpen(false)}>Home</Link></li>
         <li><Link to="/friends" onClick={() => setIsMenuOpen(false)}>Friends</Link></li>
         <li><Link to="/profile" onClick={() => setIsMenuOpen(false)}>Profile</Link></li>
         <li><Link to="/library" onClick={() => setIsMenuOpen(false)}>Library</Link></li>

@@ -75,7 +75,6 @@ namespace ShoeBoardAPI.Controllers
                 return Ok(result);
             }
 
-            result.Message = "Profile update failed.";
             return BadRequest(result);
         }
 

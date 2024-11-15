@@ -24,6 +24,7 @@
     }
 }
 
+
 .burger-menu {
     display: none;
     flex-direction: column;
@@ -67,6 +68,11 @@
                 color: $primary-color;
             }
         }
+    }
+    .home-button{
+        color: $primary-color;
+        font-size: 1.7rem;
+        text-transform: uppercase;
     }
 }
 

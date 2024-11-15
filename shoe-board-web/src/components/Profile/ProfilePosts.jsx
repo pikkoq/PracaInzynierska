@@ -61,31 +61,31 @@ const ProfilePosts = () => {
     };
 
     if (loading) {
-        return <div className="loading">Loading...</div>;
+        return <div className="profile-loading">Loading...</div>;
     }
 
     return (
         <>
             <div className="profile-posts-container">
                 <h2>Your posts</h2>
-                {error && <div className="error-message">{error}</div>}
-                {successMessage && <div className="success-message">{successMessage}</div>}
+                {error && <div className="profile-error-message">{error}</div>}
+                {successMessage && <div className="profile-success-message">{successMessage}</div>}
                 {posts.length === 0 ? (
-                    <div className="no-posts">You don't have any posts yet.</div>
+                    <div className="profile-no-posts">You don't have any posts yet.</div>
                 ) : (
                     <div className="profile-posts">
                         {posts.map((post) => (
                             <div key={post.id} className="profile-post">
-                                <div className="post-content">
-                                    <div className="post-header">
-                                        <p className="post-date">
+                                <div className="profile-post-content">
+                                    <div className="profile-post-header">
+                                        <p className="profile-post-date">
                                             {new Date(post.datePosted).toLocaleString()}
                                         </p>
                                     </div>
                                     <h3>{post.title}</h3>
-                                    <p className="post-text">{post.content}</p>
-                                    <div className="shoe-details">
-                                        <div className="details-box">
+                                    <p className="profile-post-text">{post.content}</p>
+                                    <div className="profile-shoe-details">
+                                        <div className="profile-details-box">
                                             <p>Size: {post.size}</p>
                                             <p>Comfort: {post.comfortRating} ⭐</p>
                                             <p>Style: {post.styleRating} ⭐</p>
@@ -93,12 +93,12 @@ const ProfilePosts = () => {
                                             <p>Review: {post.review}</p>
                                         </div>
                                     </div>
-                                    <div className="post-stats">
-                                        <div className="like-section">
+                                    <div className="profile-post-stats">
+                                        <div className="profile-like-section">
                                             <span>❤️ {post.likeCount}</span>
                                         </div>
                                         <button 
-                                            className="comment-button"
+                                            className="profile-comment-button"
                                             onClick={() => {
                                                 setSelectedPostId(post.id);
                                                 setShowComments(true);
@@ -108,13 +108,13 @@ const ProfilePosts = () => {
                                         </button>
                                     </div>
                                 </div>
-                                <div className="post-right-section">
-                                    <div className="post-image">
+                                <div className="profile-post-right-section">
+                                    <div className="profile-post-image">
                                         <img src={post.image_Url} alt={post.title} />
                                     </div>
                                     <button
                                         onClick={() => handleDeletePost(post.id)}
-                                        className="delete-button"
+                                        className="profile-delete-button"
                                         title="Delete post"
                                     >
                                         <FaTrash /> Delete

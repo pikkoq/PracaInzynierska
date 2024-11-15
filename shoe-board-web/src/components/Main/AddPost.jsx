@@ -47,7 +47,6 @@ const AddPost = () => {
                 setContent('');
                 setShoeId('');
                 setSuccessMessage('Post został dodany pomyślnie!');
-                // Ukryj powiadomienie po 3 sekundach
                 setTimeout(() => {
                     setSuccessMessage('');
                 }, 3000);
@@ -86,7 +85,7 @@ const AddPost = () => {
                     onChange={(e) => setContent(e.target.value)}
                     placeholder="What is on your mind?"
                     disabled={loading}
-                    className="post-content"
+                    className="add-post-content"
                 />
                 <button 
                     type="submit" 

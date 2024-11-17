@@ -5,7 +5,7 @@ import os
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 conn = pyodbc.connect(
     r'DRIVER={SQL Server};'
-    r'SERVER=PIKKO\SQLEXPRESS;'
+    r'SERVER=PIKKOLAPTOP\SQLEXPRESS;'
     r'DATABASE=ShoeBoardDataBase;'
     r'Trusted_Connection=yes;'
 )

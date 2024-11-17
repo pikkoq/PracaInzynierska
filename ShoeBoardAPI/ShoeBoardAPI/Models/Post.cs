@@ -1,10 +1,13 @@
-﻿namespace ShoeBoardAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ShoeBoardAPI.Models
 {
     public class Post
     {
         public int Id { get; set; }
         public int ShoeId { get; set; }
         public string UserId { get; set; }
+        [MaxLength(500)]
         public string Content { get; set; }
         public DateTime DatePosted { get; set; } = DateTime.UtcNow;
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();

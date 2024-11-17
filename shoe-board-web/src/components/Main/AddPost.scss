@@ -7,6 +7,10 @@
     margin-bottom: 20px;
     color: $text-primary;
     width: 90%;
+
+    .add-post-content{
+        resize: none;
+    }
 }
 
 .add-post-container h3 {
@@ -32,13 +36,23 @@
 .add-post-content {
     width: 100%;
     min-height: 100px;
-    max-height: 100%;
     padding: 10px;
     background-color: $background-dark;
     border: 1px solid $primary-color;
     border-radius: 4px;
     color: $text-primary;
-    resize: vertical;
+    resize: none;
+    line-height: 1.5;
+    overflow-y: auto;
+
+    &::placeholder {
+        color: $text-secondary;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: lighten($primary-color, 10%);
+    }
 }
 
 .submit-button {
@@ -89,5 +103,21 @@
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+.form-group {
+    margin-bottom: 15px;
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: $text-primary;
+        
+        .content-limit {
+            color: $text-secondary;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
     }
 } 

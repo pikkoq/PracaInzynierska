@@ -8,6 +8,8 @@ const CommentsModal = ({ postId, onClose, onCommentAdded }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [submitting, setSubmitting] = useState(false);
+    const MAX_COMMENT_LENGTH = 100;
+    const MAX_LINES = 3;
 
     const fetchComments = async () => {
         try {
@@ -25,6 +27,17 @@ const CommentsModal = ({ postId, onClose, onCommentAdded }) => {
     useEffect(() => {
         fetchComments();
     }, [postId]);
+
+    const handleCommentChange = (e) => {
+        const newContent = e.target.value;
+        const lines = newContent.split('\n');
+        
+        if (lines.length <= MAX_LINES) {
+            if (newContent.length <= MAX_COMMENT_LENGTH) {
+                setNewComment(newContent);
+            }
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -67,7 +80,7 @@ const CommentsModal = ({ postId, onClose, onCommentAdded }) => {
                                         {new Date(comment.createdAt).toLocaleString()}
                                     </span>
                                 </div>
-                                <p className="comment-content">{comment.content}</p>
+                                <pre className="comment-content">{comment.content}</pre>
                             </div>
                         ))
                     )}
@@ -75,12 +88,22 @@ const CommentsModal = ({ postId, onClose, onCommentAdded }) => {
 
                 <form onSubmit={handleSubmit} className="comment-form">
                     {error && <div className="error-message">{error}</div>}
-                    <textarea
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                        placeholder="Write a comment..."
-                        disabled={submitting}
-                    />
+                    <div className="comment-input-group">
+                        <label htmlFor="comment">
+                            <span className="comment-limit">
+                                ({newComment.length || 0}/{MAX_COMMENT_LENGTH})
+                            </span>
+                        </label>
+                        <textarea
+                            id="comment"
+                            value={newComment}
+                            onChange={handleCommentChange}
+                            placeholder="Write a comment..."
+                            disabled={submitting}
+                            maxLength={MAX_COMMENT_LENGTH}
+                            rows={3}
+                        />
+                    </div>
                     <button 
                         type="submit" 
                         disabled={submitting || !newComment.trim()}

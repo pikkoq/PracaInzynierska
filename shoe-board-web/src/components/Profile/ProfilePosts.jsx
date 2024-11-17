@@ -83,7 +83,7 @@ const ProfilePosts = () => {
                                         </p>
                                     </div>
                                     <h3>{post.title}</h3>
-                                    <p className="profile-post-text">{post.content}</p>
+                                    <pre className="profile-post-text">{post.content}</pre>
                                     <div className="profile-shoe-details">
                                         <div className="profile-details-box">
                                             <p>Size: {post.size}</p>

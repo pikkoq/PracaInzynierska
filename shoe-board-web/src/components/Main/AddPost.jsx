@@ -9,6 +9,8 @@ const AddPost = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const MAX_CONTENT_LENGTH = 500;
+    const MAX_LINES = 5;
 
     useEffect(() => {
         const fetchUserShoes = async () => {
@@ -61,6 +63,17 @@ const AddPost = () => {
         }
     };
 
+    const handleContentChange = (e) => {
+        const newContent = e.target.value;
+        const lines = newContent.split('\n');
+        
+        if (lines.length <= MAX_LINES) {
+            if (newContent.length <= MAX_CONTENT_LENGTH) {
+                setContent(newContent);
+            }
+        }
+    };
+
     return (
         <div className="add-post-container">
             <h3>Add new post</h3>
@@ -80,13 +93,24 @@ const AddPost = () => {
                         </option>
                     ))}
                 </select>
-                <textarea
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    placeholder="What is on your mind?"
-                    disabled={loading}
-                    className="add-post-content"
-                />
+                <div className="form-group">
+                    <label htmlFor="content">
+                        Content
+                        <span className="content-limit">
+                            ({content.length || 0}/{MAX_CONTENT_LENGTH})
+                        </span>
+                    </label>
+                    <textarea
+                        id="content"
+                        value={content}
+                        onChange={handleContentChange}
+                        maxLength={MAX_CONTENT_LENGTH}
+                        rows={5}
+                        placeholder="What is on your mind?"
+                        disabled={loading}
+                        className="add-post-content"
+                    />
+                </div>
                 <button 
                     type="submit" 
                     disabled={loading || !shoeId || !content.trim()}

@@ -95,7 +95,7 @@ const ProfileCard = ({ onClose }) => {
                     />
                     <div className="profile-info">
                         <h2 className="username">{userData.username}</h2>
-                        <pre className="bio">{userData.bio}</pre>
+                        <pre className="bio" >{userData.bio || 'There is no bio yet...'}</pre>
                     </div>
                 </div>
                 <button 

@@ -132,4 +132,42 @@
     padding: 10px;
     border-radius: 4px;
     margin-bottom: 15px;
+}
+
+.comment-input-group {
+    position: relative;
+    margin-bottom: 10px;
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        
+        .comment-limit {
+            color: $text-secondary;
+            font-size: 0.8rem;
+            float: right;
+        }
+    }
+
+    textarea {
+        width: 100%;
+        min-height: 80px;
+        padding: 10px;
+        background-color: $background-dark;
+        border: 1px solid $primary-color;
+        border-radius: 4px;
+        color: $text-primary;
+        resize: none;
+        line-height: 1.5;
+        overflow-y: auto;
+
+        &::placeholder {
+            color: $text-secondary;
+        }
+
+        &:focus {
+            outline: none;
+            border-color: lighten($primary-color, 10%);
+        }
+    }
 } 

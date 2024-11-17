@@ -73,7 +73,7 @@ const Post = ({ post, onPostUpdate }) => {
             </div>
           </div>
           <h2 className="post-title">{post.title}</h2>
-          <p className="post-text">{post.content}</p>
+          <pre className="post-text">{post.content}</pre>
           <div className="post-details">
             <p>Size: {post.size}</p>
             <p>Comfort Rating: {post.comfortRating} ⭐</p>

@@ -4,10 +4,21 @@
     width: 100%;
   }
   
-.loading, .no-posts {
+.loading, .no-posts, .loading-more, .no-more-posts {
   text-align: center;
   padding: 20px;
   color: $text-secondary;
  }
+  
+.loading-more {
+  margin-top: 20px;
+  font-style: italic;
+}
+  
+.no-more-posts {
+  margin-top: 20px;
+  padding: 10px;
+  border-top: 1px solid $background-medium;
+}
   
   

@@ -54,7 +54,7 @@ namespace ShoeBoardAPI.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("GetFriendPosts")]
-        public async Task<IActionResult> GetFriendPosts()
+        public async Task<IActionResult> GetFriendPosts(int pageNumber)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
@@ -67,7 +67,7 @@ namespace ShoeBoardAPI.Controllers
                 return BadRequest(response);
             }
 
-            var result = await _postService.GetPosts(userId);
+            var result = await _postService.GetPosts(userId, pageNumber);
             return result.Success ? Ok(result) : BadRequest(result);
         }
 

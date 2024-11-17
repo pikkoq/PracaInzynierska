@@ -10,21 +10,40 @@ import './Home.scss';
 const Home = () => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [pageNumber, setPageNumber] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+
+    const fetchPosts = async (page) => {
+        try {
+            setLoading(true);
+            const response = await getFriendPosts(page);
+            
+            if (response.success) {
+                if (page === 1) {
+                    setPosts(response.data);
+                } else {
+                    setPosts(prevPosts => [...prevPosts, ...response.data]);
+                }
+                setHasMore(response.data.length === 10);
+            }
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const response = await getFriendPosts();
-                setPosts(response.data);
-            } catch (error) {
-                console.error('Error fetching posts:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchPosts();
+        fetchPosts(1);
     }, []);
+
+    const loadMore = () => {
+        if (!loading && hasMore) {
+            const nextPage = pageNumber + 1;
+            setPageNumber(nextPage);
+            fetchPosts(nextPage);
+        }
+    };
 
     return (
         <div className="home-container">
@@ -35,7 +54,12 @@ const Home = () => {
                 </div>
                 <div className="scrollable-content">
                     <AddPost />
-                    <PostFeed initialPosts={posts} loading={loading} />
+                    <PostFeed 
+                        posts={posts} 
+                        loading={loading} 
+                        hasMore={hasMore}
+                        loadMore={loadMore}
+                    />
                 </div>
                 <div className="right-sidebar">
                     <PopularShoes />

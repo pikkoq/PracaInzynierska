@@ -7,7 +7,7 @@ namespace ShoeBoardAPI.Services.PostService
     {
         Task<ServiceResponse<bool>> AddPost(CreatePostDto newPost, string userId);
         Task<ServiceResponse<bool>> DeletePost(int postId, string userId);
-        Task<ServiceResponse<List<PostDto>>> GetPosts(string userId);
+        Task<ServiceResponse<List<PostDto>>> GetPosts(string userId, int pageNumber);
         Task<ServiceResponse<List<PostDto>>> GetYourPosts(string userId);
         Task<ServiceResponse<CommentDto>> AddComment(CreateCommentDto newComment, string userId);
         Task<ServiceResponse<bool>> DeleteComment(int commentId, string userId);

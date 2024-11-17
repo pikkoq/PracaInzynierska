@@ -31,8 +31,8 @@ export const register = async (username, email, password) => {
   return response.data;
 };
 
-export const getFriendPosts = async () => {
-  const response = await api.get('/Post/GetFriendPosts');
+export const getFriendPosts = async (pageNumber = 1) => {
+  const response = await api.get(`/Post/GetFriendPosts?pageNumber=${pageNumber}`);
   return response.data;
 };
 
@@ -326,6 +326,19 @@ export const rejectFriendRequest = async (requestId) => {
         console.error('Error rejecting friend request:', error);
         return { success: false, error: error.response?.data || 'Failed to reject friend request' };
     }
+};
+
+export const changeUserPassword = async (passwordData) => {
+  try {
+    const response = await api.patch('/User/changeUserPassword', {
+      currentPassword: passwordData.currentPassword,
+      newPassword: passwordData.newPassword
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error changing password:', error);
+    throw error;
+  }
 };
 
 export default api;

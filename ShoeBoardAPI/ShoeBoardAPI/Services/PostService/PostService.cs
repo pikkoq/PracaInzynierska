@@ -156,16 +156,18 @@ namespace ShoeBoardAPI.Services.PostService
             return response;
         }
 
-        public async Task<ServiceResponse<List<PostDto>>> GetPosts(string userId)
+        public async Task<ServiceResponse<List<PostDto>>> GetPosts(string userId, int pageNumber = 1)
         {
             var response = new ServiceResponse<List<PostDto>>();
+
+            int pageSize = 10;
 
             var friendIds = await _context.Friends
                 .Where(f => f.UserId == userId || f.FriendId == userId)
                 .Select(f => f.UserId == userId ? f.FriendId : f.UserId)
                 .ToListAsync();
 
-            var posts = await _context.Posts
+            var query = _context.Posts
                 .Where(p => friendIds.Contains(p.UserId))
                 .Include(p => p.Shoe)
                     .ThenInclude(s => s.ShoeCatalog)
@@ -190,7 +192,12 @@ namespace ShoeBoardAPI.Services.PostService
                     IsLiked = p.Likes.Any(l => l.UserId == userId),
                     LikeCount = p.Likes.Count,
                     CommentsCount = p.Comments.Count,
-                }).ToListAsync();
+                });
+
+            var posts = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
             response.Data = posts;
             response.Success = true;

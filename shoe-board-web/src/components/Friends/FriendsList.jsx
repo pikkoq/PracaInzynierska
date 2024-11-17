@@ -72,7 +72,8 @@ const FriendsList = ({ refreshTrigger }) => {
                         </p>
                     </div>
                     <div className="friend-actions">
-                        <button className="view-profile-button">
+                        <button className="view-profile-button"
+                        >
                             See profile
                         </button>
                         <button 

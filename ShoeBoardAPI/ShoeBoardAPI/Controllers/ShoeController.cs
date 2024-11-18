@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ShoeBoardAPI.Models;
 using ShoeBoardAPI.Models.DTO.ShoeDtos;

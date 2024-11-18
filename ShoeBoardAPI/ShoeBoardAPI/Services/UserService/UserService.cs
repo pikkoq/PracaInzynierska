@@ -117,18 +117,21 @@ namespace ShoeBoardAPI.Services.UserService
 
         }
 
-        public string GenerateJwtToken(User user)
+        public async Task<string> GenerateJwtToken(User user)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var roles = await _userManager.GetRolesAsync(user);
 
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("id", user.Id),
-                new Claim("username", user.UserName)
+                new Claim("username", user.UserName),
             };
+
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
@@ -243,7 +246,7 @@ namespace ShoeBoardAPI.Services.UserService
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginUser.Password, false);
             if (result.Succeeded)
             {
-                response.Data = GenerateJwtToken(user);
+                response.Data = await GenerateJwtToken(user);
                 response.Success = true;
                 response.Message = "User logged in successfully";
                 return response;
@@ -283,6 +286,7 @@ namespace ShoeBoardAPI.Services.UserService
             var result = await _userManager.CreateAsync(user, registerUser.Password);
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(user, "User");
                 response.Success = true;
                 response.Message = "User registered successfully";
                 return response;

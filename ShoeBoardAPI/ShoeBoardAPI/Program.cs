@@ -39,6 +39,8 @@ namespace ShoeBoardAPI
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
+            
+
             //Automapper registration
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
@@ -98,14 +100,6 @@ namespace ShoeBoardAPI
                     });
             });
 
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                      builder => builder.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
-            });
-
             //CORS policy
             builder.Services.AddCors(options =>
             {
@@ -122,6 +116,7 @@ namespace ShoeBoardAPI
 
             var app = builder.Build();
 
+            CreateRoles(app).Wait();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -133,12 +128,30 @@ namespace ShoeBoardAPI
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
             app.MapControllers();
 
             app.Run();
+        }
+        public static async Task CreateRoles(WebApplication app)
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                var roles = new[] { "Admin", "User" };
+
+                foreach (var role in roles)
+                {
+                    if (!await roleManager.RoleExistsAsync(role))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(role));
+                    }
+                }
+            }
         }
     }
 }

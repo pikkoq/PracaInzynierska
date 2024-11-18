@@ -44,7 +44,7 @@ namespace ShoeBoardAPI.Controllers
         }
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("SignShoeToUser")]
-        public async Task<IActionResult> SignShoeToUser([FromBody] SignShoeToUserDto newShoe, int? shoeCatalogId, int? userShoeCataloId)
+        public async Task<IActionResult> SignShoeToUser([FromBody] SignShoeToUserDto newShoe, int shoeCatalogId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
@@ -57,7 +57,7 @@ namespace ShoeBoardAPI.Controllers
                 return BadRequest(response);
             }
 
-            var result = await _shoeService.SignShoeToUser(newShoe, shoeCatalogId, userShoeCataloId, userId);
+            var result = await _shoeService.SignShoeToUser(newShoe, shoeCatalogId, userId);
             return Ok(result);
         }
 
@@ -87,31 +87,6 @@ namespace ShoeBoardAPI.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("GetAllAddedUserShoes")]
-        public async Task<IActionResult> GetAllAddedUserShoes(string userId)
-        {
-            if (userId == null)
-            {
-                var response = new ServiceResponse<bool>
-                {
-                    Success = false,
-                    Message = "User not found. Cannot indetify."
-                };
-                return BadRequest(response);
-            }
-
-            var result = await _shoeService.GetAllAddedUserShoes(userId);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            result.Message = "Failed to fetch data";
-            result.Success = false;
-            result.Data = null;
-            return BadRequest(result);
-        }
-
-        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("GetShoeDetails")]
         public async Task<IActionResult> GetShoeDetails(int shoeId)
         {
@@ -125,24 +100,6 @@ namespace ShoeBoardAPI.Controllers
         {
             var response = await _shoeService.SearchShoes(searchTerm, pageNumber);
             return response.Success ? Ok(response) : BadRequest(response.Success = false);
-        }
-
-        [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("SearchUsersShoe")]
-        public async Task<IActionResult> SearchUsersShoes(string searchTerm, int pageNumber = 1)
-        {
-            var response = await _shoeService.SearchUsersShoes(searchTerm, pageNumber);
-            return response.Success ? Ok(response) : BadRequest(response.Success = false);
-        }
-
-        [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpPatch("EditUserAddedShoe")]
-        public async Task<IActionResult> EditUserAddedShoe(int shoeId,[FromBody] EditShoeDetailsDto updatedShoe)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var response = await _shoeService.EditUserAddedShoeDetails(shoeId, updatedShoe, userId);
-            return response.Success ? Ok(response) : BadRequest(response);
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]

@@ -171,8 +171,6 @@ namespace ShoeBoardAPI.Services.PostService
                 .Where(p => friendIds.Contains(p.UserId))
                 .Include(p => p.Shoe)
                     .ThenInclude(s => s.ShoeCatalog)
-                .Include(p => p.Shoe)
-                    .ThenInclude(s => s.UserShoeCatalog)
                 .OrderByDescending(p => p.DatePosted)
                 .Select(p => new PostDto
                 {
@@ -187,8 +185,8 @@ namespace ShoeBoardAPI.Services.PostService
                     StyleRating = p.Shoe.StyleRating,
                     Season = p.Shoe.Season,
                     Review = p.Shoe.Review,
-                    Image_Url = p.Shoe.ShoeCatalogId != null ? p.Shoe.ShoeCatalog.Image_Url : p.Shoe.UserShoeCatalog.Image_Url,
-                    Title = p.Shoe.ShoeCatalogId != null ? p.Shoe.ShoeCatalog.Title : p.Shoe.UserShoeCatalog.Title,
+                    Image_Url = p.Shoe.ShoeCatalog.Image_Url,
+                    Title = p.Shoe.ShoeCatalog.Title,
                     IsLiked = p.Likes.Any(l => l.UserId == userId),
                     LikeCount = p.Likes.Count,
                     CommentsCount = p.Comments.Count,
@@ -213,8 +211,6 @@ namespace ShoeBoardAPI.Services.PostService
                 .Where(p => p.UserId == userId)
                 .Include(p => p.Shoe)
                     .ThenInclude(s => s.ShoeCatalog)
-                .Include(p => p.Shoe)
-                    .ThenInclude(s => s.UserShoeCatalog)
                 .OrderByDescending(o => o.DatePosted)
                 .Select(p => new PostDto
                 {
@@ -227,8 +223,8 @@ namespace ShoeBoardAPI.Services.PostService
                     StyleRating = p.Shoe.StyleRating,
                     Season = p.Shoe.Season,
                     Review = p.Shoe.Review,
-                    Image_Url = p.Shoe.ShoeCatalogId != null ? p.Shoe.ShoeCatalog.Image_Url : p.Shoe.UserShoeCatalog.Image_Url,
-                    Title = p.Shoe.ShoeCatalogId != null ? p.Shoe.ShoeCatalog.Title : p.Shoe.UserShoeCatalog.Title,
+                    Image_Url = p.Shoe.ShoeCatalog.Image_Url,
+                    Title = p.Shoe.ShoeCatalog.Title,
                     IsLiked = p.Likes.Any(l => l.UserId == userId),
                     CommentsCount = p.Comments.Count,
                     LikeCount = p.Likes.Count,

@@ -1,6 +1,4 @@
-﻿using ShoeBoardAPI.Models.Enums;
-
-namespace ShoeBoardAPI.Models.DTO.ShoeDtos
+﻿namespace ShoeBoardAPI.Models.DTO.ShoeDtos
 {
     public class SignShoeToUserDto
     {

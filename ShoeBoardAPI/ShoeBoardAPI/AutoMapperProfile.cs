@@ -3,7 +3,6 @@ using ShoeBoardAPI.Models;
 using ShoeBoardAPI.Models.DTO.FrindsDtos;
 using ShoeBoardAPI.Models.DTO.ShoeDtos;
 using ShoeBoardAPI.Models.DTO.UserDtos;
-using ShoeBoardAPI.Models.Enums;
 
 namespace ShoeBoardAPI
 {

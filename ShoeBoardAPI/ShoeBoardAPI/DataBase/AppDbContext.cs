@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ShoeBoardAPI.Models;
-using ShoeBoardAPI.Models.Enums;
 
 namespace ShoeBoardAPI.DataBase
 {
@@ -21,13 +20,6 @@ namespace ShoeBoardAPI.DataBase
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Shoe>()
-                .Property(s => s.ShoeAddType)
-                .HasConversion(
-                    v => v.ToString(),
-                    v => (ShoeAddType)Enum.Parse(typeof(ShoeAddType), v)
-                );
 
             modelBuilder.Entity<Friend>()
                 .Property(s => s.Id)
@@ -53,7 +45,7 @@ namespace ShoeBoardAPI.DataBase
                 .HasOne(p => p.Shoe)
                 .WithMany()
                 .HasForeignKey(p => p.ShoeId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Post>()
                 .HasOne(p => p.User)
@@ -90,11 +82,6 @@ namespace ShoeBoardAPI.DataBase
                 .HasOne(s => s.ShoeCatalog)
                 .WithMany()
                 .HasForeignKey(s => s.ShoeCatalogId);
-
-            modelBuilder.Entity<Shoe>()
-                .HasOne(s => s.UserShoeCatalog)
-                .WithMany()
-                .HasForeignKey(s => s.UserShoeCatalogId);
 
             modelBuilder.Entity<FriendRequest>()
                 .HasOne(fr => fr.Requester)

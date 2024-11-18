@@ -1,0 +1,313 @@
+@import '../../styles/variables';
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: $background-dark;
+    color: $text-primary;
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.main-content {
+    display: flex;
+}
+
+.main-content-container {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.profile-card {
+    width: 100%;
+    background-color: $background-medium;
+    border-radius: 8px;
+    padding: 2rem;
+    position: relative;
+}
+
+.profile-main-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.profile-left-section {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid $primary-color;
+}
+
+.profile-info {
+    .username {
+        font-size: 2rem;
+        color: $primary-color;
+        margin-bottom: 0.5rem;
+    }
+
+    .bio {
+        color: $text-primary;
+        font-size: 1rem;
+        max-width: 500px;
+        white-space: pre-wrap;
+        font-family: inherit;
+        margin: 0;
+        background: none;
+        border: none;
+        overflow-wrap: break-word;
+    }
+}
+
+.add-friend-button,
+.accept-friend-button {
+    padding: 0.75rem 1.5rem;
+    background-color: $primary-color;
+    border: none;
+    border-radius: 4px;
+    color: $text-primary;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &:hover {
+        background-color: darken($primary-color, 10%);
+    }
+
+    &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+}
+
+.accept-friend-button {
+    background-color: $success-color;
+
+    &:hover {
+        background-color: darken($success-color, 10%);
+    }
+}
+
+.pending-request-info {
+    color: $text-secondary;
+    padding: 0.75rem 1.5rem;
+    background-color: $background-dark;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.friend-status {
+    color: $primary-color;
+    padding: 0.75rem 1.5rem;
+    background-color: $background-dark;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    svg {
+        color: $success-color;
+    }
+}
+
+.profile-posts-container {
+    padding: 20px;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.profile-posts-container h2 {
+    color: $primary-color;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.profile-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profile-post {
+    display: flex;
+    background-color: $background-medium;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.profile-post-content {
+    flex: 1;
+    padding-right: 20px;
+}
+
+.profile-post-header {
+    margin-bottom: 15px;
+}
+
+.profile-post-date {
+    color: $text-secondary;
+    font-size: 0.9em;
+    margin: 0;
+}
+
+.profile-post-right-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile-post-image {
+    width: 250px;
+    height: 250px;
+    overflow: hidden;
+    border-radius: 5px;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.profile-post-content h3 {
+    color: $primary-color;
+    margin: 0 0 10px 0;
+}
+
+.profile-post-text {
+    margin-bottom: 15px;
+    color: $text-primary;
+}
+
+.profile-shoe-details {
+    margin: 15px 0;
+}
+
+.profile-details-box {
+    background-color: $background-dark;
+    padding: 15px;
+    border-radius: 4px;
+
+    p {
+        margin: 8px 0;
+        color: $text-primary;
+    }
+}
+
+.profile-post-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: $text-secondary;
+    margin-top: 15px;
+}
+
+.profile-like-section {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.like-button {
+    background: none;
+    border: none;
+    color: $text-primary;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 1.2rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+        color: $primary-color;
+    }
+
+    .bxs-heart {
+        color: $primary-color;
+    }
+}
+
+.profile-comment-button {
+    background: none;
+    border: none;
+    color: $text-primary;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 1rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 4px;
+
+    &:hover {
+        color: $primary-color;
+        background-color: $background-dark;
+    }
+}
+
+.profile-loading {
+    text-align: center;
+    color: $text-primary;
+    padding: 20px;
+}
+
+.profile-no-posts {
+    text-align: center;
+    color: $text-secondary;
+    padding: 20px;
+}
+
+.profile-error-message {
+    background-color: $error-color;
+    color: $background-dark;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.profile-success-message {
+    background-color: $primary-color;
+    color: $background-dark;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+} 

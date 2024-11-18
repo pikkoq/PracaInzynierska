@@ -341,4 +341,14 @@ export const changeUserPassword = async (passwordData) => {
   }
 };
 
+export const getUserProfile = async (userName) => {
+  try {
+    const response = await api.get(`/User/getUserProfile?userName=${encodeURIComponent(userName)}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    throw error;
+  }
+};
+
 export default api;

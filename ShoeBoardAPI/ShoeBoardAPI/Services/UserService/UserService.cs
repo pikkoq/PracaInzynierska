@@ -141,7 +141,7 @@ namespace ShoeBoardAPI.Services.UserService
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task<ServiceResponse<GetUserProfileDto>> GetProfile(string userName)
+        public async Task<ServiceResponse<GetUserProfileDto>> GetProfile(string userName, string currentUserId)
         {
             var response = new ServiceResponse<GetUserProfileDto>();
 
@@ -180,7 +180,19 @@ namespace ShoeBoardAPI.Services.UserService
                             IsLiked = p.Likes.Any(l => l.UserId == u.Id),
                             CommentsCount = p.Comments.Count,
                             LikeCount = p.Likes.Count,
-                        }).ToList()
+                        }).ToList(),
+                    IsFriend = _context.Friends.Any(f =>
+                        (f.UserId == currentUserId && f.FriendId == u.Id) ||
+                        (f.UserId == u.Id && f.FriendId == currentUserId)),
+                    IsRequestSent = _context.FriendRequests.Any(fs =>
+                        fs.RequesterId == currentUserId && fs.ReceiverId == u.Id && !fs.IsAccepted),
+                    IsRequestRecived = _context.FriendRequests.Any(fr =>
+                        fr.ReceiverId == currentUserId && fr.RequesterId == u.Id && !fr.IsAccepted),
+                    RequestId = _context.FriendRequests
+                        .Where(r => (r.RequesterId == currentUserId && r.ReceiverId == u.Id && !r.IsAccepted) ||
+                        (r.ReceiverId == currentUserId && r.RequesterId == u.Id && !r.IsAccepted))
+                        .Select(r => r.Id)
+                        .FirstOrDefault()
                 }).FirstOrDefaultAsync();
 
             response.Data = userProfile;

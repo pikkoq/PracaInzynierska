@@ -102,7 +102,6 @@ const ProfileCard = ({ onClose }) => {
         setPasswordError('');
         setPasswordSuccess('');
 
-        // Validate passwords
         if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmNewPassword) {
             setPasswordError('All fields are required');
             return;

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { searchFriends, sendFriendRequest } from '../../services/api';
+import { useNavigate } from 'react-router-dom';
 import './AddFriendModal.scss';
 
 const AddFriendModal = ({ onClose }) => {
+    const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -56,6 +58,11 @@ const AddFriendModal = ({ onClose }) => {
         }
     };
 
+    const handleViewProfile = (username) => {
+        navigate(`/profile/${username}`);
+        onClose();
+    };
+
     return (
         <div className="modal-overlay" onClick={onClose}>
             <div className="add-friend-modal" onClick={e => e.stopPropagation()}>
@@ -102,8 +109,13 @@ const AddFriendModal = ({ onClose }) => {
                                             />
                                         </div>
                                         <div className="user-info">
-                                            <h3>{user.username}</h3>
-                                            <p>Dołączył: {new Date(user.dateJoined).toLocaleDateString()}</p>
+                                            <h3 
+                                                onClick={() => handleViewProfile(user.username)}
+                                                style={{ cursor: 'pointer' }}
+                                            >
+                                                {user.username}
+                                            </h3>
+                                            <p>Joined: {new Date(user.dateJoined).toLocaleDateString()}</p>
                                         </div>
                                         <button 
                                             className="add-button"

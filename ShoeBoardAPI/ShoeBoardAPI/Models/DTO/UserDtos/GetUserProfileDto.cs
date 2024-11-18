@@ -9,5 +9,9 @@ namespace ShoeBoardAPI.Models.DTO.UserDtos
         public string UserProfileAvatar {  get; set; }
         public string Bio {  get; set; }
         public List<PostDto> Posts { get; set; }
+        public bool IsFriend { get; set; }
+        public bool IsRequestSent { get; set; }
+        public bool IsRequestRecived { get; set; }
+        public int? RequestId { get; set; }
     }
 }

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getFriendRequests, getSentFriendRequests, acceptFriendRequest, declineFriendRequest, rejectFriendRequest } from '../../services/api';
+import { useNavigate } from 'react-router-dom';
 import './FriendRequestsModal.scss';
 
 const FriendRequestsModal = ({ onClose, onFriendsUpdate }) => {
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('received');
     const [receivedRequests, setReceivedRequests] = useState([]);
     const [sentRequests, setSentRequests] = useState([]);
@@ -84,6 +86,10 @@ const FriendRequestsModal = ({ onClose, onFriendsUpdate }) => {
         }
     };
 
+    const handleViewProfile = (username) => {
+        navigate(`/profile/${username}`);
+        onClose();
+    };
 
     return (
         <div className="modal-overlay" onClick={onClose}>
@@ -128,8 +134,13 @@ const FriendRequestsModal = ({ onClose, onFriendsUpdate }) => {
                                                 />
                                             </div>
                                             <div className="request-info">
-                                                <h3>{request.username}</h3>
-                                                <p>Data wysłania: {new Date(request.requestDate).toLocaleDateString()}</p>
+                                                <h3 
+                                                    onClick={() => handleViewProfile(request.username)}
+                                                    style={{ cursor: 'pointer' }}
+                                                >
+                                                    {request.username}
+                                                </h3>
+                                                <p>Sent date: {new Date(request.requestDate).toLocaleDateString()}</p>
                                             </div>
                                             <div className="request-actions">
                                                 <button 
@@ -163,7 +174,12 @@ const FriendRequestsModal = ({ onClose, onFriendsUpdate }) => {
                                                 />
                                             </div>
                                             <div className="request-info">
-                                                <h3>{request.username}</h3>
+                                                <h3 
+                                                    onClick={() => handleViewProfile(request.username)}
+                                                    style={{ cursor: 'pointer' }}
+                                                >
+                                                    {request.username}
+                                                </h3>
                                                 <p>Sent date: {new Date(request.requestDate).toLocaleDateString()}</p>
                                             </div>
                                             <div className="request-actions">

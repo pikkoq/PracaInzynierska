@@ -7,6 +7,7 @@ import Profile from './components/Profile/Profile';
 import Library from './components/Library/Library';
 import SearchResults from './components/Search/SearchResults';
 import Friends from './components/Friends/Friends';
+import UserProfile from './components/Users/UserProfile';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/search" element={<SearchResults />} />
           <Route path="/friends" element={<Friends />} />
           <Route path="/" element={<Home />} />
+          <Route path="/profile/:userName" element={<UserProfile />} />
         </Routes>
       </div>
     </Router>

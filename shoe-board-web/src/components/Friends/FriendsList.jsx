@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getFriends, deleteFriend } from '../../services/api';
+import { useNavigate } from 'react-router-dom';
 import './FriendsList.scss';
 
 const FriendsList = ({ refreshTrigger }) => {
+    const navigate = useNavigate();
     const [friends, setFriends] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -43,6 +45,10 @@ const FriendsList = ({ refreshTrigger }) => {
         }
     };
 
+    const handleViewProfile = (username) => {
+        navigate(`/profile/${username}`);
+    };
+
     if (loading) {
         return <div className="loading">Loading friends...</div>;
     }
@@ -72,7 +78,9 @@ const FriendsList = ({ refreshTrigger }) => {
                         </p>
                     </div>
                     <div className="friend-actions">
-                        <button className="view-profile-button"
+                        <button 
+                            className="view-profile-button"
+                            onClick={() => handleViewProfile(friend.username)}
                         >
                             See profile
                         </button>

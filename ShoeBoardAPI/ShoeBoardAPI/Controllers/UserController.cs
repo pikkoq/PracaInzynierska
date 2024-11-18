@@ -58,7 +58,9 @@ namespace ShoeBoardAPI.Controllers
         [HttpGet("getUserProfile")]
         public async Task<IActionResult> getUserProfile(string userName)
         {
-            var response = await _userService.GetProfile(userName);
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var response = await _userService.GetProfile(userName, currentUserId);
             if (!response.Success)
             {
                 return NotFound(response);

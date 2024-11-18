@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { likePost, unlikePost, getCatalogShoeDetails } from '../../services/api';
+import { useNavigate } from 'react-router-dom';
 import './Post.scss';
 import ShoeDetailsModal from '../Navigation/ShoeDetailsModal';
 import CommentsModal from './CommentsModal';
 
 const Post = ({ post, onPostUpdate }) => {
+  const navigate = useNavigate();
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [likeCount, setLikeCount] = useState(post.likeCount);
   const [showDetails, setShowDetails] = useState(false);
@@ -12,28 +14,29 @@ const Post = ({ post, onPostUpdate }) => {
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [commentsCount, setCommentsCount] = useState(post.commentsCount || 0);
+  const [isProcessingLike, setIsProcessingLike] = useState(false);
 
   const handleLikeClick = async () => {
+    if (isProcessingLike) return;
+    
+    setIsProcessingLike(true);
     try {
-      const newIsLiked = !isLiked;
-      const newLikeCount = newIsLiked ? likeCount + 1 : likeCount - 1;
+      const response = isLiked ? 
+        await unlikePost(post.id) : 
+        await likePost(post.id);
       
-      setIsLiked(newIsLiked);
-      setLikeCount(newLikeCount);
-
-      const response = newIsLiked ? await likePost(post.id) : await unlikePost(post.id);
-      
-      if (!response.success) {
-        setIsLiked(!newIsLiked);
-        setLikeCount(likeCount);
-        console.error('Like/Unlike operation failed:', response.message);
-      } else {
+      if (response.success) {
+        const newIsLiked = !isLiked;
+        const newLikeCount = newIsLiked ? likeCount + 1 : likeCount - 1;
+        
+        setIsLiked(newIsLiked);
+        setLikeCount(newLikeCount);
         onPostUpdate(post.id, { isLiked: newIsLiked, likeCount: newLikeCount });
       }
     } catch (error) {
       console.error('Error toggling like:', error);
-      setIsLiked(!isLiked);
-      setLikeCount(likeCount);
+    } finally {
+      setIsProcessingLike(false);
     }
   };
 
@@ -57,6 +60,10 @@ const Post = ({ post, onPostUpdate }) => {
     onPostUpdate(post.id, { commentsCount: commentsCount + 1 });
   };
 
+  const handleViewProfile = (username) => {
+    navigate(`/profile/${username}`);
+  };
+
   return (
     <>
       <div className="post">
@@ -67,7 +74,12 @@ const Post = ({ post, onPostUpdate }) => {
                 <img src={post.profilePictureUrl || 'https://icons.veryicon.com/png/o/miscellaneous/common-icons-31/default-avatar-2.png'} alt="User avatar" />
               </div>
               <div className="user-details">
-                <h3>{post.username}</h3>
+                <h3 
+                  onClick={() => handleViewProfile(post.username)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  {post.username}
+                </h3>
                 <p>Posted on: {new Date(post.datePosted).toLocaleString()}</p>
               </div>
             </div>
@@ -83,7 +95,11 @@ const Post = ({ post, onPostUpdate }) => {
           </div>
           <div className="post-footer">
             <div className="like-section">
-              <button onClick={handleLikeClick} className="like-button">
+              <button 
+                onClick={handleLikeClick} 
+                className="like-button"
+                disabled={isProcessingLike}
+              >
                 <i className={`bx ${isLiked ? 'bxs-heart' : 'bx-heart'}`}></i>
               </button>
               <span>{likeCount}</span>

@@ -63,4 +63,43 @@
     &:hover {
         background-color: $primary-color-hover;
     }
+}
+
+.invite-button-container {
+    position: relative;
+    display: inline-block;
+}
+
+.pending-requests-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: $error-color;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.invites-button {
+    position: relative;
+    padding-right: 25px;
 } 

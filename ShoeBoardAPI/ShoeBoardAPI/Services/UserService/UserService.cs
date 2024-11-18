@@ -222,7 +222,16 @@ namespace ShoeBoardAPI.Services.UserService
         public async Task<ServiceResponse<string>> LoginUser(LoginUserDto loginUser)
         {
             var response = new ServiceResponse<string>();
-            var user = await _userManager.FindByEmailAsync(loginUser.Email);
+            User user;
+
+            if (loginUser.Login.Contains("@"))
+            {
+                user = await _userManager.FindByEmailAsync(loginUser.Login);
+            }
+            else
+            {
+                user = await _userManager.FindByNameAsync(loginUser.Login);
+            }
 
             if (user == null )
             {

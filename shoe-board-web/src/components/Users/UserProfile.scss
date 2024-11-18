@@ -231,26 +231,6 @@ body, html {
     gap: 5px;
 }
 
-.like-button {
-    background: none;
-    border: none;
-    color: $text-primary;
-    cursor: pointer;
-    padding: 5px;
-    font-size: 1.2rem;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-
-    &:hover {
-        color: $primary-color;
-    }
-
-    .bxs-heart {
-        color: $primary-color;
-    }
-}
-
 .profile-comment-button {
     background: none;
     border: none;
@@ -309,5 +289,23 @@ body, html {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+.user-not-found {
+    background-color: $background-medium;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    margin: 2rem auto;
+    max-width: 500px;
+
+    h2 {
+        color: $error-color;
+        margin-bottom: 1rem;
+    }
+
+    p {
+        color: $text-secondary;
     }
 } 

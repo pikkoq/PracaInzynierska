@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../../services/api';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { loginUser } from '../../services/api';
 import './Auth.scss';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || '/home';
+  const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await login(email, password);
+      const response = await loginUser(login, password);
       if (response.success) {
-        navigate('/home');
+        navigate(from, { replace: true });
       } else {
         setError(response.message || 'Login failed');
       }
@@ -30,13 +32,13 @@ const Login = () => {
         {error && <div className="auth-error">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email">Email address</label>
+            <label htmlFor="login">Login</label>
             <input
-              type="email"
-              id="email"
-              placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              id="login"
+              placeholder="Enter login"
+              value={login}
+              onChange={(e) => setLogin(e.target.value)}
               required
             />
           </div>

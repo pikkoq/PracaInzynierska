@@ -14,8 +14,8 @@ api.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-export const login = async (email, password) => {
-  const response = await api.post('/User/loginUser', { email, password });
+export const loginUser = async (login, password) => {
+  const response = await api.post('/User/loginUser', { login, password });
   if (response.data.success) {
     localStorage.setItem('token', response.data.data);
     const payload = JSON.parse(atob(response.data.data.split('.')[1]));

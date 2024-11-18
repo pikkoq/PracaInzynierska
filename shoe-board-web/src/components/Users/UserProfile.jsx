@@ -20,6 +20,7 @@ const UserProfile = () => {
     });
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
+    const [userNotFound, setUserNotFound] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [showComments, setShowComments] = useState(false);
     const [selectedPostId, setSelectedPostId] = useState(null);
@@ -32,13 +33,18 @@ const UserProfile = () => {
     const fetchUserProfile = async () => {
         try {
             setIsLoading(true);
+            setUserNotFound(false);
             const response = await getUserProfile(userName);
             if (response.success) {
                 setUserData(response.data);
             }
         } catch (error) {
-            setError('Failed to download user data.');
             console.error('Error fetching user data:', error);
+            if (error.response?.status === 404) {
+                setUserNotFound(true);
+            } else {
+                setError('Failed to download user data.');
+            }
         } finally {
             setIsLoading(false);
         }
@@ -153,6 +159,25 @@ const UserProfile = () => {
 
     if (isLoading) {
         return <div className="profile-loading">Loading...</div>;
+    }
+
+    if (userNotFound) {
+        return (
+            <div className="profile-container">
+                <TopNavbar />
+                <div className="main-content">
+                    <div className="left-nav">
+                        <Navigation />
+                    </div>
+                    <div className="main-content-container">
+                        <div className="user-not-found">
+                            <h2>User not found</h2>
+                            <p>The user "{userName}" does not exist.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (

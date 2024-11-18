@@ -8,6 +8,7 @@ namespace ShoeBoardAPI.Services.UserService
         Task<ServiceResponse<bool>> ReigsterUser(RegisterUserDto registerUser);
         Task<ServiceResponse<string>> LoginUser(LoginUserDto loginUser);
         Task<ServiceResponse<GetUserDto>> GetUser(string id);
+        Task<ServiceResponse<GetUserProfileDto>> GetProfile(string userName);
         Task<ServiceResponse<bool>> EditUserData(EditUserDto userEdit, string id);
         Task<ServiceResponse<bool>> ChangeUserPassword(ChangePasswordDto userPassword, string id);
         string GenerateJwtToken(User user);

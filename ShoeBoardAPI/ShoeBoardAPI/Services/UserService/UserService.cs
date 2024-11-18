@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.IdentityModel.Tokens;
 using ShoeBoardAPI.DataBase;
 using ShoeBoardAPI.Models;
+using ShoeBoardAPI.Models.DTO.PostDtos;
 using ShoeBoardAPI.Models.DTO.UserDtos;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -138,6 +139,55 @@ namespace ShoeBoardAPI.Services.UserService
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public async Task<ServiceResponse<GetUserProfileDto>> GetProfile(string userName)
+        {
+            var response = new ServiceResponse<GetUserProfileDto>();
+
+            var user = await _userManager.FindByNameAsync(userName);
+
+            if (user == null)
+            {
+                response.Success = false;
+                response.Message = "User not found";
+                return response;
+            }
+
+            var userProfile = await _context.Users
+                .Where(u => u.UserName == userName)
+                .Select(u => new GetUserProfileDto
+                {
+                    Id = u.Id,
+                    UserName = u.UserName,
+                    UserProfileAvatar = u.ProfilePicturePath,
+                    Bio = u.Bio,
+                    Posts = u.Posts
+                        .OrderByDescending(p => p.DatePosted)
+                        .Select(p => new PostDto
+                        {
+                            Id = p.Id,
+                            Username = p.User.UserName,
+                            Content = p.Content,
+                            DatePosted = p.DatePosted,
+                            Size = p.Shoe.Size,
+                            ComfortRating = p.Shoe.ComfortRating,
+                            StyleRating = p.Shoe.StyleRating,
+                            Season = p.Shoe.Season,
+                            Review = p.Shoe.Review,
+                            Image_Url = p.Shoe.ShoeCatalogId != null ? p.Shoe.ShoeCatalog.Image_Url : p.Shoe.UserShoeCatalog.Image_Url,
+                            Title = p.Shoe.ShoeCatalogId != null ? p.Shoe.ShoeCatalog.Title : p.Shoe.UserShoeCatalog.Title,
+                            IsLiked = p.Likes.Any(l => l.UserId == u.Id),
+                            CommentsCount = p.Comments.Count,
+                            LikeCount = p.Likes.Count,
+                        }).ToList()
+                }).FirstOrDefaultAsync();
+
+            response.Data = userProfile;
+            response.Success = true;
+            response.Message = "Retrived user profile data.";
+            return response;
+
         }
 
         public async Task<ServiceResponse<GetUserDto>> GetUser(string id)

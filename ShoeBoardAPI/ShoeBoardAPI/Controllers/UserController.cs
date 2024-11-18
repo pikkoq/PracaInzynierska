@@ -55,6 +55,18 @@ namespace ShoeBoardAPI.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("getUserProfile")]
+        public async Task<IActionResult> getUserProfile(string userName)
+        {
+            var response = await _userService.GetProfile(userName);
+            if (!response.Success)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPatch("editUserData")]
         public async Task<IActionResult> EditUserData([FromBody] EditUserDto editUser)
         {

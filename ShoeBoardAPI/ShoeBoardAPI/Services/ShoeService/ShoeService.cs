@@ -246,7 +246,7 @@ namespace ShoeBoardAPI.Services.ShoeService
 
                 try
                 {
-                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "userPhotos", "uploads");
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
                     if (!Directory.Exists(uploadsFolder))
                     {
                         Directory.CreateDirectory(uploadsFolder);

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ShoeBoardAPI.Models;
+using ShoeBoardAPI.Models.DTO.AdminDtos;
 using ShoeBoardAPI.Models.DTO.FrindsDtos;
 using ShoeBoardAPI.Models.DTO.ShoeDtos;
 using ShoeBoardAPI.Models.DTO.UserDtos;
@@ -40,6 +41,30 @@ namespace ShoeBoardAPI
                 srcMember != null &&
                 !srcMember.Equals(default) &&
                 (srcMember is not string || !string.IsNullOrWhiteSpace(srcMember.ToString()))));
+
+            //Admin panel maps
+            CreateMap<UserShoeCatalog, GetShoesToAcceptDto>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
+            CreateMap<UserShoeCatalog, ShoeCatalog>();
+            CreateMap<UserShoeCatalog, EditNewAddedShoesDto>().ReverseMap();
+            CreateMap<User, GetAllUsersDto>().ReverseMap();
+            CreateMap<User, EditUserAccountDto>().ReverseMap();
+            CreateMap<Post, GetAllUsersPostsDto>()
+                .ForMember(dest => dest.PostId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.UserName))
+                .ForMember(dest => dest.ProfilePicture, opt => opt.MapFrom(src => src.User.ProfilePicturePath))
+                .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
+                .ForMember(dest => dest.DatePosted, opt => opt.MapFrom(src => src.DatePosted))
+                .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Shoe.Size))
+                .ForMember(dest => dest.ComfortRating, opt => opt.MapFrom(src => src.Shoe.ComfortRating))
+                .ForMember(dest => dest.StyleRating, opt => opt.MapFrom(src => src.Shoe.StyleRating))
+                .ForMember(dest => dest.Season, opt => opt.MapFrom(src => src.Shoe.Season))
+                .ForMember(dest => dest.Review, opt => opt.MapFrom(src => src.Shoe.Review))
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Shoe.ShoeCatalog.Title))
+                .ForMember(dest => dest.ShoePhoto, opt => opt.MapFrom(src => src.Shoe.ShoeCatalog.Image_Url))
+                .ForMember(dest => dest.likeCount, opt => opt.MapFrom(src => src.Likes.Count))
+                .ForMember(dest => dest.commentsCount, opt => opt.MapFrom(src => src.Comments.Count));
+            CreateMap<Post, string>().ReverseMap();
         }
     }
 }

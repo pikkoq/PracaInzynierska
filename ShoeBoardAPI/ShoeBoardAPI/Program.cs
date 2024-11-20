@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ShoeBoardAPI.DataBase;
 using ShoeBoardAPI.Models;
+using ShoeBoardAPI.Services.AdminService.cs;
 using ShoeBoardAPI.Services.FriendService;
 using ShoeBoardAPI.Services.PostService;
 using ShoeBoardAPI.Services.ShoeService;
@@ -49,6 +50,7 @@ namespace ShoeBoardAPI
             builder.Services.AddScoped<IShoeService, ShoeService>();
             builder.Services.AddScoped<IFriendService, FriendService>();
             builder.Services.AddScoped<IPostService, PostService>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
 
             //JWT Authentication service
             builder.Services.AddAuthentication(options =>
@@ -117,7 +119,7 @@ namespace ShoeBoardAPI
             var app = builder.Build();
 
             //ImageSharp configuration
-            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "userPhotos", "uploads");
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
             if (!Directory.Exists(uploadsFolder))
             {
                 Directory.CreateDirectory(uploadsFolder);

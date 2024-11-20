@@ -56,8 +56,16 @@ const Post = ({ post, onPostUpdate }) => {
   };
 
   const handleCommentAdded = () => {
-    setCommentsCount(prev => prev + 1);
-    onPostUpdate(post.id, { commentsCount: commentsCount + 1 });
+    const newCommentsCount = commentsCount + 1;
+    setCommentsCount(newCommentsCount);
+    if (onPostUpdate) {
+      try {
+        onPostUpdate(post.id, { commentsCount: newCommentsCount });
+      } catch (error) {
+        setCommentsCount(commentsCount);
+        console.error('Error updating comment count:', error);
+      }
+    }
   };
 
   const handleViewProfile = (username) => {
@@ -108,7 +116,7 @@ const Post = ({ post, onPostUpdate }) => {
               className="comment-button"
               onClick={() => setShowComments(true)}
             >
-              💬 {commentsCount}
+              💬 {commentsCount || 0}
             </button>
           </div>
         </div>

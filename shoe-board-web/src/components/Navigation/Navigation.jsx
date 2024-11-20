@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './Navigation.scss';
+import homeIcon from '../../assets/home.png';
+import friendsIcon from '../../assets/friends.png';
+import profileIcon from '../../assets/profile.png';
+import libraryIcon from '../../assets/library.png';
 
 const Navigation = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -47,10 +51,30 @@ const Navigation = () => {
         </button>
       )}
       <ul className={`nav-links ${isMenuOpen ? 'show' : ''}`}>
-        <li><Link className="home-button" to="/home" onClick={() => setIsMenuOpen(false)}>Home</Link></li>
-        <li><Link to="/friends" onClick={() => setIsMenuOpen(false)}>Friends</Link></li>
-        <li><Link to="/profile" onClick={() => setIsMenuOpen(false)}>Profile</Link></li>
-        <li><Link to="/library" onClick={() => setIsMenuOpen(false)}>Library</Link></li>
+        <li>
+          <Link className="nav-link" to="/home" onClick={() => setIsMenuOpen(false)}>
+            <img src={homeIcon} alt="Home" className="nav-icon" />
+            <span className='home-text'>Home</span>
+          </Link>
+        </li>
+        <li>
+          <Link className="nav-link" to="/friends" onClick={() => setIsMenuOpen(false)}>
+            <img src={friendsIcon} alt="Friends" className="nav-icon" />
+            <span>Friends</span>
+          </Link>
+        </li>
+        <li>
+          <Link className="nav-link" to="/profile" onClick={() => setIsMenuOpen(false)}>
+            <img src={profileIcon} alt="Profile" className="nav-icon" />
+            <span>Profile</span>
+          </Link>
+        </li>
+        <li>
+          <Link className="nav-link" to="/library" onClick={() => setIsMenuOpen(false)}>
+            <img src={libraryIcon} alt="Library" className="nav-icon" />
+            <span>Library</span>
+          </Link>
+        </li>
       </ul>
     </nav>
   );

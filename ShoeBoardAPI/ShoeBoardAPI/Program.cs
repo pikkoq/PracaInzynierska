@@ -116,6 +116,15 @@ namespace ShoeBoardAPI
 
             var app = builder.Build();
 
+            //ImageSharp configuration
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "userPhotos", "uploads");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+            app.UseStaticFiles();
+
+            //Role method creation
             CreateRoles(app).Wait();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

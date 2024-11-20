@@ -21,7 +21,7 @@ namespace ShoeBoardAPI.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("RegisterNewShoe")]
-        public async Task<IActionResult> RegisterNewShoe([FromBody] NewShoeRegistryDto newShoe)
+        public async Task<IActionResult> RegisterNewShoe([FromForm] NewShoeRegistryDto newShoe)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)

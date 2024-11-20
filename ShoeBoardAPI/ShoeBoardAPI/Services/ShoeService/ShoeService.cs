@@ -5,6 +5,10 @@ using ShoeBoardAPI.DataBase;
 using ShoeBoardAPI.Models;
 using ShoeBoardAPI.Models.DTO.ShoeDtos;
 using System.Security.Claims;
+using System.Drawing;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Processing;
+
 
 namespace ShoeBoardAPI.Services.ShoeService
 {
@@ -220,14 +224,70 @@ namespace ShoeBoardAPI.Services.ShoeService
 
             if(string.IsNullOrEmpty(shoeCatalog.Title) || string.IsNullOrEmpty(shoeCatalog.Main_Color) ||
                 string.IsNullOrEmpty(shoeCatalog.Brand) || string.IsNullOrEmpty(shoeCatalog.Nickname) || 
-                string.IsNullOrEmpty(shoeCatalog.Gender) || string.IsNullOrEmpty(shoeCatalog.Series))
+                string.IsNullOrEmpty(shoeCatalog.Gender) || string.IsNullOrEmpty(shoeCatalog.Series) ||
+                shoeCatalog.Image_Path == null)
             {
                 response.Success = false;
-                response.Message = "Title, Brand, Nickname, Gender, Main_color and series can't be empty.";
+                response.Message = "Title, Brand, Nickname, Gender, Main_color, Series and Image can't be empty.";
                 return response;
             }
 
             shoeCatalog.UserId = userId;
+
+            if (newShoe.ImageFile != null)
+            {
+                if (!newShoe.ImageFile.ContentType.StartsWith("image/"))
+                {
+                    response.Success = false;
+                    response.Data = false;
+                    response.Message = "The file must be an image";
+                    return response;
+                }
+
+                try
+                {
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "userPhotos", "uploads");
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    var fileName = $"{Guid.NewGuid()}{Path.GetExtension(newShoe.ImageFile.FileName)}";
+                    var filePath = Path.Combine(uploadsFolder, fileName);
+
+                    using (var image = await SixLabors.ImageSharp.Image.LoadAsync(newShoe.ImageFile.OpenReadStream()))
+                    {
+                        image.Mutate(x => x.Resize(new ResizeOptions
+                        {
+                            Size = new SixLabors.ImageSharp.Size(480, 480),
+                            Mode = ResizeMode.Max
+
+                        }));
+
+                        await using(var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await image.SaveAsync(fileStream, new JpegEncoder
+                            {
+                                Quality = 90
+                            });
+                        }
+                    }
+
+                    shoeCatalog.Image_Path = $"/uploads/{fileName}";
+                }
+                catch (Exception ex)
+                {
+                    response.Success = false;
+                    response.Message = $"Image processing failed: {ex.Message}";
+                    return response;
+                }
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "Image is required.";
+                return response;
+            }
 
             await _context.UserShoeCatalogs.AddAsync(shoeCatalog);
             var result = await _context.SaveChangesAsync();
@@ -324,4 +384,5 @@ namespace ShoeBoardAPI.Services.ShoeService
 
         }
     }
+
 }

@@ -12,6 +12,7 @@
         public string Series { get; set; }
         public string Gender { get; set; }
         public string Image_Path { get; set; }
+        public string ShopUrl { get; set; }
         public DateTime Release_Date { get; set; }
         public string Main_Color { get; set; }
         public string Colorway { get; set; }

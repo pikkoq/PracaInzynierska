@@ -9,6 +9,7 @@
         public string? Series { get; set; }
         public string? Gender { get; set; }
         public string? ImagePath { get; set; }
+        public string? ShopUrl { get; set; }
         public string? MainColor { get; set; }
         public string? Colorway { get; set; }
         public decimal? Price { get; set; }

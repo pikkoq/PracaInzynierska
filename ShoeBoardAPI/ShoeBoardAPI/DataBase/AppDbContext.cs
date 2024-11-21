@@ -25,6 +25,10 @@ namespace ShoeBoardAPI.DataBase
                 .Property(s => s.Id)
                 .ValueGeneratedOnAdd();
 
+            modelBuilder.Entity<ShoeCatalog>()
+                .Property(s => s.Id)
+                .ValueGeneratedOnAdd();
+
             modelBuilder.Entity<FriendRequest>()
                 .Property(s => s.Id)
                 .ValueGeneratedOnAdd();
@@ -87,13 +91,13 @@ namespace ShoeBoardAPI.DataBase
                 .HasOne(fr => fr.Requester)
                 .WithMany()
                 .HasForeignKey(fr => fr.RequesterId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<FriendRequest>()
                 .HasOne(fr => fr.Receiver)
                 .WithMany()
                 .HasForeignKey(fr => fr.ReceiverId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

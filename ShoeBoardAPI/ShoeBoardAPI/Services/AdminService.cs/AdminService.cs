@@ -28,7 +28,7 @@ namespace ShoeBoardAPI.Services.AdminService.cs
                 if( shoe == null )
                 {
                     response.Success = false;
-                    response.Message = "Shoe not found";
+                    response.Message = "Shoe not found.";
                     response.Data = false;
                     return response;
                 }
@@ -40,7 +40,7 @@ namespace ShoeBoardAPI.Services.AdminService.cs
                 await _context.SaveChangesAsync();
                 response.Success = true;
                 response.Data = true;
-                response.Message = "Accepted shoe";
+                response.Message = "Accepted shoe.";
             }
             catch (Exception ex)
             {
@@ -96,12 +96,18 @@ namespace ShoeBoardAPI.Services.AdminService.cs
                     return response;
                 }
 
+                var friendRequestsAsRequester = _context.FriendRequests.Where(fr => fr.RequesterId == userId);
+                var friendRequestsAsReceiver = _context.FriendRequests.Where(fr => fr.ReceiverId == userId);
+
+                _context.FriendRequests.RemoveRange(friendRequestsAsRequester);
+                _context.FriendRequests.RemoveRange(friendRequestsAsReceiver);
+
                 _context.Users.Remove(user);
                 await _context.SaveChangesAsync();
 
                 response.Success = true;
                 response.Data = true;
-                response.Message = "Deleted user";
+                response.Message = "Deleted user.";
             }
             catch (Exception ex)
             {

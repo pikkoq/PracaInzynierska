@@ -45,8 +45,13 @@ namespace ShoeBoardAPI
             //Admin panel maps
             CreateMap<UserShoeCatalog, GetShoesToAcceptDto>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
-            CreateMap<UserShoeCatalog, ShoeCatalog>();
-            CreateMap<UserShoeCatalog, EditNewAddedShoesDto>().ReverseMap();
+            CreateMap<UserShoeCatalog, ShoeCatalog>()
+                .ForMember(dest => dest.Url_Link_Handler, opt => opt.MapFrom(src => src.ShopUrl))
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Image_Url, opt => opt.MapFrom(src => src.Image_Path))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price));
+            CreateMap<UserShoeCatalog, EditNewAddedShoesDto>().ReverseMap()
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<User, GetAllUsersDto>().ReverseMap();
             CreateMap<User, EditUserAccountDto>().ReverseMap();
             CreateMap<Post, GetAllUsersPostsDto>()

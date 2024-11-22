@@ -5,11 +5,22 @@ import homeIcon from '../../assets/home.png';
 import friendsIcon from '../../assets/friends.png';
 import profileIcon from '../../assets/profile.png';
 import libraryIcon from '../../assets/library.png';
+import adminIcon from '../../assets/admin.png';
 
 const Navigation = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navRef = useRef(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const userRole = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+      setIsAdmin(userRole === "Admin");
+    }
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -75,6 +86,14 @@ const Navigation = () => {
             <span>Library</span>
           </Link>
         </li>
+        {isAdmin && (
+          <li>
+            <Link className="nav-link" to="/admin" onClick={() => setIsMenuOpen(false)}>
+              <img src={adminIcon} alt="Admin Panel" className="nav-icon" />
+              <span>Admin Panel</span>
+            </Link>
+          </li>
+        )}
       </ul>
     </nav>
   );

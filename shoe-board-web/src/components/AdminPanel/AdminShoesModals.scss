@@ -1,0 +1,57 @@
+@import '../../styles/variables';
+
+.admin-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.admin-modal-content {
+    background-color: $background-medium;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 1200px;
+    height: 80vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-modal-header {
+    padding: 1rem 2rem;
+    border-bottom: 1px solid $primary-color;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+        color: $primary-color;
+        margin: 0;
+    }
+
+    .close-button {
+        background: none;
+        border: none;
+        color: $text-primary;
+        font-size: 2rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        
+        &:hover {
+            color: $error-color;
+        }
+    }
+}
+
+.admin-modal-body {
+    padding: 2rem;
+    overflow-y: auto;
+    flex: 1;
+} 

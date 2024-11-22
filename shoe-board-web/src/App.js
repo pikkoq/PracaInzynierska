@@ -9,6 +9,7 @@ import SearchResults from './components/Search/SearchResults';
 import Friends from './components/Friends/Friends';
 import UserProfile from './components/Users/UserProfile';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
+import AdminPanel from './components/AdminPanel/AdminPanel';
 
 function App() {
   return (
@@ -46,6 +47,12 @@ function App() {
           <Route path="/profile/:userName" element={
             <ProtectedRoute>
               <UserProfile />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/admin" element={
+            <ProtectedRoute>
+              <AdminPanel />
             </ProtectedRoute>
           } />
 

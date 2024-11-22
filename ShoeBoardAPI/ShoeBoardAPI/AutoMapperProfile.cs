@@ -53,7 +53,9 @@ namespace ShoeBoardAPI
             CreateMap<UserShoeCatalog, EditNewAddedShoesDto>().ReverseMap()
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<User, GetAllUsersDto>().ReverseMap();
-            CreateMap<User, EditUserAccountDto>().ReverseMap();
+            CreateMap<EditUserAccountDto,User >()
+                .ForMember(dest => dest.Bio, opt => opt.MapFrom(src => src.Bio))
+                .ForMember(dest => dest.ProfilePicturePath, opt => opt.MapFrom(src => src.ProfilePicture));
             CreateMap<Post, GetAllUsersPostsDto>()
                 .ForMember(dest => dest.PostId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.UserName))
@@ -69,7 +71,6 @@ namespace ShoeBoardAPI
                 .ForMember(dest => dest.ShoePhoto, opt => opt.MapFrom(src => src.Shoe.ShoeCatalog.Image_Url))
                 .ForMember(dest => dest.likeCount, opt => opt.MapFrom(src => src.Likes.Count))
                 .ForMember(dest => dest.commentsCount, opt => opt.MapFrom(src => src.Comments.Count));
-            CreateMap<Post, string>().ReverseMap();
         }
     }
 }

@@ -224,7 +224,7 @@ namespace ShoeBoardAPI.Services.AdminService.cs
                     return response;
                 }
 
-                _mapper.Map(content, post);
+                post.Content = content;
 
                 _context.Posts.Update(post);
                 await _context.SaveChangesAsync();

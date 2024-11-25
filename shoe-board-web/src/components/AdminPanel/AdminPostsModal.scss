@@ -56,33 +56,45 @@
     flex: 1;
 }
 
-.shoes-grid {
+.posts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: 1fr;
     gap: 2rem;
     margin-bottom: 2rem;
-    position: relative;
-    min-height: 200px;
-    
+
     &.loading {
         opacity: 0.7;
         pointer-events: none;
-        transition: opacity 0.2s ease;
     }
 }
 
-.shoe-card {
+.post-card {
     background-color: $background-dark;
     border-radius: 8px;
-    overflow: hidden;
+    padding: 1.5rem;
     display: flex;
-    flex-direction: column;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    gap: 2rem;
+    align-items: stretch;
 
-    .shoe-image {
+    .post-content-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .post-header {
         width: 100%;
-        height: 200px;
+        margin-bottom: 1rem;
+    }
+
+    .post-image {
+        width: 300px;
+        height: 300px;
+        border-radius: 8px;
         overflow: hidden;
+        flex-shrink: 0;
+        align-self: center;
 
         img {
             width: 100%;
@@ -91,28 +103,82 @@
         }
     }
 
-    .shoe-info {
-        padding: 1rem;
+    .post-header {
         display: flex;
-        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba($text-secondary, 0.2);
 
-        h3 {
-            color: $text-highlight;
-            margin: 0 0 1rem 0;
-            font-size: 1.2rem;
-        }
-
-        p {
-            margin: 0.5rem 0;
-            color: $text-secondary;
-        }
-
-        .shoe-actions {
+        .user-info {
             display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+            transition: opacity 0.2s;
+
+            &:hover {
+                opacity: 0.8;
+            }
+
+            .user-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+            .username {
+                color: $text-highlight;
+                font-weight: bold;
+            }
         }
+
+        .post-date {
+            color: $text-secondary;
+            font-size: 0.9rem;
+        }
+    }
+
+    .post-content {
+        h3 {
+            color: $primary-color;
+            margin: 0 0 1rem 0;
+        }
+
+        .content-text {
+            color: $text-primary;
+            white-space: pre-wrap;
+            margin: 1rem 0;
+            font-family: inherit;
+            line-height: 1.5;
+        }
+
+        .shoe-details {
+            background-color: rgba($background-medium, 0.5);
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+
+            p {
+                margin: 0.5rem 0;
+                color: $text-secondary;
+            }
+        }
+
+        .post-stats {
+            display: flex;
+            gap: 1rem;
+            color: $text-secondary;
+            margin-top: 1rem;
+        }
+    }
+
+    .post-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba($text-secondary, 0.2);
     }
 }
 
@@ -127,15 +193,6 @@
     font-size: 0.9rem;
     transition: all 0.2s;
 
-    &.accept {
-        background-color: $success-color;
-        color: $text-highlight;
-
-        &:hover {
-            background-color: $primary-color-hover;
-        }
-    }
-
     &.edit {
         background-color: $button-primary;
         color: $text-highlight;
@@ -145,22 +202,12 @@
         }
     }
 
-    &.decline {
+    &.delete {
         background-color: $button-danger;
         color: $text-highlight;
 
         &:hover {
             background-color: $button-danger-hover;
-        }
-    }
-
-    &.shop {
-        background-color: $info-color;
-        color: $text-highlight;
-        padding: 0.5rem;
-
-        &:hover {
-            background-color: darken($info-color, 10%);
         }
     }
 }
@@ -184,42 +231,33 @@
     border-radius: 8px;
     width: 90%;
     max-width: 600px;
-    max-height: 80vh;
-    overflow-y: auto;
 
     h3 {
         color: $text-highlight;
         margin-bottom: 1.5rem;
     }
 
-    .form-group {
+    textarea {
+        width: 100%;
+        min-height: 150px;
+        padding: 1rem;
+        border: 1px solid $input-border;
+        border-radius: 4px;
+        background-color: $input-background;
+        color: $input-text;
+        resize: vertical;
         margin-bottom: 1rem;
 
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: $text-secondary;
-        }
-
-        input {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid $input-border;
-            border-radius: 4px;
-            background-color: $input-background;
-            color: $input-text;
-
-            &:focus {
-                outline: none;
-                border-color: $primary-color;
-            }
+        &:focus {
+            outline: none;
+            border-color: $primary-color;
         }
     }
 
     .form-actions {
         display: flex;
         gap: 1rem;
-        margin-top: 2rem;
+        justify-content: flex-end;
 
         button {
             padding: 0.5rem 1.5rem;
@@ -232,8 +270,13 @@
                 background-color: $success-color;
                 color: $text-highlight;
 
-                &:hover {
+                &:hover:not(:disabled) {
                     background-color: $primary-color-hover;
+                }
+
+                &:disabled {
+                    opacity: 0.7;
+                    cursor: not-allowed;
                 }
             }
 
@@ -288,58 +331,68 @@
     text-align: center;
 }
 
-.admin-modal-loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    color: $text-primary;
-    font-size: 1.2rem;
-}
-
-.shop-link {
+.comments-button {
+    background: none;
+    border: none;
+    color: $text-secondary;
+    cursor: pointer;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    background-color: $info-color;
-    color: $text-highlight;
-    text-decoration: none;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    transition: all 0.2s;
-    width: fit-content;
+    padding: 0;
+    font-size: inherit;
+    transition: color 0.2s;
 
     &:hover {
-        background-color: darken($info-color, 10%);
+        color: $primary-color;
     }
-
-    svg {
-        font-size: 1.1rem;
-    }
-}
-
-.page-loading-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: $background-medium;
-    padding: 1rem 2rem;
-    border-radius: 8px;
-    color: $text-highlight;
-    z-index: 10;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {
+    .post-card {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+
+        .post-content-wrapper {
+            order: 2;
+        }
+
+        .post-header {
+            order: 1;
+        }
+
+        .post-image {
+            order: 2;
+            width: 100%;
+            height: 250px;
+            margin: 0.5rem 0;
+        }
+
+        .post-content {
+            order: 3;
+        }
+    }
+
     .admin-modal-content {
-        width: 98%;
-        height: 95vh;
+        width: 95%;
+        height: 90vh;
     }
 
     .admin-modal-body {
-        padding: 1.5rem;
+        padding: 1rem;
+    }
+
+    .posts-grid {
+        gap: 1rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .post-card {
+        .post-image {
+            width: 250px;
+            height: 250px;
+        }
     }
 }

@@ -74,10 +74,24 @@ const SearchResultCard = ({ shoe }) => {
     const ratingOptions = Array.from({ length: 11 }, (_, i) => i);
     const seasonOptions = ['Spring', 'Summer', 'Autumn', 'Winter'];
 
+    const getImageUrl = (imageUrl) => {
+        if (!imageUrl) return '';
+
+        if (imageUrl.startsWith('https')) {
+            return imageUrl;
+        }
+
+        if (imageUrl.startsWith('/uploads')) {
+            return `https://localhost:7117${imageUrl}`;
+        }
+
+        return imageUrl;
+    };
+
     return (
         <>
             <div className="search-result-card" onClick={handleCardClick}>
-                <img src={shoe.image_Url} alt={shoe.title} className="shoe-image" />
+                <img src={getImageUrl(shoe.image_Url)} alt={shoe.title} className="shoe-image" />
                 <div className="shoe-content">
                     <h3>{shoe.title}</h3>
                     <div className="shoe-details">

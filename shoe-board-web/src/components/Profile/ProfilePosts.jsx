@@ -60,6 +60,20 @@ const ProfilePosts = () => {
         }));
     };
 
+    const getImageUrl = (imageUrl) => {
+        if (!imageUrl) return '';
+
+        if (imageUrl.startsWith('https')) {
+            return imageUrl;
+        }
+
+        if (imageUrl.startsWith('/uploads')) {
+            return `https://localhost:7117${imageUrl}`;
+        }
+
+        return imageUrl;
+    };
+
     if (loading) {
         return <div className="profile-loading">Loading...</div>;
     }
@@ -110,7 +124,7 @@ const ProfilePosts = () => {
                                 </div>
                                 <div className="profile-post-right-section">
                                     <div className="profile-post-image">
-                                        <img src={post.image_Url} alt={post.title} />
+                                        <img src={getImageUrl(post.image_Url)} alt={post.title} />
                                     </div>
                                     <button
                                         onClick={() => handleDeletePost(post.id)}

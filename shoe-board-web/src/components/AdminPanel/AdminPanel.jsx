@@ -3,6 +3,8 @@ import { Navigate } from 'react-router-dom';
 import TopNavbar from '../Navigation/TopNavbar';
 import Navigation from '../Navigation/Navigation';
 import AdminShoesModal from './AdminShoesModal';
+import AdminUsersModal from './AdminUsersModal';
+import AdminPostsModal from './AdminPostsModal';
 import './AdminPanel.scss';
 
 const AdminPanel = () => {
@@ -72,10 +74,10 @@ const AdminPanel = () => {
                         <AdminShoesModal onClose={() => setShowShoesModal(false)} />
                     )}
                     {showUsersModal && (
-                        <AdminShoesModal onClose={() => setShowUsersModal(false)} />
+                        <AdminUsersModal onClose={() => setShowUsersModal(false)} />
                     )}
                     {showPostsModal && (
-                        <AdminShoesModal onClose={() => setShowPostsModal(false)} />
+                        <AdminPostsModal onClose={() => setShowPostsModal(false)} />
                     )}
                 </div>
             </div>

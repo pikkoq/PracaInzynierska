@@ -351,4 +351,136 @@ export const getUserProfile = async (userName) => {
   }
 };
 
+export const getShoesToAccept = async (pageNumber = 1) => {
+  try {
+    const response = await api.get(`/Admin/GetShoesToAccept?pageNumber=${pageNumber}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching shoes to accept:', error);
+    throw error;
+  }
+};
+
+export const acceptShoe = async (shoeId) => {
+  try {
+    const response = await api.post(`/Admin/AcceptNewAddedShoes?shoeId=${shoeId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error accepting shoe:', error);
+    throw error;
+  }
+};
+
+export const declineShoe = async (shoeId) => {
+  try {
+    const response = await api.delete(`/Admin/DeclineNewAddedShoes?shoeId=${shoeId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error declining shoe:', error);
+    throw error;
+  }
+};
+
+export const editNewShoe = async (shoeId, shoeData) => {
+  try {
+    const response = await api.patch(`/Admin/EditNewAddedShoes?shoeId=${shoeId}`, shoeData);
+    return response.data;
+  } catch (error) {
+    console.error('Error editing shoe:', error);
+    throw error;
+  }
+};
+
+export const getAllUsers = async (pageNumber = 1) => {
+  try {
+    const response = await api.get(`/Admin/GetAllUsers?pageNumber=${pageNumber}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
+  }
+};
+
+export const deleteUser = async (userId) => {
+  try {
+    const response = await api.delete(`/Admin/DeleteUserAccount?userId=${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    throw error;
+  }
+};
+
+export const editUser = async (userId, userData) => {
+  try {
+    const response = await api.patch(`/Admin/EditUserAccount?userId=${userId}`, userData);
+    return response.data;
+  } catch (error) {
+    console.error('Error editing user:', error);
+    throw error;
+  }
+};
+
+export const getAllPosts = async (pageNumber = 1) => {
+  try {
+    const response = await api.get(`/Admin/GetAllUsersPosts?pageNumber=${pageNumber}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching all posts:', error);
+    throw error;
+  }
+};
+
+export const editPost = async (postId, content) => {
+  try {
+    const response = await api.patch(`/Admin/EditUserPost?postId=${postId}`, JSON.stringify(content), {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error editing post:', error);
+    throw error;
+  }
+};
+
+export const deletePostAdmin = async (postId) => {
+  try {
+    const response = await api.delete(`/Admin/DeleteUserPost?postId=${postId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    throw error;
+  }
+};
+
+export const registerNewShoe = async (shoeData) => {
+  try {
+    const formData = new FormData();
+    formData.append('Gender', shoeData.gender);
+    formData.append('Release_Date', shoeData.releaseDate);
+    formData.append('Brand', shoeData.brand);
+    formData.append('Price', shoeData.price);
+    formData.append('Colorway', shoeData.colorway);
+    formData.append('Nickname', shoeData.nickname);
+    formData.append('ImageFile', shoeData.imageFile);
+    formData.append('Series', shoeData.series);
+    formData.append('Model_No', shoeData.modelNo);
+    formData.append('Title', shoeData.title);
+    formData.append('ShopUrl', shoeData.shopUrl);
+    formData.append('Main_Color', shoeData.mainColor);
+
+    const response = await api.post('/Shoe/RegisterNewShoe', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error registering new shoe:', error);
+    throw error;
+  }
+};
+
 export default api;

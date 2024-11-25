@@ -1,8 +1,44 @@
 import React from 'react';
+import { FaShoppingCart } from 'react-icons/fa';
 import './ShoeDetailsModal.scss';
 
 const ShoeDetailsModal = ({ shoe, isLoading, onClose }) => {
     if (!shoe && !isLoading) return null;
+
+    const getShopUrl = (shopLink, modelNo) => {
+        if (!shopLink) return null;
+
+        if (shopLink.startsWith('https')) {
+            return shopLink;
+        }
+
+        if (modelNo?.includes('Stockx')) {
+            return `https://stockx.com/${shopLink}`;
+        }
+
+        return `https://www.kickscrew.com/en-PL/products/${shopLink}`;
+    };
+
+    const getImageUrl = (imageUrl) => {
+        if (!imageUrl) return '';
+
+        if (imageUrl.startsWith('https')) {
+            return imageUrl;
+        }
+
+        if (imageUrl.startsWith('/uploads')) {
+            return `https://localhost:7117${imageUrl}`;
+        }
+
+        return imageUrl;
+    };
+
+    const handleShopClick = () => {
+        const shopUrl = getShopUrl(shoe.shopLink, shoe.model_No);
+        if (shopUrl) {
+            window.open(shopUrl, '_blank');
+        }
+    };
 
     return (
         <div className="shoe-details-modal" onClick={onClose}>
@@ -14,7 +50,7 @@ const ShoeDetailsModal = ({ shoe, isLoading, onClose }) => {
                         <h2>{shoe.title}</h2>
                         <div className="details-grid">
                             <img 
-                                src={shoe.imageUrl}
+                                src={getImageUrl(shoe.imageUrl)}
                                 alt={shoe.title} 
                                 className="detail-image"
                             />
@@ -32,6 +68,16 @@ const ShoeDetailsModal = ({ shoe, isLoading, onClose }) => {
                             <p><strong>Price:</strong> ${shoe.price}</p>
                             <p><strong>Gender:</strong> {shoe.gender}</p>
                         </div>
+                        {shoe.shopLink && (
+                            <div className="shop-button-container">
+                                <button 
+                                    className="shop-button"
+                                    onClick={handleShopClick}
+                                >
+                                    <FaShoppingCart /> Visit Shop
+                                </button>
+                            </div>
+                        )}
                     </>
                 )}
             </div>

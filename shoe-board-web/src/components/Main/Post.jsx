@@ -72,6 +72,20 @@ const Post = ({ post, onPostUpdate }) => {
     navigate(`/profile/${username}`);
   };
 
+  const getImageUrl = (imageUrl) => {
+    if (!imageUrl) return '';
+
+    if (imageUrl.startsWith('https')) {
+      return imageUrl;
+    }
+
+    if (imageUrl.startsWith('/uploads')) {
+      return `https://localhost:7117${imageUrl}`;
+    }
+
+    return imageUrl;
+  };
+
   return (
     <>
       <div className="post">
@@ -79,7 +93,7 @@ const Post = ({ post, onPostUpdate }) => {
           <div className="post-header">
             <div className="user-info">
               <div className="avatar">
-                <img src={post.profilePictureUrl || 'https://icons.veryicon.com/png/o/miscellaneous/common-icons-31/default-avatar-2.png'} alt="User avatar" />
+                <img src={getImageUrl(post.profilePictureUrl) || 'https://icons.veryicon.com/png/o/miscellaneous/common-icons-31/default-avatar-2.png'} alt="User avatar" />
               </div>
               <div className="user-details">
                 <h3 
@@ -121,7 +135,7 @@ const Post = ({ post, onPostUpdate }) => {
           </div>
         </div>
         <div className="post-image" onClick={handleImageClick} style={{ cursor: 'pointer' }}>
-          <img src={post.image_Url} alt={post.title} />
+          <img src={getImageUrl(post.image_Url)} alt={post.title} />
         </div>
       </div>
 

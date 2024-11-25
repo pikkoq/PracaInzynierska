@@ -1,0 +1,172 @@
+@import '../../styles/variables';
+
+.add-shoe-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $modal-overlay;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.add-shoe-modal-content {
+    background-color: $background-medium;
+    border-radius: 10px;
+    width: 95%;
+    max-width: 1000px;
+    max-height: 90vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-shoe-modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid $border-primary;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+        color: $text-highlight;
+        margin: 0;
+    }
+
+    .close-button {
+        background: none;
+        border: none;
+        color: $text-primary;
+        font-size: 2rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        
+        &:hover {
+            color: $error-color;
+        }
+    }
+}
+
+.add-shoe-modal-body {
+    padding: 2rem;
+    overflow-y: auto;
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+    }
+
+    .form-group {
+        label {
+            display: block;
+            color: $text-secondary;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid $border-primary;
+            border-radius: 4px;
+            background-color: $background-dark;
+            color: $text-primary;
+            font-size: 1rem;
+
+            &:focus {
+                outline: none;
+                border-color: $primary-color;
+            }
+
+            &[type="file"] {
+                padding: 0.5rem;
+                border: none;
+                background: none;
+            }
+        }
+
+        select {
+            cursor: pointer;
+        }
+    }
+
+    .image-preview {
+        margin-top: 1rem;
+        max-width: 300px;
+        border-radius: 8px;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+    }
+
+    .form-actions {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: flex-end;
+
+        .submit-button {
+            padding: 0.75rem 2rem;
+            background-color: $primary-color;
+            color: $text-highlight;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+
+            &:hover:not(:disabled) {
+                background-color: $primary-color-hover;
+            }
+
+            &:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+            }
+        }
+    }
+}
+
+.error-message {
+    background-color: rgba($error-color, 0.1);
+    color: $error-color;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.success-message {
+    background-color: rgba($success-color, 0.1);
+    color: $success-color;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .add-shoe-modal-content {
+        width: 98%;
+        height: 95vh;
+    }
+
+    .add-shoe-modal-body {
+        padding: 1rem;
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+} 

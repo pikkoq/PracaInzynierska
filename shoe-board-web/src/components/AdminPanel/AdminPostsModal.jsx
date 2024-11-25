@@ -70,6 +70,20 @@ const AdminPostsModal = ({ onClose }) => {
         }
     };
 
+    const getImageUrl = (imageUrl) => {
+        if (!imageUrl) return '';
+
+        if (imageUrl.startsWith('https')) {
+            return imageUrl;
+        }
+
+        if (imageUrl.startsWith('/uploads')) {
+            return `https://localhost:7117${imageUrl}`;
+        }
+
+        return imageUrl;
+    };
+
     const handleViewProfile = (userName) => {
         window.open(`/profile/${userName}`, '_blank');
     };
@@ -156,7 +170,7 @@ const AdminPostsModal = ({ onClose }) => {
                                     </div>
                                 </div>
                                 <div className="post-image">
-                                    <img src={post.shoePhoto} alt={post.title} />
+                                    <img src={getImageUrl(post.shoePhoto)} alt={post.title} />
                                 </div>
                             </div>
                         ))}

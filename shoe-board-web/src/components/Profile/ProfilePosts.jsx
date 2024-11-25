@@ -50,6 +50,7 @@ const ProfilePosts = () => {
             }
         }
     };
+    
 
     const handleCommentAdded = (postId) => {
         setPosts(posts.map(post => {

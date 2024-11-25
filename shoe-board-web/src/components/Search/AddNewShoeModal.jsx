@@ -104,21 +104,23 @@ const AddNewShoeModal = ({ onClose }) => {
                                 />
                             </div>
                             <div className="form-group">
-                                <label>Series</label>
+                                <label>Series*</label>
                                 <input
                                     type="text"
                                     name="series"
                                     value={formData.series}
                                     onChange={handleInputChange}
+                                    required
                                 />
                             </div>
                             <div className="form-group">
-                                <label>Nickname</label>
+                                <label>Nickname*</label>
                                 <input
                                     type="text"
                                     name="nickname"
                                     value={formData.nickname}
                                     onChange={handleInputChange}
+                                    required
                                 />
                             </div>
                             <div className="form-group">
@@ -129,9 +131,9 @@ const AddNewShoeModal = ({ onClose }) => {
                                     onChange={handleInputChange}
                                     required
                                 >
-                                    <option value="MENS">Men's</option>
-                                    <option value="WOMENS">Women's</option>
-                                    <option value="UNISEX">Unisex</option>
+                                    <option value="MENS">MENS</option>
+                                    <option value="WOMENS">WOMENS's</option>
+                                    <option value="UNISEX">UNISEX</option>
                                 </select>
                             </div>
                             <div className="form-group">
@@ -175,12 +177,13 @@ const AddNewShoeModal = ({ onClose }) => {
                                 />
                             </div>
                             <div className="form-group">
-                                <label>Shop URL</label>
+                                <label>Shop URL*</label>
                                 <input
                                     type="url"
                                     name="shopUrl"
                                     value={formData.shopUrl}
                                     onChange={handleInputChange}
+                                    required
                                 />
                             </div>
                             <div className="form-group full-width">

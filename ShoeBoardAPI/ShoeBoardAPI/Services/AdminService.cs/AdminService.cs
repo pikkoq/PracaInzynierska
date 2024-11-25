@@ -82,6 +82,37 @@ namespace ShoeBoardAPI.Services.AdminService.cs
             return response;
         }
 
+        public async Task<ServiceResponse<bool>> DeleteComment(int commentId)
+        {
+            var response = new ServiceResponse<bool>();
+
+            try
+            {
+                var comment = await _context.Comments.FindAsync(commentId);
+                if (comment == null)
+                {
+                    response.Success = false;
+                    response.Data = false;
+                    response.Message = "Comment not found.";
+                    return response;
+                }
+
+                _context.Comments.Remove(comment);
+                await _context.SaveChangesAsync();
+
+                response.Success = true;
+                response.Data = true;
+                response.Message = "Deleted comment.";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Data = false;
+                response.Message = $"Error deleting comment: {ex.Message}";
+            }
+            return response;
+        }
+
         public async Task<ServiceResponse<bool>> DeleteUserAccount(string userId)
         {
             var response = new ServiceResponse<bool>();
@@ -143,6 +174,38 @@ namespace ShoeBoardAPI.Services.AdminService.cs
                 response.Success = false;
                 response.Data = false;
                 response.Message = $"Error deleting post: {ex.Message}";
+            }
+            return response;
+        }
+
+        public async Task<ServiceResponse<bool>> EditComment(int commentId, string content)
+        {
+            var response = new ServiceResponse<bool>();
+
+            try
+            {
+                var comment = await _context.Comments.FindAsync(commentId);
+                if (comment == null)
+                {
+                    response.Success = false;
+                    response.Data = false;
+                    response.Message = "Comment not found.";
+                    return response;
+                }
+
+                comment.Content = content;
+                _context.Comments.Update(comment);
+                await _context.SaveChangesAsync();
+
+                response.Success = true;
+                response.Data = true;
+                response.Message = "Edited comment.";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Data = false;
+                response.Message = $"Error editing comment: {ex.Message}";
             }
             return response;
         }
@@ -245,7 +308,7 @@ namespace ShoeBoardAPI.Services.AdminService.cs
         public async Task<SearchServiseResponse<List<GetAllUsersDto>>> GetAllUsers(int pageNumber = 1)
         {
             var response = new SearchServiseResponse<List<GetAllUsersDto>>();
-            int pageSize = 10;
+            int pageSize = 12;
 
             try
             {

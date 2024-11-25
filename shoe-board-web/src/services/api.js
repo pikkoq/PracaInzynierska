@@ -483,4 +483,38 @@ export const registerNewShoe = async (shoeData) => {
   }
 };
 
+export const deleteComment = async (commentId) => {
+  try {
+    const response = await api.delete(`/Post/DeleteComment?commentId=${commentId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting comment:', error);
+    throw error;
+  }
+};
+
+export const deleteCommentAdmin = async (commentId) => {
+  try {
+    const response = await api.delete(`/Admin/DeleteUserComment?commentId=${commentId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting comment as admin:', error);
+    throw error;
+  }
+};
+
+export const editCommentAdmin = async (commentId, content) => {
+  try {
+    const response = await api.patch(`/Admin/EditUserComment?commentId=${commentId}`, JSON.stringify(content), {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error editing comment as admin:', error);
+    throw error;
+  }
+};
+
 export default api;

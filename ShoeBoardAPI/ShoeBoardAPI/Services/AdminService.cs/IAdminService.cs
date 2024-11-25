@@ -15,6 +15,8 @@ namespace ShoeBoardAPI.Services.AdminService.cs
         Task<SearchServiseResponse<List<GetAllUsersPostsDto>>> GetAllUsersPosts(int pageNumber = 1);
         Task<ServiceResponse<bool>> EditUserPost(int postId, string content);
         Task<ServiceResponse<bool>> DeleteUserPost(int postId);
+        Task<ServiceResponse<bool>> DeleteComment(int commentId);
+        Task<ServiceResponse<bool>> EditComment(int commentId, string content);
 
     }
 }

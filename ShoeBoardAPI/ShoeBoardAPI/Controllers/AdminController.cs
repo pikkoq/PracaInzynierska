@@ -86,5 +86,19 @@ namespace ShoeBoardAPI.Controllers
             var response = await _adminService.DeleteUserPost(postId);
             return response.Success ? Ok(response) : BadRequest(response);
         }
+
+        [HttpDelete("DeleteUserComment")]
+        public async Task<IActionResult> DeleteUserComment(int commentId)
+        {
+            var response = await _adminService.DeleteComment(commentId);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+
+        [HttpPatch("EditUserComment")]
+        public async Task<IActionResult> EditUserComment(int commentId, [FromBody] string content)
+        {
+            var response = await _adminService.EditComment(commentId, content);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
     }
 }

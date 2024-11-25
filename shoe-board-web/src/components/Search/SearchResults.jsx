@@ -126,52 +126,54 @@ const SearchResults = () => {
                             />
                         ))}
                     </div>
-                    {totalPages > 1 && (
-                        <div className="pagination-container">
-                            <div className="total-results">
-                                Total Results: {totalCount}
-                            </div>
-                            <div className="add-shoe-section">
-                                <p>Can't find what you're looking for?</p>
-                                <button 
-                                    className="add-shoe-button"
-                                    onClick={() => setShowAddModal(true)}
-                                >
-                                    <FaPlus /> Add New Shoe
-                                </button>
-                            </div>
-                            <div className="pagination">
-                                <button 
-                                    className="page-button nav-button"
-                                    onClick={() => handlePageChange(currentPage - 1)}
-                                    disabled={currentPage === 1}
-                                >
-                                    <FaChevronLeft />
-                                </button>
-                                {getPageNumbers().map((page, index) => (
-                                    <React.Fragment key={index}>
-                                        {page === '...' ? (
-                                            <span className="page-ellipsis">...</span>
-                                        ) : (
-                                            <button
-                                                onClick={() => handlePageChange(page)}
-                                                className={`page-button ${currentPage === page ? 'active' : ''}`}
-                                            >
-                                                {page}
-                                            </button>
-                                        )}
-                                    </React.Fragment>
-                                ))}
-                                <button 
-                                    className="page-button nav-button"
-                                    onClick={() => handlePageChange(currentPage + 1)}
-                                    disabled={currentPage === totalPages}
-                                >
-                                    <FaChevronRight />
-                                </button>
-                            </div>
+                    <div className="pagination-container">
+                        {totalPages > 1 && (
+                            <>
+                                <div className="total-results">
+                                    Total Results: {totalCount}
+                                </div>
+                                <div className="pagination">
+                                    <button 
+                                        className="page-button nav-button"
+                                        onClick={() => handlePageChange(currentPage - 1)}
+                                        disabled={currentPage === 1}
+                                    >
+                                        <FaChevronLeft />
+                                    </button>
+                                    {getPageNumbers().map((page, index) => (
+                                        <React.Fragment key={index}>
+                                            {page === '...' ? (
+                                                <span className="page-ellipsis">...</span>
+                                            ) : (
+                                                <button
+                                                    onClick={() => handlePageChange(page)}
+                                                    className={`page-button ${currentPage === page ? 'active' : ''}`}
+                                                >
+                                                    {page}
+                                                </button>
+                                            )}
+                                        </React.Fragment>
+                                    ))}
+                                    <button 
+                                        className="page-button nav-button"
+                                        onClick={() => handlePageChange(currentPage + 1)}
+                                        disabled={currentPage === totalPages}
+                                    >
+                                        <FaChevronRight />
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                        <div className="add-shoe-section">
+                            <p>{results.length === 0 ? "No results found. Want to add a new shoe?" : "Can't find what you're looking for?"}</p>
+                            <button 
+                                className="add-shoe-button"
+                                onClick={() => setShowAddModal(true)}
+                            >
+                                <FaPlus /> Add New Shoe
+                            </button>
                         </div>
-                    )}
+                    </div>
                 </div>
             </div>
             {showAddModal && (

@@ -31,7 +31,6 @@ const PostFeed = ({ posts, loading, hasMore, loadMore }) => {
         <div className="post-feed">
             {posts.map((post, index) => {
                 if (posts.length === index + 1) {
-                    // Ostatni post
                     return (
                         <div ref={lastPostRef} key={post.id}>
                             <Post post={post} />

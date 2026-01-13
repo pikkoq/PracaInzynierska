@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoeBoardAPI", "ShoeBoardAPI\ShoeBoardAPI.csproj", "{0ABD8064-2A74-41E0-9E8E-518D685848BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoeBoardAPI", "ShoeBoardAPI\ShoeBoardAPI.csproj", "{0ABD8064-2A74-41E0-9E8E-518D685848BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoeBoardAPITest", "ShoeBoardAPITest\ShoeBoardAPITest.csproj", "{7620B021-ED01-4BED-8DAC-2356DC97E98E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{0ABD8064-2A74-41E0-9E8E-518D685848BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0ABD8064-2A74-41E0-9E8E-518D685848BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0ABD8064-2A74-41E0-9E8E-518D685848BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7620B021-ED01-4BED-8DAC-2356DC97E98E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7620B021-ED01-4BED-8DAC-2356DC97E98E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7620B021-ED01-4BED-8DAC-2356DC97E98E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7620B021-ED01-4BED-8DAC-2356DC97E98E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

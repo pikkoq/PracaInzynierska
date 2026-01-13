@@ -63,6 +63,7 @@ namespace ShoeBoardAPI.Services.ShoeService
                 response.Success = false;
                 response.Data = false;
                 response.Message = "Shoe not found.";
+                return response;
             }
 
             if (shoe.UserId != userId)

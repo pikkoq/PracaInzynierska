@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FaTrash, FaSave, FaTimes } from 'react-icons/fa';
 import { getShoeDetails } from '../../services/api';
 import './ShoeCard.scss';
+import ShoeImage from '../common/ShoeImage';
 
 const ShoeCard = ({ shoe, onDelete, onUpdate }) => {
     const [showDetails, setShowDetails] = useState(false);
@@ -109,7 +110,7 @@ const ShoeCard = ({ shoe, onDelete, onUpdate }) => {
     return (
         <>
             <div className="shoe-card" onClick={handleCardClick}>
-                <img src={getImageUrl(shoe.image_Url)} alt={shoe.title} className="shoe-image" />
+                <ShoeImage src={getImageUrl(shoe.image_Url)} alt={shoe.title} className="shoe-image" />
                 <div className="shoe-content">
                     <h3>{shoe.title}</h3>
                     <div className="shoe-details">

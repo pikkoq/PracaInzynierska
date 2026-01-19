@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 import './ShoeDetailsModal.scss';
+import ShoeImage from '../common/ShoeImage';
 
 const ShoeDetailsModal = ({ shoe, isLoading, onClose }) => {
     if (!shoe && !isLoading) return null;
@@ -49,7 +50,7 @@ const ShoeDetailsModal = ({ shoe, isLoading, onClose }) => {
                     <>
                         <h2>{shoe.title}</h2>
                         <div className="details-grid">
-                            <img 
+                            <ShoeImage 
                                 src={getImageUrl(shoe.imageUrl)}
                                 alt={shoe.title} 
                                 className="detail-image"

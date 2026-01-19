@@ -3,6 +3,7 @@ import { FaEdit, FaTrash, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { getAllPosts, editPost, deletePostAdmin } from '../../services/api';
 import CommentsModal from '../Main/CommentsModal';
 import './AdminPostsModal.scss';
+import ShoeImage from '../common/ShoeImage';
 
 const AdminPostsModal = ({ onClose }) => {
     const [posts, setPosts] = useState([]);
@@ -170,7 +171,7 @@ const AdminPostsModal = ({ onClose }) => {
                                     </div>
                                 </div>
                                 <div className="post-image">
-                                    <img src={getImageUrl(post.shoePhoto)} alt={post.title} />
+                                    <ShoeImage src={getImageUrl(post.shoePhoto)} alt={post.title} />
                                 </div>
                             </div>
                         ))}

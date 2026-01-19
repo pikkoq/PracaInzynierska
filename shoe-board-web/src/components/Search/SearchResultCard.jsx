@@ -3,6 +3,7 @@ import { FaPlus, FaSave, FaTimes } from 'react-icons/fa';
 import { addShoeToUserCollection, getCatalogShoeDetails } from '../../services/api';
 import ShoeDetailsModal from '../Navigation/ShoeDetailsModal';
 import './SearchResultCard.scss';
+import ShoeImage from '../common/ShoeImage';
 
 const SearchResultCard = ({ shoe }) => {
     const [showAddModal, setShowAddModal] = useState(false);
@@ -91,7 +92,7 @@ const SearchResultCard = ({ shoe }) => {
     return (
         <>
             <div className="search-result-card" onClick={handleCardClick}>
-                <img src={getImageUrl(shoe.image_Url)} alt={shoe.title} className="shoe-image" />
+                <ShoeImage src={getImageUrl(shoe.image_Url)} alt={shoe.title} className="shoe-image" />
                 <div className="shoe-content">
                     <h3>{shoe.title}</h3>
                     <div className="shoe-details">

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FaEdit, FaCheck, FaTimes, FaShoppingCart, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { getShoesToAccept, acceptShoe, declineShoe, editNewShoe } from '../../services/api';
 import './AdminShoesModals.scss';
+import ShoeImage from '../common/ShoeImage';
 
 const AdminShoesModal = ({ onClose }) => {
     const [shoes, setShoes] = useState([]);
@@ -117,7 +118,7 @@ const AdminShoesModal = ({ onClose }) => {
                         {shoes.map(shoe => (
                             <div key={shoe.id} className="shoe-card">
                                 <div className="shoe-image">
-                                    <img src={`https://localhost:7117${shoe.image_Path}`} alt={shoe.title} />
+                                    <ShoeImage src={`https://localhost:7117${shoe.image_Path}`} alt={shoe.title} />
                                 </div>
                                 <div className="shoe-info">
                                     <h3>{shoe.title}</h3>

@@ -6,6 +6,7 @@ import Navigation from "../Navigation/Navigation";
 import CommentsModal from '../Main/CommentsModal';
 import { getUserProfile, sendFriendRequest, acceptFriendRequest } from '../../services/api';
 import './UserProfile.scss';
+import ShoeImage from '../common/ShoeImage';
 
 const UserProfile = () => {
     const { userName } = useParams();
@@ -249,7 +250,7 @@ const UserProfile = () => {
                                         </div>
                                         <div className="profile-post-right-section">
                                             <div className="profile-post-image">
-                                                <img src={post.image_Url} alt={post.title} />
+                                                <ShoeImage src={post.image_Url} alt={post.title} />
                                             </div>
                                         </div>
                                     </div>

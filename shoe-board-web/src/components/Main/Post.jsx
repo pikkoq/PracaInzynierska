@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { likePost, unlikePost, getCatalogShoeDetails } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import './Post.scss';
+import ShoeImage from '../common/ShoeImage';
 import ShoeDetailsModal from '../Navigation/ShoeDetailsModal';
 import CommentsModal from './CommentsModal';
 
@@ -135,7 +136,7 @@ const Post = ({ post, onPostUpdate }) => {
           </div>
         </div>
         <div className="post-image" onClick={handleImageClick} style={{ cursor: 'pointer' }}>
-          <img src={getImageUrl(post.image_Url)} alt={post.title} />
+          <ShoeImage src={getImageUrl(post.image_Url)} alt={post.title} />
         </div>
       </div>
 

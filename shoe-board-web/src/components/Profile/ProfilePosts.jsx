@@ -3,6 +3,7 @@ import { getYourPosts, deletePost } from '../../services/api';
 import { FaTrash } from 'react-icons/fa';
 import CommentsModal from '../Main/CommentsModal';
 import './ProfilePosts.scss';
+import ShoeImage from '../common/ShoeImage';
 
 const ProfilePosts = () => {
     const [posts, setPosts] = useState([]);
@@ -125,7 +126,7 @@ const ProfilePosts = () => {
                                 </div>
                                 <div className="profile-post-right-section">
                                     <div className="profile-post-image">
-                                        <img src={getImageUrl(post.image_Url)} alt={post.title} />
+                                        <ShoeImage src={getImageUrl(post.image_Url)} alt={post.title} />
                                     </div>
                                     <button
                                         onClick={() => handleDeletePost(post.id)}

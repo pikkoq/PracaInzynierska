@@ -1,6 +1,7 @@
 # ShoeBoard
 
 A web app for shoe colectors.
+GitHub repo: https://github.com/pikkoq/PracaInzynierska
 
 ## Project Structure
 
